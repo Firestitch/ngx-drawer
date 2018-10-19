@@ -1,0 +1,19 @@
+<div class="drawer" [style.width]="drawerConfig.width">
+  <ng-container>
+    <div class="drawer-actions">
+      <div *ngFor="let action of drawerConfig.actions" class="action-btn">
+        <button [type]="action.type"
+          [matTooltip]="action.tooltip">
+          <i class="material-icons">{{action.icon}}</i>
+        </button>
+      </div>
+    </div>
+
+    <div class="drawer-content">
+      <ng-template [ngTemplateOutlet]="fsDrawerSide">
+      </ng-template>
+      <ng-template [ngTemplateOutlet]="fsDrawer">
+      </ng-template>
+    </div>
+  </ng-container>
+</div>

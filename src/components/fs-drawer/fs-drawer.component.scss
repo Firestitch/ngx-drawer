@@ -1,0 +1,36 @@
+.drawer {
+  position: fixed;
+  border-left: 1px solid #efefef;
+  border-right: 1px solid #efefef;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  z-index: 75;
+  background-color: #fff;
+  min-width: 350px;
+}
+
+.drawer-actions {
+  position: fixed;
+  width: 34px;
+  height: 100%;
+  border-right: 1px solid #efefef;
+  white-space: nowrap;
+
+  .action-btn {
+    margin-bottom: 5px;
+
+    > button {
+      border: none;
+
+      >i {
+        font-size: 18px;
+      }
+    }
+
+  }
+}
+
+.drawer-content {
+  margin: 0 34px;
+}
