@@ -15,11 +15,17 @@ export class FsDrawerExampleComponent implements OnInit {
   }
 
   public openDrawer() {
-    const drawerRef = this.drawer.open(this.task, TaskDrawerComponent, {
+    const drawerRef = this.drawer.open(TaskDrawerComponent, {
       data: { account: { name: 'Name', email: 'email@email.com' } }
-    })
+    });
 
-    drawerRef.close();
+    drawerRef.afterClosed().subscribe(() => {
+      console.log('The drawer was closed');
+    });
+
+    drawerRef.afterOpened().subscribe(() => {
+      console.log('The drawer was opened');
+    });
 
   }
 

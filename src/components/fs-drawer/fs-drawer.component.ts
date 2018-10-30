@@ -1,6 +1,7 @@
 import { Component, ContentChild, Input, OnInit } from '@angular/core';
 import { DrawerConfig } from '../../models/fs-drawer-config.model';
 import { IDrawerConfig } from '../../interfaces/fs-drawer-config.interface';
+import { Action } from '../../models/action.model';
 
 @Component({
   selector: 'fs-drawer',
@@ -15,6 +16,9 @@ export class FsDrawerComponent implements OnInit {
 
   public drawerConfig: DrawerConfig;
 
+  public isOpen = false;
+  public isOpenSide = false;
+
   constructor() {
   }
 
@@ -24,10 +28,25 @@ export class FsDrawerComponent implements OnInit {
   }
 
   public open() {
-
+    this.isOpen = true;
   }
 
   public close() {
-    console.log('close');
+    this.isOpen = false;
   }
+
+  public openSide() {
+    this.isOpenSide = true;
+  }
+
+  public closeSide() {
+    this.isOpenSide = false;
+  }
+
+  public click(action: Action, event) {
+    if (action.click) {
+      action.click.call(event);
+    }
+  }
+
 }

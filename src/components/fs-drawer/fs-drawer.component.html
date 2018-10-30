@@ -1,19 +1,25 @@
-<div class="drawer" [style.width]="drawerConfig.width">
+<div class="drawer" [style.width]="drawerConfig.width" [hidden]="!isOpen" [ngClass]="drawerConfig.position">
   <ng-container>
     <div class="drawer-actions">
       <div *ngFor="let action of drawerConfig.actions" class="action-btn">
         <button [type]="action.type"
-          [matTooltip]="action.tooltip">
+          [matTooltip]="action.tooltip"
+          [class.active]="action.name && action.name === drawerConfig.activeAction"
+          (click)="click(action, $event)">
           <i class="material-icons">{{action.icon}}</i>
         </button>
       </div>
     </div>
 
     <div class="drawer-content">
-      <ng-template [ngTemplateOutlet]="fsDrawerSide">
-      </ng-template>
-      <ng-template [ngTemplateOutlet]="fsDrawer">
-      </ng-template>
+      <div class="side" *ngIf="isOpenSide">
+        <ng-template [ngTemplateOutlet]="fsDrawerSide">
+        </ng-template>
+      </div>
+      <div>
+        <ng-template [ngTemplateOutlet]="fsDrawer">
+        </ng-template>
+      </div>
     </div>
   </ng-container>
 </div>

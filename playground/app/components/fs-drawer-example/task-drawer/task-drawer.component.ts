@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { FsDrawerComponent } from '../../../../../src/components/fs-drawer/';
-import { IDrawerConfig } from '../../../../../src/interfaces/fs-drawer-config.interface';
+import { Component, Inject, OnInit, ViewChild } from '@angular/core';
+import { IDrawerConfig } from '../../../../../src/interfaces/';
+import { DrawerRef } from '../../../../../src/components/fs-drawer/';
+import { DRAWER_DATA } from '../../../../../src/services/';
 
 @Component({
   selector: 'fs-task-drawer',
@@ -8,28 +9,28 @@ import { IDrawerConfig } from '../../../../../src/interfaces/fs-drawer-config.in
   styleUrls: ['./task-drawer.component.scss']
 })
 export class TaskDrawerComponent implements OnInit {
-  @ViewChild('drawer') drawer: FsDrawerComponent;
+  @ViewChild('drawerTemplate') public drawerTemplate;
 
   public config: IDrawerConfig;
-  public data;
 
-  constructor() {
-
+  constructor(public drawer: DrawerRef<TaskDrawerComponent>,
+              @Inject(DRAWER_DATA) public data: any) {
   }
 
   public ngOnInit() {
+    this.drawer.template = this.drawerTemplate; // for connection drawer component for dynamic components
 
     this.config = {
-      disableClose: false, // Whether the drawer can be closed with the escape key. Default to false
-      position: 'right', // Anchors the drawer to the left or right side of the screen.  Default to right
+      disableClose: false,
+      position: 'right',
       activeAction: 'settings',
-      width: '500px', // The initial width of the drawer. Default to 500
+      width: '500px',
       actions: [
         {
           icon: 'clear',
           type: 'button',
           click: (event) => {
-            // this.drawer.close();
+            this.drawer.close();
           }
         },
         {
@@ -46,8 +47,8 @@ export class TaskDrawerComponent implements OnInit {
           type: 'button',
           tooltip: 'Edit',
           click: (event) => {
-            // this.drawer.openSide();
-            // this.drawer.setActiveAction('edit');
+            this.drawer.openSide();
+            this.drawer.setActiveAction('edit');
           }
         },
         {
