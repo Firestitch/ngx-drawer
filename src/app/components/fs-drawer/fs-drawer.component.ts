@@ -2,14 +2,10 @@ import {
   Component,
   ComponentRef,
   ContentChild,
-  EmbeddedViewRef,
-  Input,
+  EmbeddedViewRef, Inject,
   OnInit,
   ViewChild
 } from '@angular/core';
-import { DrawerConfig } from '../../models/fs-drawer-config.model';
-import { Action } from '../../models/action.model';
-import { IDrawerConfig } from '../../interfaces';
 import {
   BasePortalOutlet,
   CdkPortalOutlet,
@@ -17,16 +13,21 @@ import {
   TemplatePortal
 } from '@angular/cdk/portal';
 
+import { DrawerConfig } from '../../models/fs-drawer-config.model';
+import { Action } from '../../models/action.model';
+import { DRAWER_DATA } from '../../services/drawer-data';
+
 @Component({
   selector: 'fs-drawer',
   templateUrl: './fs-drawer.component.html',
   styleUrls: [ 'fs-drawer.component.scss' ],
+  host: {
+    'class': 'fs-drawer-container',
+  },
 })
 export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
 
   @ViewChild(CdkPortalOutlet) _portalOutlet: CdkPortalOutlet;
-
-  @Input() public config: IDrawerConfig;
 
   @ContentChild('fsDrawerSide') public fsDrawerSide;
   @ContentChild('fsDrawer') public fsDrawer;
@@ -42,7 +43,6 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
 
   public ngOnInit() {
     // set config with defaults params
-    this.drawerConfig = new DrawerConfig(this.config);
   }
 
   public open() {

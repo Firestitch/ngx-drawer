@@ -5,9 +5,13 @@ import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components';
+import { ComponentRef } from '@angular/core';
+import { DrawerConfig } from '../models/fs-drawer-config.model';
 
 
 export class DrawerRef<T, R = any> {
+
+  public readonly drawerConfig;
 
   /** Subject for notifying the user that the drawer has finished opening. */
   private readonly _afterOpened = new Subject<void>();
@@ -28,10 +32,14 @@ export class DrawerRef<T, R = any> {
   private _container;
 
   /** Main drawer component and template */
-  private _drawerComponent: FsDrawerComponent;
+  private _drawerContainerRef: FsDrawerComponent;
+
+  /** Main drawer component and template */
+  private _drawerComponentRef: ComponentRef<T>;
 
   constructor(private _overlayRef: OverlayRef,
-              private _config: any) {
+              _config: any) {
+    this.drawerConfig = new DrawerConfig(_config);
   }
 
   /**
@@ -43,13 +51,19 @@ export class DrawerRef<T, R = any> {
   }
 
   /**
-   * Set drawer template and open the drawer
+   * Set reference to drawer container
    * @param {FsDrawerComponent} value
    */
-  set template(value: FsDrawerComponent) {
-    this._drawerComponent = value;
-    this.events();
-    this.open();
+  set containerRef(value: FsDrawerComponent) {
+    this._drawerContainerRef = value;
+  }
+
+  /**
+   * Set reference to drawer component
+   * @param {ComponentRef<T>} value
+   */
+  set componentRef(value: ComponentRef<T>) {
+    this._drawerComponentRef = value;
   }
 
   /**
@@ -57,7 +71,7 @@ export class DrawerRef<T, R = any> {
    */
   public events() {
     this._overlayRef.keydownEvents()
-      .pipe(filter(event => event.keyCode === ESCAPE && !this._drawerComponent.drawerConfig))
+      .pipe(filter(event => event.keyCode === ESCAPE && !this._drawerContainerRef.drawerConfig))
       .subscribe(() => this.close());
   }
 
@@ -79,7 +93,7 @@ export class DrawerRef<T, R = any> {
    * Open drawer and notify observable
    */
   public open() {
-    this._drawerComponent.open();
+    this._drawerContainerRef.open();
     this._afterOpened.next();
     this._afterOpened.complete();
   }
@@ -89,7 +103,7 @@ export class DrawerRef<T, R = any> {
    * @param result Optional result to return to the dialog opener.
    */
   public close(result?: R): void {
-    this._drawerComponent.close();
+    this._drawerContainerRef.close();
     this._result = result;
 
     this._afterClosed.next(result);
@@ -101,21 +115,21 @@ export class DrawerRef<T, R = any> {
    * Open the side of the drawer
    */
   public openSide() {
-    this._drawerComponent.openSide();
+    this._drawerContainerRef.openSide();
   }
 
   /**
    * Close the side of the drawer
    */
   public closeSide() {
-    this._drawerComponent.closeSide();
+    this._drawerContainerRef.closeSide();
   }
 
   /**
    * Toggle the side of the drawer
    */
   public toggleSide() {
-    const drawer = this._drawerComponent;
+    const drawer = this._drawerContainerRef;
     drawer.isOpenSide ? drawer.closeSide() : drawer.openSide();
   }
 
@@ -124,7 +138,7 @@ export class DrawerRef<T, R = any> {
    * @returns {boolean}
    */
   public isOpen(): boolean {
-    return this._drawerComponent.isOpen;
+    return this._drawerContainerRef.isOpen;
   }
 
   /**
@@ -132,7 +146,7 @@ export class DrawerRef<T, R = any> {
    * @returns {boolean}
    */
   public isSideOpen(): boolean {
-    return this._drawerComponent.isOpenSide;
+    return this._drawerContainerRef.isOpenSide;
   }
 
   /**
@@ -140,7 +154,7 @@ export class DrawerRef<T, R = any> {
    * @param {string} name
    */
   public setActiveAction(name: string) {
-    this._drawerComponent.drawerConfig.activeAction = name;
+    this._drawerContainerRef.drawerConfig.activeAction = name;
   }
 
 

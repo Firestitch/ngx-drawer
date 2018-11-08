@@ -17,6 +17,7 @@ export class TaskDrawerComponent implements OnInit {
   }
 
   public ngOnInit() {
+    console.log(this.data);
     // this.drawer.template = this.drawerTemplate; // for connection drawer component for dynamic components
 
     // this.config = {
