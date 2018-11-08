@@ -2,10 +2,13 @@ import { Injectable, InjectionToken, Injector } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayContainer, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
 
-import { DrawerRef } from '../components/fs-drawer/classes/drawer-ref';
+import { FsDrawerComponent } from '../components';
+import { DrawerRef } from '../classes';
+import { IDrawerConfig } from '../interfaces';
 
 /** Injection token that can be used to access the data that was passed in to a drawer. */
 export const DRAWER_DATA = new InjectionToken<any>('DrawerData');
+
 
 @Injectable()
 export class FsDrawerService {
@@ -17,9 +20,12 @@ export class FsDrawerService {
 
   public open(component: ComponentType<any>, config?) {
     const overlayRef = this.createOverlay(config);
-    const containerRef = this.attachComponent(component, overlayRef, config);
+    // const drawerContainer =
+    const containerRef = this.attachDrawerContainer(overlayRef, config);
+    const componentRef = this.attachComponent(component, containerRef, overlayRef, config);
 
-    return containerRef;
+    // console.log(containerRef);
+    return componentRef;
   }
 
   private createOverlay(config): OverlayRef {
@@ -31,11 +37,30 @@ export class FsDrawerService {
     return new OverlayConfig();
   }
 
-  private attachComponent<T, R>(componentRef, overlayRef, config ) {
+  private attachDrawerContainer<T, R>(overlayRef: OverlayRef, config: IDrawerConfig) {
     const drawerRef = new DrawerRef<T, R>(overlayRef, config);
     const injector = this.createInjector(drawerRef, config);
-    const portal = new ComponentPortal(componentRef, undefined, injector);
-    drawerRef.container = overlayRef.attach(portal);
+    const containerPortal = new ComponentPortal(FsDrawerComponent, undefined, injector);
+    const containerRef = overlayRef.attach<FsDrawerComponent>(containerPortal);
+
+    return containerRef.instance;
+  }
+
+  private attachComponent<T, R>(
+    componentRef: ComponentType<T>,
+    drawerContainer: FsDrawerComponent,
+    overlayRef: OverlayRef,
+    config: IDrawerConfig,
+  ) {
+    const drawerRef = new DrawerRef<T, R>(overlayRef, config);
+    const injector = this.createInjector(drawerRef, config);
+    const contentRef = drawerContainer.attachComponentPortal<T>(
+      new ComponentPortal<T>(componentRef, undefined, injector)
+    );
+
+
+    // const portal = new ComponentPortal(componentRef, undefined, injector);
+    // drawerRef.container = overlayRef.attach(portal);
 
     return drawerRef;
   }

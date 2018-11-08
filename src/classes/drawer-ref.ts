@@ -1,9 +1,11 @@
 import { ESCAPE } from '@angular/cdk/keycodes';
-import { Observable, Subject } from 'rxjs/Rx';
-
 import { OverlayRef } from '@angular/cdk/overlay';
-import { filter } from 'rxjs/internal/operators';
-import { FsDrawerComponent } from '../fs-drawer.component';
+
+import { Observable, Subject } from 'rxjs';
+import { filter } from 'rxjs/operators';
+
+import { FsDrawerComponent } from '../components';
+
 
 export class DrawerRef<T, R = any> {
 

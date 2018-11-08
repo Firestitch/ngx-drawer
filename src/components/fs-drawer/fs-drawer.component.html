@@ -12,14 +12,15 @@
     </div>
 
     <div class="drawer-content">
-      <div class="side" *ngIf="isOpenSide">
+      <ng-template cdkPortalOutlet></ng-template>
+      <!--<div class="side" *ngIf="isOpenSide">
         <ng-template [ngTemplateOutlet]="fsDrawerSide">
         </ng-template>
       </div>
       <div>
         <ng-template [ngTemplateOutlet]="fsDrawer">
         </ng-template>
-      </div>
+      </div>-->
     </div>
   </ng-container>
 </div>

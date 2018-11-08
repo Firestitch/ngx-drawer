@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { IDrawerConfig } from '../../../../../src/interfaces/';
-import { DrawerRef } from '../../../../../src/components/fs-drawer/';
+import { DrawerRef } from '../../../../../src/classes';
 import { DRAWER_DATA } from '../../../../../src/services/';
 
 @Component({
@@ -21,49 +21,7 @@ export class TaskDrawerComponent implements OnInit {
     this.drawer.template = this.drawerTemplate; // for connection drawer component for dynamic components
 
     this.config = {
-      disableClose: false,
-      position: 'right',
-      activeAction: 'settings',
-      width: '500px',
-      actions: [
-        {
-          icon: 'clear',
-          type: 'button',
-          click: (event) => {
-            this.drawer.close();
-          }
-        },
-        {
-          icon: 'settings',
-          name: 'settings',
-          type: 'button',
-          tooltip: 'Settings',
-          click: (event) => {
-          }
-        },
-        {
-          icon: 'edit',
-          name: 'edit',
-          type: 'button',
-          tooltip: 'Edit',
-          click: (event) => {
-            this.drawer.openSide();
-            this.drawer.setActiveAction('edit');
-          }
-        },
-        {
-          icon: 'more_vert',
-          type: 'menu',
-          actions: [
-            {
-              icon: 'settings',
-              type: 'button',
-              click: (event) => {
-              }
-            }
-          ]
-        }
-      ]
+
     };
 
   }
