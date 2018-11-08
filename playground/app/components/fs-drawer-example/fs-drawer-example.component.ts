@@ -1,6 +1,8 @@
 import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import { FsDrawerService } from '../../../../src/services/fs-drawer.service';
-import {TaskDrawerComponent} from './task-drawer/task-drawer.component';
+import { FsDrawerService } from '@firestitch/drawer';
+
+import { TaskDrawerComponent } from './task-drawer';
+
 
 @Component({
   selector: 'fs-drawer-example',

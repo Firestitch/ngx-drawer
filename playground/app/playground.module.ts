@@ -1,19 +1,21 @@
-import './styles.scss';
-
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterModule, Routes } from '@angular/router';
-import { AppComponent } from './app/app.component';
 import { BrowserModule } from '@angular/platform-browser';
-import { FsDrawerModule } from '../src';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { AppMaterialModule } from './app/material.module';
-import { FsExampleModule } from '@firestitch/example';
-import {  ExampleComponent,
-          ExamplesComponent,
-          FsDrawerExampleComponent,
-          TaskDrawerComponent } from './app/components';
 
+import { FsExampleModule } from '@firestitch/example';
+import { FsDrawerModule } from '@firestitch/drawer';
+
+import { AppMaterialModule } from './material.module';
+
+import {
+AppComponent,
+ExampleComponent,
+ExamplesComponent,
+FsDrawerExampleComponent,
+TaskDrawerComponent,
+} from './components';
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -23,12 +25,12 @@ const routes: Routes = [
   bootstrap: [ AppComponent ],
   imports: [
     BrowserModule,
-    FsDrawerModule,
     BrowserAnimationsModule,
     AppMaterialModule,
     FormsModule,
     FsExampleModule.forRoot(),
     RouterModule.forRoot(routes),
+    FsDrawerModule,
   ],
   entryComponents: [
     TaskDrawerComponent

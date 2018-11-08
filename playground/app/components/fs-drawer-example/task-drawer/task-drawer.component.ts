@@ -1,7 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { IDrawerConfig } from '../../../../../src/interfaces/';
-import { DrawerRef } from '../../../../../src/classes';
-import { DRAWER_DATA } from '../../../../../src/services/';
+import { DRAWER_DATA, DrawerRef, IDrawerConfig } from '@firestitch/drawer';
+
 
 @Component({
   selector: 'fs-task-drawer',
@@ -18,11 +17,10 @@ export class TaskDrawerComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.drawer.template = this.drawerTemplate; // for connection drawer component for dynamic components
+    // this.drawer.template = this.drawerTemplate; // for connection drawer component for dynamic components
 
-    this.config = {
-
-    };
-
+    // this.config = {
+    //
+    // };
   }
 }
