@@ -6,6 +6,8 @@ import { FsDrawerComponent } from './components/fs-drawer/fs-drawer.component';
 import { FsDrawerService } from './services';
 
 import { MatTooltipModule } from '@angular/material';
+import { FsDrawerSide } from './directives/drawer-side.directive';
+import { FsDrawerContent } from './directives/drawer-content.directive';
 
 
 @NgModule({
@@ -17,12 +19,16 @@ import { MatTooltipModule } from '@angular/material';
   ],
   exports: [
     FsDrawerComponent,
+    FsDrawerSide,
+    FsDrawerContent,
   ],
   entryComponents: [
     FsDrawerComponent,
   ],
   declarations: [
     FsDrawerComponent,
+    FsDrawerSide,
+    FsDrawerContent,
   ],
   providers: [
     FsDrawerService,

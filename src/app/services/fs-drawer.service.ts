@@ -27,7 +27,7 @@ export class FsDrawerService {
     const componentRef = this.attachComponent(component, containerRef, drawerRef, config);
 
     drawerRef.containerRef = containerRef;
-    containerRef.drawerConfig = drawerRef.drawerConfig;
+    containerRef.setDrawerRef(drawerRef);
 
     drawerRef.componentRef = componentRef;
 

@@ -1,10 +1,10 @@
-<div class="drawer" [style.width]="drawerConfig.width" [hidden]="!isOpen" [ngClass]="drawerConfig.position">
+<div class="drawer" [style.width]="config.width" [hidden]="!isOpen" [ngClass]="config.position">
   <ng-container>
     <div class="drawer-actions">
-      <div *ngFor="let action of drawerConfig.actions" class="action-btn">
+      <div *ngFor="let action of config.actions" class="action-btn">
         <button [type]="action.type"
           [matTooltip]="action.tooltip"
-          [class.active]="action.name && action.name === drawerConfig.activeAction"
+          [class.active]="action.name !== '' && action.name === drawerRef.activeAction"
           (click)="click(action, $event)">
           <i class="material-icons">{{action.icon}}</i>
         </button>

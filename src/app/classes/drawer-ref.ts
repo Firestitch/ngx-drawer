@@ -1,3 +1,4 @@
+import { ComponentRef } from '@angular/core';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
@@ -5,13 +6,12 @@ import { Observable, Subject } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components';
-import { ComponentRef } from '@angular/core';
 import { DrawerConfig } from '../models/fs-drawer-config.model';
 
 
 export class DrawerRef<T, R = any> {
 
-  public readonly drawerConfig;
+  public readonly drawerConfig: DrawerConfig;
 
   /** Subject for notifying the user that the drawer has finished opening. */
   private readonly _afterOpened = new Subject<void>();
@@ -28,26 +28,23 @@ export class DrawerRef<T, R = any> {
   /** Result to be passed to afterClosed. */
   private _result: R | undefined;
 
-  /** Target component */
-  private _container;
-
   /** Main drawer component and template */
   private _drawerContainerRef: FsDrawerComponent;
 
   /** Main drawer component and template */
   private _drawerComponentRef: ComponentRef<T>;
 
-  constructor(private _overlayRef: OverlayRef,
-              _config: any) {
-    this.drawerConfig = new DrawerConfig(_config);
-  }
+  private _activeAction: string;
 
-  /**
-   * Set main target component
-   * @param value
-   */
-  set container(value) {
-    this._container = value;
+  private _isOpen = false;
+  private _isSideOpen = false;
+
+
+  constructor(
+    private _overlayRef: OverlayRef,
+              _config: any
+  ) {
+    this.drawerConfig = new DrawerConfig(_config);
   }
 
   /**
@@ -66,12 +63,32 @@ export class DrawerRef<T, R = any> {
     this._drawerComponentRef = value;
   }
 
+  get activeAction() {
+    return this._activeAction;
+  }
+
+  /**
+   * Return actual status of the drawer
+   * @returns {boolean}
+   */
+  get isOpen(): boolean {
+    return this._isOpen;
+  }
+
+  /**
+   * Return actual status of the side of the drawer
+   * @returns {boolean}
+   */
+  get isSideOpen(): boolean {
+    return this._isSideOpen;
+  }
+
   /**
    * Subscribe on keydown events to react on escape
    */
   public events() {
     this._overlayRef.keydownEvents()
-      .pipe(filter(event => event.keyCode === ESCAPE && !this._drawerContainerRef.drawerConfig))
+      .pipe(filter(event => event.keyCode === ESCAPE && !this.drawerConfig.disableClose))
       .subscribe(() => this.close());
   }
 
@@ -115,38 +132,22 @@ export class DrawerRef<T, R = any> {
    * Open the side of the drawer
    */
   public openSide() {
-    this._drawerContainerRef.openSide();
+    this._isSideOpen = true;
   }
 
   /**
    * Close the side of the drawer
    */
   public closeSide() {
-    this._drawerContainerRef.closeSide();
+    this._activeAction = null;
+    this._isSideOpen = false;
   }
 
   /**
    * Toggle the side of the drawer
    */
   public toggleSide() {
-    const drawer = this._drawerContainerRef;
-    drawer.isOpenSide ? drawer.closeSide() : drawer.openSide();
-  }
-
-  /**
-   * Return actual status of the drawer
-   * @returns {boolean}
-   */
-  public isOpen(): boolean {
-    return this._drawerContainerRef.isOpen;
-  }
-
-  /**
-   * Return actual status of the side of the drawer
-   * @returns {boolean}
-   */
-  public isSideOpen(): boolean {
-    return this._drawerContainerRef.isOpenSide;
+    this.isSideOpen ? this.closeSide() : this.openSide();
   }
 
   /**
@@ -154,7 +155,8 @@ export class DrawerRef<T, R = any> {
    * @param {string} name
    */
   public setActiveAction(name: string) {
-    this._drawerContainerRef.drawerConfig.activeAction = name;
+    this._activeAction = name;
+    this.openSide();
   }
 
 

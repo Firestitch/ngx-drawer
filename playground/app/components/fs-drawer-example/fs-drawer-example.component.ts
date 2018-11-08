@@ -45,8 +45,8 @@ export class FsDrawerExampleComponent implements OnInit {
           type: 'button',
           tooltip: 'Edit',
           click: (event) => {
-            drawerRef.openSide();
-            drawerRef.setActiveAction('edit');
+            // drawerRef.openSide();
+            // drawerRef.setActiveAction('edit');
           }
         },
         {

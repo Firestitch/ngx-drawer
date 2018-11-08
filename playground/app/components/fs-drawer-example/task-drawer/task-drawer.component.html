@@ -1,9 +1,11 @@
-<!--
-<ng-template #fsDrawerSide>
-  Side {{ data | json }}
-</ng-template>
-<ng-template #fsDrawer>
-  Drawer {{ data | json }}
-</ng-template>-->
-
-{{ data | json }}
+<div fsDrawerSide *ngIf="drawer.isSideOpen" [ngSwitch]="drawer.activeAction">
+  <ng-template [ngSwitchCase]="'settings'">
+    Settings action
+  </ng-template>
+  <ng-template [ngSwitchCase]="'edit'">
+    Edit action
+  </ng-template>
+</div>
+<div fsDrawerContent>
+  {{ data | json }}
+</div>
