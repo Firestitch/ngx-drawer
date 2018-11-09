@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components';
 import { DrawerConfig } from '../models/fs-drawer-config.model';
+import { Subscriber } from 'rxjs/src/internal/Subscriber';
 
 
 export class DrawerRef<T, R = any> {
@@ -14,16 +15,16 @@ export class DrawerRef<T, R = any> {
   public readonly drawerConfig: DrawerConfig;
 
   /** Subject for notifying the user that the drawer has finished opening. */
-  private readonly _afterOpened = new Subject<void>();
+  private readonly _afterOpened$ = new Subject<void>();
 
   /** Subject for notifying the user that the drawer has finished closing. */
-  private readonly _afterClosed = new Subject<R | undefined>();
+  private readonly _afterClosed$ = new Subject<R | undefined>();
 
   /** Subject for notifying the user that the drawer has started closing. */
-  private readonly _closeStart = new Subject<void>();
+  private readonly _closeStart$ = new Subject<Subscriber<void>>();
 
   /** Subject for notifying the user that the drawer has started opening. */
-  private readonly _openStart = new Subject<void>();
+  private readonly _openStart$ = new Subject<Subscriber<void>>();
 
   /** Result to be passed to afterClosed. */
   private _result: R | undefined;
@@ -45,6 +46,8 @@ export class DrawerRef<T, R = any> {
               _config: any
   ) {
     this.drawerConfig = new DrawerConfig(_config);
+
+    this._activeAction = this.drawerConfig.activeAction;
   }
 
   /**
@@ -96,23 +99,53 @@ export class DrawerRef<T, R = any> {
    * Gets an observable that is notified when the dialog is finished closing.
    */
   public afterClosed(): Observable<R | undefined> {
-    return this._afterClosed.asObservable();
+    return this._afterClosed$.asObservable();
   }
 
   /**
    * Gets an observable that is notified when the dialog is finished opening.
    */
   public afterOpened(): Observable<void> {
-    return this._afterOpened.asObservable();
+    return this._afterOpened$.asObservable();
+  }
+
+  /**
+   * Gets an observable that is notified when the dialog open starts.
+   */
+  public openStart(): Observable<Subscriber<void>> {
+    return this._openStart$.asObservable();
+  }
+
+  /**
+   * Gets an observable that is notified when the dialog is finished opening.
+   */
+  public closeStart(): Observable<Subscriber<void>> {
+    return this._closeStart$.asObservable();
   }
 
   /**
    * Open drawer and notify observable
    */
   public open() {
-    this._drawerContainerRef.open();
-    this._afterOpened.next();
-    this._afterOpened.complete();
+    Observable.create((obs) => {
+      setTimeout(() => { // FIXME Crutch
+        if (this._openStart$.observers.length) {
+          this._openStart$.next(obs);
+        } else {
+          obs.next();
+          obs.complete();
+        }
+      });
+    }).subscribe({
+      next: () => {
+        this._drawerContainerRef.open();
+        this._afterOpened$.next();
+        this._afterOpened$.complete();
+      },
+      error: () => {
+        this.destroy();
+      },
+    });
   }
 
   /**
@@ -120,12 +153,23 @@ export class DrawerRef<T, R = any> {
    * @param result Optional result to return to the dialog opener.
    */
   public close(result?: R): void {
-    this._drawerContainerRef.close();
-    this._result = result;
+    Observable.create((obs) => {
+      if (this._closeStart$.observers.length) {
+        this._closeStart$.next(obs);
+      } else {
+        obs.next();
+        obs.complete();
+      }
+    }).subscribe({
+      next: () => {
+        this._drawerContainerRef.close();
+        this._result = result;
 
-    this._afterClosed.next(result);
-    this._afterClosed.complete();
-    this._overlayRef.detachBackdrop();
+        this._afterClosed$.next(result);
+
+        this.destroy();
+      }
+    });
   }
 
   /**
@@ -157,6 +201,17 @@ export class DrawerRef<T, R = any> {
   public setActiveAction(name: string) {
     this._activeAction = name;
     this.openSide();
+  }
+
+  public destroy() {
+    this._overlayRef.detachBackdrop();
+    this._overlayRef.detach();
+    this._drawerComponentRef.destroy();
+
+    this._openStart$.complete();
+    this._closeStart$.complete();
+    this._afterOpened$.complete();
+    this._afterClosed$.complete();
   }
 
 

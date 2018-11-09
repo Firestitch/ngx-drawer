@@ -72,6 +72,16 @@ export class FsDrawerExampleComponent implements OnInit {
       console.log('The drawer was opened');
     });
 
+    drawerRef.closeStart().subscribe((result) => {
+      console.log('close starts');
+      result.next();
+    });
+
+    drawerRef.openStart().subscribe((result) => {
+      console.log('open starts');
+      result.next();
+    });
+
   }
 
   public ngOnInit() {
