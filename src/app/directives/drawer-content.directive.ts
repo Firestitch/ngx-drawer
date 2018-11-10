@@ -6,4 +6,4 @@ import { Directive } from '@angular/core';
     'class': 'content'
   }
 })
-export class FsDrawerContent {}
+export class FsDrawerContentDirective {}

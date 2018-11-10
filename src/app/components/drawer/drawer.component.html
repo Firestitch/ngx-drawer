@@ -1,0 +1,13 @@
+<div class="drawer" [style.width]="config.width" [hidden]="!isOpen" [ngClass]="config.position">
+  <ng-container>
+    <fs-drawer-actions class="drawer-actions"
+                       [actions]="config.actions"
+                       [activeAction]="drawerRef.activeAction"
+                       (actionClicked)="actionClick($event)"
+                       (menuActionClicked)="menuActionClick($event)"
+    ></fs-drawer-actions>
+    <div class="drawer-content">
+      <ng-template cdkPortalOutlet></ng-template>
+    </div>
+  </ng-container>
+</div>

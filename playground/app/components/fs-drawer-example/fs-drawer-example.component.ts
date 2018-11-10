@@ -1,5 +1,5 @@
 import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
-import { FsDrawerService } from '@firestitch/drawer';
+import { FsDrawerAction, FsDrawerService } from '@firestitch/drawer';
 
 import { TaskDrawerComponent } from './task-drawer';
 
@@ -26,15 +26,16 @@ export class FsDrawerExampleComponent implements OnInit {
       actions: [
         {
           icon: 'clear',
-          type: 'button',
+          type: FsDrawerAction.button,
+          close: true,
           click: (event) => {
-            drawerRef.close();
+            console.log('close clicked');
           }
         },
         {
           icon: 'settings',
           name: 'settings',
-          type: 'button',
+          type: FsDrawerAction.button,
           tooltip: 'Settings',
           click: (event) => {
           }
@@ -42,7 +43,7 @@ export class FsDrawerExampleComponent implements OnInit {
         {
           icon: 'edit',
           name: 'edit',
-          type: 'button',
+          type: FsDrawerAction.button,
           tooltip: 'Edit',
           click: (event) => {
             // drawerRef.openSide();
@@ -51,12 +52,13 @@ export class FsDrawerExampleComponent implements OnInit {
         },
         {
           icon: 'more_vert',
-          type: 'menu',
+          type: FsDrawerAction.menu,
           actions: [
             {
               icon: 'settings',
-              type: 'button',
+              label: 'Do something..',
               click: (event) => {
+                console.log('clicked sub menu action');
               }
             }
           ]

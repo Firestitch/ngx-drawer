@@ -1,1 +1,1 @@
-export * from './drawer-ref';
+export { DrawerRef } from './drawer-ref';

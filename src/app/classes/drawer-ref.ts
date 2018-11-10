@@ -2,12 +2,11 @@ import { ComponentRef } from '@angular/core';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { Observable, Subject } from 'rxjs';
+import { Observable, Subject, Subscriber } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components';
-import { DrawerConfig } from '../models/fs-drawer-config.model';
-import { Subscriber } from 'rxjs/src/internal/Subscriber';
+import { DrawerConfig } from '../models';
 
 
 export class DrawerRef<T, R = any> {
@@ -26,6 +25,9 @@ export class DrawerRef<T, R = any> {
   /** Subject for notifying the user that the drawer has started opening. */
   private readonly _openStart$ = new Subject<Subscriber<void>>();
 
+  /** Subject for notifying the user that the drawer has started opening. */
+  private readonly _activeActionChange$ = new Subject<{ old: string, current: string }>();
+
   /** Result to be passed to afterClosed. */
   private _result: R | undefined;
 
@@ -35,16 +37,13 @@ export class DrawerRef<T, R = any> {
   /** Main drawer component and template */
   private _drawerComponentRef: ComponentRef<T>;
 
-  private _activeAction: string;
+  private _activeAction: string = null;
 
   private _isOpen = false;
   private _isSideOpen = false;
 
 
-  constructor(
-    private _overlayRef: OverlayRef,
-              _config: any
-  ) {
+  constructor(private _overlayRef: OverlayRef, _config: any) {
     this.drawerConfig = new DrawerConfig(_config);
 
     this._activeAction = this.drawerConfig.activeAction;
@@ -96,6 +95,13 @@ export class DrawerRef<T, R = any> {
   }
 
   /**
+   * Event provides change of active action
+   */
+  public activeActionChange() {
+    return this._activeActionChange$.asObservable();
+  }
+
+  /**
    * Gets an observable that is notified when the dialog is finished closing.
    */
   public afterClosed(): Observable<R | undefined> {
@@ -138,6 +144,10 @@ export class DrawerRef<T, R = any> {
       });
     }).subscribe({
       next: () => {
+        if (this.activeAction) {
+          this.openSide();
+        }
+
         this._drawerContainerRef.open();
         this._afterOpened$.next();
         this._afterOpened$.complete();
@@ -183,8 +193,9 @@ export class DrawerRef<T, R = any> {
    * Close the side of the drawer
    */
   public closeSide() {
-    this._activeAction = null;
     this._isSideOpen = false;
+
+    this.setActiveAction(null);
   }
 
   /**
@@ -199,8 +210,15 @@ export class DrawerRef<T, R = any> {
    * @param {string} name
    */
   public setActiveAction(name: string) {
+    const activeAction = this._activeAction;
+
     this._activeAction = name;
-    this.openSide();
+
+    if (name) {
+      this.openSide();
+    }
+
+    this._activeActionChange$.next({ old: activeAction, current: this._activeAction });
   }
 
   public destroy() {

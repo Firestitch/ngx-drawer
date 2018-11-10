@@ -1,12 +1,12 @@
 import {
   Component,
   ComponentRef,
-  ContentChild,
-  EmbeddedViewRef, Inject,
+  EmbeddedViewRef,
   OnInit,
   ViewChild,
   ViewEncapsulation
 } from '@angular/core';
+
 import {
   BasePortalOutlet,
   CdkPortalOutlet,
@@ -14,15 +14,14 @@ import {
   TemplatePortal
 } from '@angular/cdk/portal';
 
-import { DrawerConfig } from '../../models/fs-drawer-config.model';
-import { Action } from '../../models/action.model';
-import { DrawerRef } from '../../classes/drawer-ref';
+import { DrawerRef } from '../../classes';
+import { DrawerConfig } from '../../models/drawer-config.model';
 
 
 @Component({
   selector: 'fs-drawer',
-  templateUrl: './fs-drawer.component.html',
-  styleUrls: [ 'fs-drawer.component.scss' ],
+  templateUrl: './drawer.component.html',
+  styleUrls: [ 'drawer.component.scss' ],
   host: {
     'class': 'fs-drawer-container',
   },
@@ -62,13 +61,24 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
     this.isOpenSide = false;
   }
 
-  public click(action: Action, event) {
+  public actionClick({ action, event }) {
+    if (action.click) {
+      action.click.call(event);
+    }
+
+    if (action.close) {
+      this.drawerRef.close();
+      return;
+    }
+
     if (this.drawerRef.isSideOpen && this.drawerRef.activeAction === action.name) {
       this.drawerRef.toggleSide();
     } else {
       this.drawerRef.setActiveAction(action.name);
     }
+  }
 
+  public menuActionClick({ action, event }) {
     if (action.click) {
       action.click.call(event);
     }

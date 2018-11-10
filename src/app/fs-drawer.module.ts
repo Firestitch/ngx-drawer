@@ -1,13 +1,14 @@
 import { NgModule, ModuleWithProviders } from '@angular/core';
+import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { CommonModule } from '@angular/common';
-import { FsDrawerComponent } from './components/fs-drawer/fs-drawer.component';
-import { FsDrawerService } from './services';
-
 import { MatTooltipModule } from '@angular/material';
-import { FsDrawerSide } from './directives/drawer-side.directive';
-import { FsDrawerContent } from './directives/drawer-content.directive';
+
+import { FsMenuModule } from '@firestitch/menu';
+
+import { FsDrawerActionsComponent, FsDrawerComponent, FsDrawerSideComponent } from './components';
+import { FsDrawerContentDirective, FsDrawerActionDirective } from './directives';
+import { FsDrawerService } from './services';
 
 
 @NgModule({
@@ -16,19 +17,23 @@ import { FsDrawerContent } from './directives/drawer-content.directive';
     MatTooltipModule,
     OverlayModule,
     PortalModule,
+    FsMenuModule,
   ],
   exports: [
     FsDrawerComponent,
-    FsDrawerSide,
-    FsDrawerContent,
+    FsDrawerSideComponent,
+    FsDrawerContentDirective,
+    FsDrawerActionDirective,
   ],
   entryComponents: [
     FsDrawerComponent,
   ],
   declarations: [
+    FsDrawerSideComponent,
     FsDrawerComponent,
-    FsDrawerSide,
-    FsDrawerContent,
+    FsDrawerActionsComponent,
+    FsDrawerContentDirective,
+    FsDrawerActionDirective,
   ],
   providers: [
     FsDrawerService,

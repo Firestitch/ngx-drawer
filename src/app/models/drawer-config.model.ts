@@ -1,4 +1,5 @@
 import { Actions } from './actions.model';
+import { Action } from './action.model';
 
 export class DrawerConfig {
   public disableClose: boolean;
@@ -12,6 +13,6 @@ export class DrawerConfig {
     this.position = data.position || 'right';
     this.activeAction = data.activeAction || '';
     this.width = data.width || '500px';
-    this.actions = data.actions && data.actions.map((action) => new Actions(action)) || null;
+    this.actions = data.actions && data.actions.map((action) => new Action(action)) || null;
   }
 }

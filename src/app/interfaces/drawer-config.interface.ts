@@ -1,4 +1,4 @@
-import { IActionsConfig } from './actions.interface';
+import { IActionConfig } from './action.iterface';
 
 export interface IDrawerConfig {
   data?: any;
@@ -6,5 +6,5 @@ export interface IDrawerConfig {
   position?: 'right' | 'left';
   activeAction?: string;
   width?: string;
-  actions?: IActionsConfig[];
+  actions?: IActionConfig[];
 }

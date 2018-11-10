@@ -1,1 +1,3 @@
-export * from './fs-drawer-config.interface';
+export { IDrawerConfig } from './drawer-config.interface';
+export { IActionConfig } from './action.iterface';
+export { IMenuAction } from './menu-action.interface';

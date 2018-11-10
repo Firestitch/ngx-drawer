@@ -1,27 +1,23 @@
-import { Injectable, InjectionToken, Injector } from '@angular/core';
-import { Overlay, OverlayConfig, OverlayContainer, OverlayRef } from '@angular/cdk/overlay';
+import { Injectable, Injector } from '@angular/core';
+import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
 
-import { FsDrawerComponent } from '../components/fs-drawer/fs-drawer.component';
+import { FsDrawerComponent } from '../components';
 import { DrawerRef } from '../classes';
 import { IDrawerConfig } from '../interfaces';
 import { DRAWER_DATA } from './drawer-data';
-import { DrawerConfig } from '../models/fs-drawer-config.model';
 
 
 @Injectable()
 export class FsDrawerService {
 
-  constructor(private _overlay: Overlay,
-              private _injector: Injector,
-              private _overlayContainer: OverlayContainer) {
+  constructor(private _overlay: Overlay, private _injector: Injector) {
   }
 
   public open(component: ComponentType<any>, config?: IDrawerConfig) {
-    const overlayRef = this.createOverlay(config.data);
+    const overlayRef = this.createOverlay();
 
     const drawerRef = new DrawerRef(overlayRef, config);
-
 
     const containerRef = this.attachDrawerContainer(overlayRef, config);
     const componentRef = this.attachComponent(component, containerRef, drawerRef, config);
@@ -37,12 +33,12 @@ export class FsDrawerService {
     return drawerRef;
   }
 
-  private createOverlay(config): OverlayRef {
-    const overlayConfig = this.getOverlayConfig(config);
+  private createOverlay(): OverlayRef {
+    const overlayConfig = this.getOverlayConfig();
     return this._overlay.create(overlayConfig);
   }
 
-  private getOverlayConfig(dialogConfig): OverlayConfig {
+  private getOverlayConfig(): OverlayConfig {
     return new OverlayConfig();
   }
 

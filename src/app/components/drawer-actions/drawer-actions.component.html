@@ -1,0 +1,33 @@
+<div *ngFor="let action of actions" class="action-btn">
+  <ng-container [ngSwitch]="action.type">
+    <button *ngSwitchCase="actionTypes.button"
+            type="button"
+            [matTooltip]="action.tooltip"
+            [class.active]="action.name !== '' && action.name === activeAction"
+            (click)="actionClick(action, $event)">
+      <i class="material-icons">{{action.icon}}</i>
+    </button>
+
+    <ng-container *ngSwitchCase="actionTypes.menu">
+      <button type="button"
+              class="sub-action"
+              [fsMenuTriggerFor]="menu"
+              [matTooltip]="action.tooltip"
+              [class.active]="action.name !== '' && action.name === activeAction"
+              (click)="actionClick(action, $event)">
+        <i class="material-icons">{{action.icon}}</i>
+      </button>
+
+      <fs-menu #menu>
+        <ng-template ngFor let-subAction [ngForOf]="action.actions">
+          <ng-template fs-menu-item (click)="menuActionClick(subAction, $event)">
+            <i class="material-icons" *ngIf="subAction.icon">{{subAction.icon}}</i>
+            <span>{{subAction.label}}</span>
+          </ng-template>
+        </ng-template>
+      </fs-menu>
+
+    </ng-container>
+  </ng-container>
+
+</div>

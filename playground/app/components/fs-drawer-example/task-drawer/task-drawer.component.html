@@ -1,8 +1,8 @@
-<div fsDrawerSide *ngIf="drawer.isSideOpen" [ngSwitch]="drawer.activeAction">
-  <ng-template [ngSwitchCase]="'settings'">
+<div [fsDrawerSide]="drawer">
+  <ng-template fsDrawerAction="settings">
     Settings action
   </ng-template>
-  <ng-template [ngSwitchCase]="'edit'">
+  <ng-template fsDrawerAction="edit">
     Edit action
   </ng-template>
 </div>

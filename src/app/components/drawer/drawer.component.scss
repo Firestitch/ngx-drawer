@@ -32,20 +32,6 @@
   border-right: 1px solid #efefef;
   border-left: 1px solid #efefef;
   white-space: nowrap;
-
-  .action-btn {
-    margin-bottom: 5px;
-
-    > button {
-      border: none;
-      outline: none;
-
-      >i {
-        font-size: 18px;
-      }
-    }
-
-  }
 }
 
 .drawer-content {
