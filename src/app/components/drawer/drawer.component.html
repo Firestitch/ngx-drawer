@@ -1,6 +1,11 @@
-<div class="drawer" [style.width]="config.width" [hidden]="!isOpen" [ngClass]="config.position">
+<div class="drawer" #drawer [style.width]="config.width" [hidden]="!isOpen" [ngClass]="config.position">
   <ng-container>
     <fs-drawer-actions class="drawer-actions"
+                       [fsDrawerResizer]="drawer"
+                       [resizeMin]="config.resize?.min"
+                       [resizeMax]="config.resize?.max"
+                       [resizable]="!!config.resize"
+                       [direction]="config.position"
                        [actions]="config.actions"
                        [activeAction]="drawerRef.activeAction"
                        (actionClicked)="actionClick($event)"

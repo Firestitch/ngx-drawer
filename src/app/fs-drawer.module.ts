@@ -7,7 +7,7 @@ import { MatTooltipModule } from '@angular/material';
 import { FsMenuModule } from '@firestitch/menu';
 
 import { FsDrawerActionsComponent, FsDrawerComponent, FsDrawerSideComponent } from './components';
-import { FsDrawerContentDirective, FsDrawerActionDirective } from './directives';
+import { FsDrawerContentDirective, FsDrawerActionDirective, FsDrawerResizerDirective } from './directives';
 import { FsDrawerService } from './services';
 
 
@@ -24,6 +24,7 @@ import { FsDrawerService } from './services';
     FsDrawerSideComponent,
     FsDrawerContentDirective,
     FsDrawerActionDirective,
+    FsDrawerResizerDirective,
   ],
   entryComponents: [
     FsDrawerComponent,
@@ -34,6 +35,7 @@ import { FsDrawerService } from './services';
     FsDrawerActionsComponent,
     FsDrawerContentDirective,
     FsDrawerActionDirective,
+    FsDrawerResizerDirective,
   ],
   providers: [
     FsDrawerService,

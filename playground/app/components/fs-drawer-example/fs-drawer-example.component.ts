@@ -12,9 +12,7 @@ import { TaskDrawerComponent } from './task-drawer';
 export class FsDrawerExampleComponent implements OnInit {
   @ViewChild('task', { read: ViewContainerRef }) task: ViewContainerRef;
 
-  constructor(public drawer: FsDrawerService) {
-
-  }
+  constructor(public drawer: FsDrawerService) {}
 
   public openDrawer() {
     const drawerRef = this.drawer.open(TaskDrawerComponent, {
@@ -23,6 +21,10 @@ export class FsDrawerExampleComponent implements OnInit {
       position: 'right',
       activeAction: 'settings',
       width: '500px',
+      resize: {
+        min: 400,
+        max: 600
+      },
       actions: [
         {
           icon: 'clear',
