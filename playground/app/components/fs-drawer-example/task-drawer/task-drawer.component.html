@@ -1,8 +1,11 @@
-<fs-drawer #drawerTemplate [config]="config">
-  <ng-template #fsDrawerSide>
-    {{ data | json }}
+<div [fsDrawerSide]="drawer">
+  <ng-template fsDrawerAction="settings">
+    Settings action
   </ng-template>
-  <ng-template #fsDrawer>
-    {{ data | json }}
+  <ng-template fsDrawerAction="edit">
+    Edit action
   </ng-template>
-</fs-drawer>
+</div>
+<div fsDrawerContent>
+  {{ data | json }}
+</div>
