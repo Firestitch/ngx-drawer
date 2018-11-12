@@ -1,11 +1,11 @@
 <div [fsDrawerSide]="drawer">
   <ng-template fsDrawerAction="settings">
-    Settings action
+    <p>Settings action</p>
   </ng-template>
   <ng-template fsDrawerAction="edit">
-    Edit action
+    <p>Edit action</p>
   </ng-template>
 </div>
 <div fsDrawerContent>
-  {{ data | json }}
+  <pre>{{ data | json }}</pre>
 </div>

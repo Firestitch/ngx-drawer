@@ -2,7 +2,7 @@ import { NgModule, ModuleWithProviders } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
-import { MatTooltipModule } from '@angular/material';
+import { MatTooltipModule, MatButtonModule } from '@angular/material';
 
 import { FsMenuModule } from '@firestitch/menu';
 
@@ -15,6 +15,7 @@ import { FsDrawerService } from './services';
   imports: [
     CommonModule,
     MatTooltipModule,
+    MatButtonModule,
     OverlayModule,
     PortalModule,
     FsMenuModule,

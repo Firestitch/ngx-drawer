@@ -7,5 +7,5 @@ export interface IDrawerConfig {
   activeAction?: string;
   width?: string;
   actions?: IActionConfig[];
-  resize?: { min: number, max: number }
+  resize?: { min?: number, max?: number }
 }

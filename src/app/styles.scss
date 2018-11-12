@@ -1,0 +1,74 @@
+@import '~@angular/material/theming';
+@include mat-core();
+
+@mixin fs-drawer($theme) {
+
+  $primary: mat-palette($theme);
+
+  fs-drawer {
+
+    .drawer {
+      position: fixed;
+      border-left: 1px solid #efefef;
+      border-right: 1px solid #efefef;
+      top: 0;
+      bottom: 0;
+      z-index: 75;
+      background-color: #fff;
+      min-width: 350px;
+    }
+
+    .left {
+      left: 0;
+
+      .drawer-actions {
+        right: 0;
+      }
+    }
+
+    .right {
+      right: 0;
+
+      .drawer-actions {
+        left: 0;
+      }
+    }
+
+    .drawer-content {
+      height: 100%;
+
+      > *:first-child {
+        margin-left: 40px;
+        display: flex;
+        align-content: space-between;
+        height: 100%;
+
+        .side {
+          border-right: 1px solid #efefef;
+        }
+      }
+    }
+
+    .drawer-actions {
+      user-select: none;
+      position: absolute;
+      width: 40px;
+      height: 100%;
+      border-right: 1px solid #efefef;
+      white-space: nowrap;
+
+      .action-btn {
+        margin-bottom: 5px;
+
+        > button {
+          border: none;
+          outline: none;
+        }
+      }
+
+      .active .material-icons {
+        color: mat-color($primary);
+      }
+    }
+  }
+}
