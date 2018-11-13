@@ -1,6 +1,7 @@
 <div *ngFor="let action of actions" class="action-btn">
   <ng-container [ngSwitch]="action.type">
-    <button *ngSwitchCase="actionTypes.button"
+    <button mat-icon-button
+            *ngSwitchCase="actionTypes.button"
             type="button"
             [matTooltip]="action.tooltip"
             [class.active]="action.name !== '' && action.name === activeAction"
@@ -9,7 +10,8 @@
     </button>
 
     <ng-container *ngSwitchCase="actionTypes.menu">
-      <button type="button"
+      <button mat-icon-button
+              type="button"
               class="sub-action"
               [fsMenuTriggerFor]="menu"
               [matTooltip]="action.tooltip"

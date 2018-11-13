@@ -10,7 +10,6 @@ import { TaskDrawerComponent } from './task-drawer';
   styleUrls: ['./fs-drawer-example.component.scss']
 })
 export class FsDrawerExampleComponent implements OnInit {
-  @ViewChild('task', { read: ViewContainerRef }) task: ViewContainerRef;
 
   constructor(public drawer: FsDrawerService) {}
 
@@ -23,7 +22,7 @@ export class FsDrawerExampleComponent implements OnInit {
       width: '500px',
       resize: {
         min: 400,
-        max: 600
+        max: 99999
       },
       actions: [
         {
@@ -89,6 +88,9 @@ export class FsDrawerExampleComponent implements OnInit {
   }
 
   public ngOnInit() {
-
+    // Avoids: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'klass: undefined'
+    setTimeout(() => {
+      this.openDrawer();
+    });
   }
 }
