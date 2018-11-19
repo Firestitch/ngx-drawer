@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild, ViewContainerRef} from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FsDrawerAction, FsDrawerService } from '@firestitch/drawer';
 
 import { TaskDrawerComponent } from './task-drawer';
@@ -22,7 +22,9 @@ export class FsDrawerExampleComponent implements OnInit {
       width: '500px',
       resize: {
         min: 400,
-        max: 99999
+        max: 99999,
+        minSide: 100,
+        maxSide: 300,
       },
       actions: [
         {

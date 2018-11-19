@@ -1,1 +1,30 @@
-<ng-template [ngIf]="activeTemplate" [ngTemplateOutlet]="activeTemplate"></ng-template>
+<ng-container [ngSwitch]="drawer.drawerConfig.position" *ngIf="activeTemplate">
+  <ng-container *ngSwitchCase="'right'">
+    <div class="side-content" #sideContent>
+      <ng-template [ngTemplateOutlet]="activeTemplate"></ng-template>
+    </div>
+    <div class="resize"
+         resizable="true"
+         direction="left"
+         [fsDrawerResizer]="sideContent"
+         [resizeMin]="drawer.drawerConfig.resize.minSide"
+         [resizeMax]="drawer.drawerConfig.resize.maxSide"
+    >
+      <span class="resize-icon"></span>
+    </div>
+  </ng-container>
+  <ng-container *ngSwitchCase="'left'">
+    <div class="resize"
+         resizable="true"
+         direction="right"
+         [fsDrawerResizer]="sideContent"
+         [resizeMin]="drawer.drawerConfig.resize.minSide"
+         [resizeMax]="drawer.drawerConfig.resize.maxSide"
+    >
+      <span class="resize-icon"></span>
+    </div>
+    <div class="side-content" #sideContent>
+      <ng-template [ngTemplateOutlet]="activeTemplate"></ng-template>
+    </div>
+  </ng-container>
+</ng-container>

@@ -19,6 +19,14 @@
     .left {
       left: 0;
 
+      .drawer-content {
+
+        > *:first-child {
+          margin-left: 0 !important;
+          flex-direction: row-reverse;
+        }
+      }
+
       .drawer-actions {
         right: 0;
       }
@@ -42,8 +50,12 @@
         height: 100%;
 
         .side {
+          display: flex;
           border-right: 1px solid #efefef;
-          padding: 18px;
+
+          .side-content {
+            padding: 18px;
+          }
         }
 
         .content {
@@ -54,14 +66,22 @@
 
 
     .drawer-actions {
-      user-select: none;
       position: absolute;
-      width: 40px;
+      width: 35px;
       height: 100%;
+      display: flex;
+      flex-direction: column;
+      border-style: solid;
+      border-color: #ccc;
+      border-width: 0 1px;
+      user-select: none;
       white-space: nowrap;
 
       .action-btn {
+        position: relative;
         margin-bottom: 5px;
+        background: #fff;
+        z-index: 5;
 
         > button {
           border: none;
@@ -76,6 +96,29 @@
       button.active .material-icons {
         color: mat-color($primary);
       }
+    }
+
+    .resize {
+      width: 35px;
+      border-style: solid;
+      border-color: #ccc;
+      border-width: 0 1px;
+    }
+
+    .resize-icon {
+      position: absolute;
+      display: block;
+      top: 50%;
+      width: 7px;
+      height: 20px;
+      margin: -10px 0 0 12px;
+      border-style: solid;
+      border-color: #ccc;
+      border-width: 0 1px;
+      box-sizing: border-box;
+      line-height: 14px;
+      user-select: none;
+      z-index: 1;
     }
   }
 }
