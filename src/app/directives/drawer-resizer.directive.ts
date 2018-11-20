@@ -20,11 +20,14 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   private readonly _borderPadding = 10;
 
+  private _maxWidthByScreen: number;
+
   constructor(private _el: ElementRef, private _renderer: Renderer2) {}
 
   public ngOnInit() {
     if (this.resizable) {
       this._el.nativeElement.addEventListener('mousedown', this._dragStartHandler, false);
+
       this._renderer.setStyle(this._el.nativeElement, 'cursor', 'col-resize');
 
       this._width = this._getElementWidth(this.fsDrawerResizer);
@@ -33,7 +36,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
         this._width = this.resizeMin;
       }
 
-      this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`)
+      this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`);
     }
   }
 
@@ -47,34 +50,26 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     this._x = this._getClientX(e);
     this._width = this._getElementWidth(this.fsDrawerResizer);
 
+    this._maxWidthByScreen = (window.innerWidth - this._borderPadding);
+
+    this._setMinMaxStyles();
+
+    if (e.stopPropagation) e.stopPropagation();
+    if (e.preventDefault) e.preventDefault();
+
+    e.cancelBubble = true;
+    e.returnValue = false;
+
     document.addEventListener('mouseup', this._dragEndHandler, false);
     document.addEventListener('mousemove', this._dragHandler, false);
   }
 
   private _drag(e) {
     const clientX = this._getClientX(e);
-    let predictedWidth = null;
 
-    switch (this.direction) {
-      case 'left': {
-        predictedWidth = this._width - (this._x - clientX);
-      } break;
+    const predictedWidth = this._calcWidth(this.direction, clientX);
 
-      case 'right': {
-        predictedWidth = this._width + (this._x - clientX);
-      } break;
-    }
-
-    if (
-      predictedWidth > +this.resizeMin &&
-      predictedWidth < +this.resizeMax &&
-      clientX > this._borderPadding &&
-      clientX < (window.innerWidth - this._borderPadding)
-    ) {
-      this._width = predictedWidth;
-      this._x = clientX;
-      this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`)
-    }
+    this._updatePosition(clientX, predictedWidth);
   }
 
   private _dragEnd(e) {
@@ -97,5 +92,27 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     }
 
     return parseFloat(width);
+  }
+
+  private _updatePosition(clientX, width) {
+    this._x = clientX;
+    this._width = width;
+
+    this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`)
+  }
+
+  private _calcWidth(direction, clientX) {
+    const directionSign = direction === 'left' ? -1 : 1;
+
+    return this._width + (this._x - clientX) * directionSign;
+  }
+
+  private _setMinMaxStyles() {
+
+    const minWidth = this.resizeMin >= 0 ? this.resizeMin : 0;
+    this._renderer.setStyle(this.fsDrawerResizer, 'min-width', `${minWidth}px`);
+
+    const maxWidth = this.resizeMax >= this._maxWidthByScreen ? this._maxWidthByScreen : this.resizeMax;
+    this._renderer.setStyle(this.fsDrawerResizer, 'max-width', `${maxWidth}px`)
   }
 }
