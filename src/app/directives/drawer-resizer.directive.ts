@@ -1,4 +1,7 @@
 import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2, } from '@angular/core';
+import { fromEvent, Subject } from 'rxjs';
+import { debounceTime, takeUntil } from 'rxjs/operators';
+
 
 @Directive({
   selector: '[fsDrawerResizer]',
@@ -22,11 +25,15 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   private _maxWidthByScreen: number;
 
+  private _destroy$ = new Subject();
+
   constructor(private _el: ElementRef, private _renderer: Renderer2) {}
 
   public ngOnInit() {
+
     if (this.resizable) {
       this._el.nativeElement.addEventListener('mousedown', this._dragStartHandler, false);
+      this._el.nativeElement.addEventListener('touchstart', this._dragStartHandler, false);
 
       this._renderer.setStyle(this._el.nativeElement, 'cursor', 'col-resize');
 
@@ -36,6 +43,8 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
         this._width = this.resizeMin;
       }
 
+      this._listenWindowResize();
+
       this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`);
     }
   }
@@ -43,70 +52,135 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this._renderer.removeStyle(this._el.nativeElement, 'cursor');
     this._el.nativeElement.removeEventListener('mousedown', this._dragStartHandler, false);
+
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
-  private _dragStart(e) {
+  /**
+   * Subscribe to move events and init base dimensions/restrictions
+   * @param event { MouseEvent }
+   * @private
+   */
+  private _dragStart(event: MouseEvent) {
 
-    this._x = this._getClientX(e);
+    this._x = this._getClientX(event);
     this._width = this._getElementWidth(this.fsDrawerResizer);
 
-    this._maxWidthByScreen = (window.innerWidth - this._borderPadding);
-
+    this._updateMaxScreenWidth();
     this._setMinMaxStyles();
 
-    if (e.stopPropagation) e.stopPropagation();
-    if (e.preventDefault) e.preventDefault();
+    if (event.stopPropagation) event.stopPropagation();
+    if (event.preventDefault) event.preventDefault();
 
-    e.cancelBubble = true;
-    e.returnValue = false;
+    event.cancelBubble = true;
+    event.returnValue = false;
 
-    document.addEventListener('mouseup', this._dragEndHandler, false);
+    document.addEventListener('touchmove', this._dragHandler, false);
+    document.addEventListener('touchend', this._dragEndHandler, false);
+
     document.addEventListener('mousemove', this._dragHandler, false);
+    document.addEventListener('mouseup', this._dragEndHandler, false);
   }
 
-  private _drag(e) {
-    const clientX = this._getClientX(e);
+  /**
+   * Update coordinates during drag
+   * @param event
+   * @private
+   */
+  private _drag(event: MouseEvent) {
+    const clientX = this._getClientX(event);
 
     const predictedWidth = this._calcWidth(this.direction, clientX);
 
     this._updatePosition(clientX, predictedWidth);
   }
 
-  private _dragEnd(e) {
-    document.removeEventListener('mouseup', this._dragEndHandler, false);
+  /**
+   * Remove listeners when drag finished
+   * @param event
+   * @private
+   */
+  private _dragEnd(event: MouseEvent) {
     document.removeEventListener('mousemove', this._dragHandler, false);
+    document.removeEventListener('mouseup', this._dragEndHandler, false);
+    document.removeEventListener('touchmove', this._dragHandler, false);
+    document.removeEventListener('touchend', this._dragEndHandler, false);
   }
 
-  private _getClientX(e) {
-    return e.touches ? e.touches[0].clientX : e.clientX;
+  /**
+   * Listen for browser resize and update restrictions
+   * @private
+   */
+  private _listenWindowResize() {
+    fromEvent(window, 'resize')
+      .pipe(
+        debounceTime(50),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._updateMaxScreenWidth();
+        this._setMinMaxStyles();
+      })
   }
 
+  /**
+   *
+   * @param event
+   * @private
+   */
+  private _getClientX(event) {
+    return event.touches ? event.touches[0].clientX : event.clientX;
+  }
+
+
+  /**
+   * Will return width of element
+   * @param el
+   * @private
+   */
   private _getElementWidth(el) {
     let width = null;
 
     try {
       width = window.getComputedStyle(el, null)
         .getPropertyValue('width');
-    } catch (e) {
-      width = this.fsDrawerResizer.currentStyle.width;
+    } catch (error) {
+      width = el.currentStyle.width;
     }
 
     return parseFloat(width);
   }
 
-  private _updatePosition(clientX, width) {
+  /**
+   * Update width and position of target element
+   * @param clientX
+   * @param width
+   * @private
+   */
+  private _updatePosition(clientX: number, width: number) {
     this._x = clientX;
     this._width = width;
 
     this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`)
   }
 
+  /**
+   * Calc new width based on offset from previous position
+   * @param direction
+   * @param clientX
+   * @private
+   */
   private _calcWidth(direction, clientX) {
     const directionSign = direction === 'left' ? -1 : 1;
 
     return this._width + (this._x - clientX) * directionSign;
   }
 
+  /**
+   * Set inline styles min/max width
+   * @private
+   */
   private _setMinMaxStyles() {
 
     const minWidth = this.resizeMin >= 0 ? this.resizeMin : 0;
@@ -114,5 +188,13 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
     const maxWidth = this.resizeMax >= this._maxWidthByScreen ? this._maxWidthByScreen : this.resizeMax;
     this._renderer.setStyle(this.fsDrawerResizer, 'max-width', `${maxWidth}px`)
+  }
+
+  /**
+   * Update current window size
+   * @private
+   */
+  private _updateMaxScreenWidth() {
+    this._maxWidthByScreen = (window.innerWidth - this._borderPadding);
   }
 }
