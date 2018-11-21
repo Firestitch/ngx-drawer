@@ -14,7 +14,7 @@ import {
   TemplatePortal
 } from '@angular/cdk/portal';
 
-import { DrawerRef } from '../../classes';
+import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerConfig } from '../../models/drawer-config.model';
 
 

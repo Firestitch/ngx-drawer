@@ -1,4 +1,4 @@
-import { FsDrawerAction } from '@firestitch/drawer';
+import { FsDrawerAction } from '../helpers/action-type.enum';
 import { IMenuAction } from './menu-action.interface';
 
 

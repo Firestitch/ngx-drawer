@@ -11,8 +11,8 @@ import {
 } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
-import { DrawerRef } from '../../classes';
-import { FsDrawerActionDirective } from '../../directives';
+import { DrawerRef } from '../../classes/drawer-ref';
+import { FsDrawerActionDirective } from '../../directives/drawer-action.directive';
 
 
 @Component({

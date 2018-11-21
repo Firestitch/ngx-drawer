@@ -2,9 +2,9 @@ import { Injectable, Injector } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
 
-import { FsDrawerComponent } from '../components';
-import { DrawerRef } from '../classes';
-import { IDrawerConfig } from '../interfaces';
+import { FsDrawerComponent } from '../components/drawer/drawer.component';
+import { DrawerRef } from '../classes/drawer-ref';
+import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DRAWER_DATA } from './drawer-data';
 
 

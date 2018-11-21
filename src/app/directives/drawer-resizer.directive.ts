@@ -60,7 +60,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   /**
    * Subscribe to move events and init base dimensions/restrictions
    * @param event { MouseEvent }
-   * @private
    */
   private _dragStart(event: MouseEvent) {
 
@@ -86,7 +85,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   /**
    * Update coordinates during drag
    * @param event
-   * @private
    */
   private _drag(event: MouseEvent) {
     const clientX = this._getClientX(event);
@@ -99,7 +97,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   /**
    * Remove listeners when drag finished
    * @param event
-   * @private
    */
   private _dragEnd(event: MouseEvent) {
     document.removeEventListener('mousemove', this._dragHandler, false);
@@ -110,7 +107,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   /**
    * Listen for browser resize and update restrictions
-   * @private
    */
   private _listenWindowResize() {
     fromEvent(window, 'resize')
@@ -127,7 +123,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   /**
    *
    * @param event
-   * @private
    */
   private _getClientX(event) {
     return event.touches ? event.touches[0].clientX : event.clientX;
@@ -137,7 +132,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   /**
    * Will return width of element
    * @param el
-   * @private
    */
   private _getElementWidth(el) {
     let width = null;
@@ -156,7 +150,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    * Update width and position of target element
    * @param clientX
    * @param width
-   * @private
    */
   private _updatePosition(clientX: number, width: number) {
     this._x = clientX;
@@ -169,7 +162,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    * Calc new width based on offset from previous position
    * @param direction
    * @param clientX
-   * @private
    */
   private _calcWidth(direction, clientX) {
     const directionSign = direction === 'left' ? -1 : 1;
@@ -179,7 +171,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   /**
    * Set inline styles min/max width
-   * @private
    */
   private _setMinMaxStyles() {
 
@@ -192,7 +183,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   /**
    * Update current window size
-   * @private
    */
   private _updateMaxScreenWidth() {
     this._maxWidthByScreen = (window.innerWidth - this._borderPadding);

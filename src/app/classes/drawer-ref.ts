@@ -5,8 +5,8 @@ import { OverlayRef } from '@angular/cdk/overlay';
 import { Observable, Subject, Subscriber } from 'rxjs';
 import { filter } from 'rxjs/operators';
 
-import { FsDrawerComponent } from '../components';
-import { DrawerConfig } from '../models';
+import { FsDrawerComponent } from '../components/drawer/drawer.component';
+import { DrawerConfig } from '../models/drawer-config.model';
 
 
 export class DrawerRef<T, R = any> {
@@ -51,7 +51,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Set reference to drawer container
-   * @param {FsDrawerComponent} value
+   * @param value
    */
   set containerRef(value: FsDrawerComponent) {
     this._drawerContainerRef = value;
@@ -59,7 +59,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Set reference to drawer component
-   * @param {ComponentRef<T>} value
+   * @param value
    */
   set componentRef(value: ComponentRef<T>) {
     this._drawerComponentRef = value;
@@ -71,7 +71,6 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Return actual status of the drawer
-   * @returns {boolean}
    */
   get isOpen(): boolean {
     return this._isOpen;
@@ -79,7 +78,6 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Return actual status of the side of the drawer
-   * @returns {boolean}
    */
   get isSideOpen(): boolean {
     return this._isSideOpen;
@@ -207,7 +205,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Change active action
-   * @param {string} name
+   * @param name
    */
   public setActiveAction(name: string) {
     const activeAction = this._activeAction;
