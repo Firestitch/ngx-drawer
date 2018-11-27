@@ -20,10 +20,12 @@
   "main": "package/index.js",
   "typings": "package/index.d.ts",
   "scripts": {
-    "package": "ng build fs-drawer",
+    "package": "npm-run-all -s build copy-styles",
     "package:test": "ng test fs-drawer",
     "package:publish": "cd package && npm publish --access=public",
     "demo:build": "ng build --aot --prod",
+    "build": "ng build fs-drawer",
+    "copy-styles": "cd tools && npm run cli:copy-styles",
     "serve": "ng serve"
   },
   "devDependencies": {
