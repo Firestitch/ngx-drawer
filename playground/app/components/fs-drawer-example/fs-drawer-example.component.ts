@@ -19,9 +19,9 @@ export class FsDrawerExampleComponent implements OnInit {
       disableClose: false,
       position: 'right',
       activeAction: 'settings',
-      width: '500px',
+      width: 'auto',
       resize: {
-        min: 400,
+        min: 1000,
         max: 99999,
         minSide: 100,
         maxSide: 300,
