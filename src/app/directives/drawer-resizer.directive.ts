@@ -174,10 +174,14 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    */
   private _setMinMaxStyles() {
 
-    const minWidth = this.resizeMin >= 0 ? this.resizeMin : 0;
+    const minWidth = this.resizeMin && this.resizeMin >= 0 ? this.resizeMin : 0;
+
     this._renderer.setStyle(this.fsDrawerResizer, 'min-width', `${minWidth}px`);
 
-    const maxWidth = this.resizeMax >= this._maxWidthByScreen ? this._maxWidthByScreen : this.resizeMax;
+    const maxWidth = !this.resizeMax || this.resizeMax >= this._maxWidthByScreen
+      ? this._maxWidthByScreen
+      : this.resizeMax;
+
     this._renderer.setStyle(this.fsDrawerResizer, 'max-width', `${maxWidth}px`)
   }
 
