@@ -4,7 +4,8 @@ import {
   EmbeddedViewRef,
   OnInit,
   ViewChild,
-  ViewEncapsulation
+  ViewEncapsulation,
+  HostBinding
 } from '@angular/core';
 
 import {
@@ -21,15 +22,15 @@ import { DrawerConfig } from '../../models/drawer-config.model';
 @Component({
   selector: 'fs-drawer',
   templateUrl: './drawer.component.html',
-  styleUrls: [ 'drawer.component.scss' ],
   host: {
     'class': 'fs-drawer-container',
   },
-  encapsulation: ViewEncapsulation.None,
+  encapsulation: ViewEncapsulation.None
 })
 export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
 
   @ViewChild(CdkPortalOutlet) _portalOutlet: CdkPortalOutlet;
+  @HostBinding('class.side-open') public sideOpen: boolean = false;
 
   public config: DrawerConfig;
   public isOpen = false;

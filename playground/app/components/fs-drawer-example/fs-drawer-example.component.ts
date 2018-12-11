@@ -18,13 +18,13 @@ export class FsDrawerExampleComponent implements OnInit {
       data: { account: { name: 'Name', email: 'email@email.com' } },
       disableClose: false,
       position: 'right',
-      activeAction: 'settings',
+      //activeAction: 'settings',
       width: 'auto',
       resize: {
-        min: 1000,
+        min: 200,
         max: 99999,
-        minSide: 100,
-        maxSide: 300,
+        //minSide: 100,
+        //maxSide: 300,
       },
       actions: [
         {
