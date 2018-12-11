@@ -7,6 +7,7 @@ import { filter } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerConfig } from '../models/drawer-config.model';
+import { DrawerData } from './drawer-data';
 
 
 export class DrawerRef<T, R = any> {
@@ -43,10 +44,20 @@ export class DrawerRef<T, R = any> {
   private _isSideOpen = false;
 
 
-  constructor(private _overlayRef: OverlayRef, _config: any) {
+  constructor(
+    private _overlayRef: OverlayRef,
+    private _dataFactory: DrawerData,
+    _config: any) {
     this.drawerConfig = new DrawerConfig(_config);
 
     this._activeAction = this.drawerConfig.activeAction;
+  }
+
+  /**
+   * Getter for DRAWER_DATA for current drawer
+   */
+  get drawerData() {
+    return { ...this._dataFactory.value } // Like immutable.... TODO switch to Immer
   }
 
   /**
@@ -175,6 +186,7 @@ export class DrawerRef<T, R = any> {
 
         this._afterClosed$.next(result);
 
+        this._dataFactory.destroy();
         this.destroy();
       }
     });
@@ -217,6 +229,14 @@ export class DrawerRef<T, R = any> {
     }
 
     this._activeActionChange$.next({ old: activeAction, current: this._activeAction });
+  }
+
+  /**
+   * Do immutable update of drawerDataa
+   * @param data
+   */
+  public updateDrawerData(data: any) {
+    this._dataFactory.value = data;
   }
 
   public destroy() {

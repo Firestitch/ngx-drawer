@@ -1,4 +1,9 @@
-<div class="mat-elevation-z2 drawer" #drawer [style.width]="config.width" [hidden]="!isOpen" [ngClass]="config.position">
+<div class="mat-elevation-z2 drawer" #drawer
+     hidden
+     [style.width]="config.width"
+     [ngClass]="config.position"
+     [hidden]="!initialized"
+>
   <ng-container>
     <fs-drawer-actions class="drawer-actions"
                        [fsDrawerResizer]="drawer"

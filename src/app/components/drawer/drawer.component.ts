@@ -37,6 +37,8 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
 
   public drawerRef: DrawerRef<any>;
 
+  public initialized = false;
+
   constructor() {
     super();
   }
@@ -88,6 +90,8 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
     this.drawerRef = value;
 
     this.config = this.drawerRef.drawerConfig;
+
+    this.initialized = true;
   }
 
   /**

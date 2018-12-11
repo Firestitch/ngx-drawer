@@ -4,6 +4,7 @@ import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/por
 
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerRef } from '../classes/drawer-ref';
+import { DrawerData } from '../classes/drawer-data';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DRAWER_DATA } from './drawer-data';
 
@@ -17,10 +18,11 @@ export class FsDrawerService {
   public open(component: ComponentType<any>, config?: IDrawerConfig) {
     const overlayRef = this.createOverlay();
 
-    const drawerRef = new DrawerRef(overlayRef, config);
+    const dataFactory = new DrawerData(config.data);
+    const drawerRef = new DrawerRef(overlayRef, dataFactory, config);
 
-    const containerRef = this.attachDrawerContainer(overlayRef, config);
-    const componentRef = this.attachComponent(component, containerRef, drawerRef, config);
+    const containerRef = this.attachDrawerContainer(overlayRef, drawerRef, dataFactory);
+    const componentRef = this.attachComponent(component, containerRef, drawerRef, dataFactory);
 
     drawerRef.containerRef = containerRef;
     containerRef.setDrawerRef(drawerRef);
@@ -42,9 +44,12 @@ export class FsDrawerService {
     return new OverlayConfig();
   }
 
-  private attachDrawerContainer<T, R>(overlayRef: OverlayRef, config: IDrawerConfig) {
-    const drawerRef = new DrawerRef<T, R>(overlayRef, config);
-    const injector = this.createInjector(drawerRef, config);
+  private attachDrawerContainer<T, R>(
+    overlayRef: OverlayRef,
+    drawerRef: DrawerRef<T, R>,
+    dataFactory: DrawerData
+  ) {
+    const injector = this.createInjector(drawerRef, dataFactory);
     const containerPortal = new ComponentPortal(FsDrawerComponent, undefined, injector);
     const containerRef = overlayRef.attach<FsDrawerComponent>(containerPortal);
 
@@ -55,10 +60,10 @@ export class FsDrawerService {
     componentRef: ComponentType<T>,
     drawerContainer: FsDrawerComponent,
     drawerRef: DrawerRef<T, R>,
-    config: IDrawerConfig,
+    dataFactory: DrawerData,
   ) {
 
-    const injector = this.createInjector(drawerRef, config);
+    const injector = this.createInjector(drawerRef, dataFactory);
 
     return drawerContainer.attachComponentPortal<T>(
       new ComponentPortal<T>(componentRef, undefined, injector)
@@ -66,10 +71,10 @@ export class FsDrawerService {
   }
 
 
-  private createInjector(componentRef, config) {
+  private createInjector(componentRef, dataFactory) {
     const injectionTokens = new WeakMap<any, any>([
       [DrawerRef, componentRef],
-      [DRAWER_DATA, config.data]
+      [DRAWER_DATA, dataFactory]
     ]);
 
     return new PortalInjector(this._injector, injectionTokens);
