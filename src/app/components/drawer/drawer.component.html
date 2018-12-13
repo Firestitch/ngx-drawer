@@ -6,6 +6,7 @@
 >
   <ng-container>
     <fs-drawer-actions class="drawer-actions"
+                       #drawerActionsContainer
                        [fsDrawerResizer]="drawer"
                        [resizeMin]="config.resize?.min"
                        [resizeMax]="config.resize?.max"
@@ -16,7 +17,7 @@
                        (actionClicked)="actionClick($event)"
                        (menuActionClicked)="menuActionClick($event)"
     ></fs-drawer-actions>
-    <div class="drawer-container">
+    <div class="drawer-container" #drawerContentContainer>
       <ng-template cdkPortalOutlet></ng-template>
     </div>
   </ng-container>

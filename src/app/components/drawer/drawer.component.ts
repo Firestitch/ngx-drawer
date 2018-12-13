@@ -5,7 +5,8 @@ import {
   OnInit,
   ViewChild,
   ViewEncapsulation,
-  HostBinding
+  HostBinding,
+  ElementRef
 } from '@angular/core';
 
 import {
@@ -29,8 +30,8 @@ import { DrawerConfig } from '../../models/drawer-config.model';
 })
 export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
 
-  @ViewChild(CdkPortalOutlet) _portalOutlet: CdkPortalOutlet;
-  @HostBinding('class.side-open') public sideOpen: boolean = false;
+  @HostBinding('class.side-open')
+  public sideOpen = false;
 
   public config: DrawerConfig;
   public isOpen = false;
@@ -39,6 +40,15 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
   public drawerRef: DrawerRef<any>;
 
   public initialized = false;
+
+  @ViewChild(CdkPortalOutlet)
+  private _portalOutlet: CdkPortalOutlet;
+
+  @ViewChild('drawerContentContainer')
+  private _drawerContentContainer: ElementRef;
+
+  @ViewChild('drawerActionsContainer', { read: ElementRef })
+  private _drawerActionsContainer: ElementRef;
 
   constructor() {
     super();
@@ -91,6 +101,14 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
     this.drawerRef = value;
 
     this.config = this.drawerRef.drawerConfig;
+
+    // Need to be like a parent for children resize
+    this.drawerRef.drawerContentContainer = this._drawerContentContainer;
+    this.drawerRef.drawerActionsContainer = this._drawerActionsContainer;
+
+    this.drawerRef.sideToggle().subscribe((opened) => {
+      this.sideOpen = opened;
+    });
 
     this.initialized = true;
   }

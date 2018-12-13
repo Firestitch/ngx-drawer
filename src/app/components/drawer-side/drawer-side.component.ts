@@ -7,7 +7,8 @@ import {
   HostBinding,
   Input,
   OnInit,
-  OnDestroy, AfterViewInit,
+  OnDestroy,
+  AfterViewInit,
 } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
@@ -46,6 +47,7 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
       // Check current side status
       this.hidden = !this.drawer.isSideOpen;
 
+      console.log(this.drawer);
       this.updateActiveActionTemplate();
     });
   }

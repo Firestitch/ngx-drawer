@@ -13,6 +13,8 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   @Input() public resizeMax = Infinity;
   @Input() public direction = 'left';
   @Input() public resizable = false;
+  @Input() public parentContainer: ElementRef;
+  @Input() public actionsContainer: ElementRef;
 
   private _dragStartHandler = this._dragStart.bind(this);
   private _dragHandler = this._drag.bind(this);
@@ -20,6 +22,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   private _x = 0;
   private _width = 0;
+  private _actionsWidth = 0;
 
   private readonly _borderPadding = 0;
 
@@ -40,9 +43,21 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   }
 
   private get maxWidth() {
-    return !this.resizeMax || this.resizeMax >= this._maxWidthByScreen
-      ? this._maxWidthByScreen
-      : this.resizeMax;
+    let parentContainerWidth = null;
+
+    if (this.parentContainer) {
+      parentContainerWidth = this._getElementWidth(this.parentContainer.nativeElement);
+    }
+
+    if (parentContainerWidth !== null) {
+      return !this.resizeMax || this.resizeMax >= parentContainerWidth
+        ? parentContainerWidth - this._actionsWidth * 2
+        : this.resizeMax;
+    } else {
+      return !this.resizeMax || this.resizeMax >= this._maxWidthByScreen
+        ? this._maxWidthByScreen
+        : this.resizeMax;
+    }
   }
 
   public ngOnInit() {
@@ -52,6 +67,11 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
       this._el.nativeElement.addEventListener('touchstart', this._dragStartHandler, false);
 
       this._renderer.setStyle(this._el.nativeElement, 'cursor', 'col-resize');
+
+      if (this.actionsContainer) {
+        debugger;
+        this._actionsWidth = this._getElementWidth(this.actionsContainer.nativeElement)
+      }
 
       this._updateMaxScreenWidth();
       this._setMinMaxStyles();

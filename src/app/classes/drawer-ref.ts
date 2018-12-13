@@ -1,4 +1,4 @@
-import { ComponentRef } from '@angular/core';
+import { ComponentRef, ElementRef } from '@angular/core';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
@@ -26,6 +26,9 @@ export class DrawerRef<T, R = any> {
   /** Subject for notifying the user that the drawer has started opening. */
   private readonly _openStart$ = new Subject<Subscriber<void>>();
 
+  /** Subject for notifying the user that the drawer has started closing. */
+  private readonly _sideToggle = new Subject<boolean>();
+
   /** Subject for notifying the user that the drawer has started opening. */
   private readonly _activeActionChange$ = new Subject<{ old: string, current: string }>();
 
@@ -37,6 +40,12 @@ export class DrawerRef<T, R = any> {
 
   /** Main drawer component and template */
   private _drawerComponentRef: ComponentRef<T>;
+
+  /** Drawer Content Template */
+  private _drawerContentContainer: ElementRef;
+
+  /** Drawer Actions Template */
+  private _drawerActionsContainer: ElementRef;
 
   private _activeAction: string = null;
 
@@ -74,6 +83,22 @@ export class DrawerRef<T, R = any> {
    */
   set componentRef(value: ComponentRef<T>) {
     this._drawerComponentRef = value;
+  }
+
+  set drawerContentContainer(value: ElementRef) {
+    this._drawerContentContainer = value;
+  }
+
+  set drawerActionsContainer(value: ElementRef) {
+    this._drawerActionsContainer = value;
+  }
+
+  get drawerContentContainer(): ElementRef {
+    return this._drawerContentContainer;
+  }
+
+  get drawerActionsContainer(): ElementRef {
+    return this._drawerActionsContainer;
   }
 
   get activeAction() {
@@ -139,6 +164,13 @@ export class DrawerRef<T, R = any> {
   }
 
   /**
+   * Gets an observable that is notify that side status toggled
+   */
+  public sideToggle(): Observable<boolean> {
+    return this._sideToggle.asObservable();
+  }
+
+  /**
    * Open drawer and notify observable
    */
   public open() {
@@ -197,6 +229,7 @@ export class DrawerRef<T, R = any> {
    */
   public openSide() {
     this._isSideOpen = true;
+    this._sideToggle.next(this._isSideOpen);
   }
 
   /**
@@ -204,6 +237,7 @@ export class DrawerRef<T, R = any> {
    */
   public closeSide() {
     this._isSideOpen = false;
+    this._sideToggle.next(this._isSideOpen);
 
     this.setActiveAction(null);
   }
