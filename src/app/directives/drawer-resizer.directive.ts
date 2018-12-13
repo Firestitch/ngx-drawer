@@ -69,7 +69,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
       this._renderer.setStyle(this._el.nativeElement, 'cursor', 'col-resize');
 
       if (this.actionsContainer) {
-        debugger;
         this._actionsWidth = this._getElementWidth(this.actionsContainer.nativeElement)
       }
 
@@ -192,7 +191,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    */
   private _updatePosition(clientX: number, width: number) {
     this._x = clientX;
-    this._width = width;
+    this._width = width < 0 ? 0 : width;
 
     this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`)
   }
