@@ -3,7 +3,7 @@ import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
 import { Observable, Subject, Subscriber } from 'rxjs';
-import { filter } from 'rxjs/operators';
+import { filter, takeUntil } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerConfig } from '../models/drawer-config.model';
@@ -31,6 +31,9 @@ export class DrawerRef<T, R = any> {
 
   /** Subject for notifying the user that the drawer has started opening. */
   private readonly _activeActionChange$ = new Subject<{ old: string, current: string }>();
+
+  /** Destroy notifier **/
+  private readonly _destroy$ = new Subject<void>();
 
   /** Result to be passed to afterClosed. */
   private _result: R | undefined;
@@ -124,7 +127,10 @@ export class DrawerRef<T, R = any> {
    */
   public events() {
     this._overlayRef.keydownEvents()
-      .pipe(filter(event => event.keyCode === ESCAPE && !this.drawerConfig.disableClose))
+      .pipe(
+        filter(event => event.keyCode === ESCAPE && !this.drawerConfig.disableClose),
+        takeUntil(this._destroy$),
+      )
       .subscribe(() => this.close());
   }
 
@@ -132,42 +138,49 @@ export class DrawerRef<T, R = any> {
    * Event provides change of active action
    */
   public activeActionChange() {
-    return this._activeActionChange$.asObservable();
+    return this._activeActionChange$.pipe(takeUntil(this._destroy$));
   }
 
   /**
    * Gets an observable that is notified when the dialog is finished closing.
    */
   public afterClosed(): Observable<R | undefined> {
-    return this._afterClosed$.asObservable();
+    return this._afterClosed$.pipe(takeUntil(this._destroy$));
   }
 
   /**
    * Gets an observable that is notified when the dialog is finished opening.
    */
   public afterOpened(): Observable<void> {
-    return this._afterOpened$.asObservable();
+    return this._afterOpened$.pipe(takeUntil(this._destroy$));
   }
 
   /**
    * Gets an observable that is notified when the dialog open starts.
    */
   public openStart(): Observable<Subscriber<void>> {
-    return this._openStart$.asObservable();
+    return this._openStart$.pipe(takeUntil(this._destroy$));
   }
 
   /**
    * Gets an observable that is notified when the dialog is finished opening.
    */
   public closeStart(): Observable<Subscriber<void>> {
-    return this._closeStart$.asObservable();
+    return this._closeStart$.pipe(takeUntil(this._destroy$));
+  }
+
+  /**
+   * Gets an observable that is notified when data in DRAWER_DATA was changed
+   */
+  public dataChange(): Observable<void> {
+    return this._dataFactory.dataChange$;
   }
 
   /**
    * Gets an observable that is notify that side status toggled
    */
   public sideToggle(): Observable<boolean> {
-    return this._sideToggle.asObservable();
+    return this._sideToggle.pipe(takeUntil(this._destroy$));
   }
 
   /**
@@ -183,19 +196,20 @@ export class DrawerRef<T, R = any> {
           obs.complete();
         }
       });
-    }).subscribe({
-      next: () => {
-        if (this.activeAction) {
-          this.openSide();
-        }
+    }).pipe(takeUntil(this._destroy$))
+      .subscribe({
+        next: () => {
+          if (this.activeAction) {
+            this.openSide();
+          }
 
-        this._drawerContainerRef.open();
-        this._afterOpened$.next();
-        this._afterOpened$.complete();
-      },
-      error: () => {
-        this.destroy();
-      },
+          this._drawerContainerRef.open();
+          this._afterOpened$.next();
+          this._afterOpened$.complete();
+        },
+        error: () => {
+          this.destroy();
+        },
     });
   }
 
@@ -211,14 +225,14 @@ export class DrawerRef<T, R = any> {
         obs.next();
         obs.complete();
       }
-    }).subscribe({
+    }).pipe(takeUntil(this._destroy$))
+      .subscribe({
       next: () => {
         this._drawerContainerRef.close();
         this._result = result;
 
         this._afterClosed$.next(result);
 
-        this._dataFactory.destroy();
         this.destroy();
       }
     });
@@ -277,11 +291,10 @@ export class DrawerRef<T, R = any> {
     this._overlayRef.detachBackdrop();
     this._overlayRef.detach();
     this._drawerComponentRef.destroy();
+    this._dataFactory.destroy();
 
-    this._openStart$.complete();
-    this._closeStart$.complete();
-    this._afterOpened$.complete();
-    this._afterClosed$.complete();
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
 

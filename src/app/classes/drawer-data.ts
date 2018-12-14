@@ -5,15 +5,15 @@ import { takeUntil } from 'rxjs/operators';
 export class DrawerData {
 
   private _data;
-  private _dataUpdated = new Subject<void>();
+  private _dataChange = new Subject<void>();
   private _destroy = new Subject<void>();
 
   constructor(data: any = {}) {
     this._data = data;
   }
 
-  get dataUpdated$(): Observable<void> {
-    return this._dataUpdated.pipe(takeUntil(this._destroy));
+  get dataChange$(): Observable<void> {
+    return this._dataChange.pipe(takeUntil(this._destroy));
   }
 
   get value() {
@@ -22,7 +22,7 @@ export class DrawerData {
 
   set value(value) {
     this._data = value;
-    this._dataUpdated.next();
+    this._dataChange.next();
   }
 
   public destroy() {
