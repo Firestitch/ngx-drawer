@@ -18,7 +18,7 @@ export class FsDrawerService {
   public open(component: ComponentType<any>, config?: IDrawerConfig) {
     const overlayRef = this.createOverlay();
 
-    const dataFactory = new DrawerData(config.data);
+    const dataFactory = DrawerData.createWithProxy(config.data);
     const drawerRef = new DrawerRef(overlayRef, dataFactory, config);
 
     const containerRef = this.attachDrawerContainer(overlayRef, drawerRef, dataFactory);

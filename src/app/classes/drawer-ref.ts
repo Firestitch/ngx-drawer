@@ -69,7 +69,7 @@ export class DrawerRef<T, R = any> {
    * Getter for DRAWER_DATA for current drawer
    */
   get drawerData() {
-    return { ...this._dataFactory.value } // Like immutable.... TODO switch to Immer
+    return { ...this._dataFactory.getValue() } // Like immutable.... TODO switch to Immer
   }
 
   /**
@@ -172,8 +172,16 @@ export class DrawerRef<T, R = any> {
   /**
    * Gets an observable that is notified when data in DRAWER_DATA was changed
    */
-  public dataChange(): Observable<void> {
+  get dataChanged$(): Observable<void> {
     return this._dataFactory.dataChange$;
+  }
+
+  /**
+   * Set value for DRAWER_DATA
+   * @param data
+   */
+  public dataChange(data) {
+    this._dataFactory.setValue(data);
   }
 
   /**
@@ -277,14 +285,6 @@ export class DrawerRef<T, R = any> {
     }
 
     this._activeActionChange$.next({ old: activeAction, current: this._activeAction });
-  }
-
-  /**
-   * Do immutable update of drawerDataa
-   * @param data
-   */
-  public updateDrawerData(data: any) {
-    this._dataFactory.value = data;
   }
 
   public destroy() {
