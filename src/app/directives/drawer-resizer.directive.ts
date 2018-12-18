@@ -130,6 +130,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     const predictedWidth = this._calcWidth(this.direction, clientX);
 
     this._updatePosition(clientX, predictedWidth);
+    this._emitResizeEvent();
   }
 
   /**
@@ -220,5 +221,16 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    */
   private _updateMaxScreenWidth() {
     this._maxWidthByScreen = (window.innerWidth - this._borderPadding);
+  }
+
+  /**
+   * Resize event for Window
+   * @private
+   */
+  private _emitResizeEvent() {
+    const resizeEvent = window.document.createEvent('UIEvents');
+    resizeEvent.initUIEvent('resize', true, false, window, 0);
+
+    window.dispatchEvent(resizeEvent);
   }
 }
