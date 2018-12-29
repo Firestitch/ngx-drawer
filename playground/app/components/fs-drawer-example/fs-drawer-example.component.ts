@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FsDrawerAction, FsDrawerService } from '@firestitch/drawer';
 
 import { TaskDrawerComponent } from './task-drawer';
+import { CustomMenuComponent } from './custom-menu';
 
 
 @Component({
@@ -54,6 +55,12 @@ export class FsDrawerExampleComponent implements OnInit {
           }
         },
         {
+          icon: 'local_offer',
+          type: FsDrawerAction.component,
+          component: CustomMenuComponent,
+          data: { task_id: 10 }
+        },
+        {
           icon: 'more_vert',
           type: FsDrawerAction.menu,
           actions: [
@@ -65,7 +72,7 @@ export class FsDrawerExampleComponent implements OnInit {
               }
             }
           ]
-        }
+        },
       ]
     });
 
