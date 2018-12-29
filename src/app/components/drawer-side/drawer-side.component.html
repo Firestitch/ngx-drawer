@@ -14,7 +14,7 @@
          [parentContainer]="drawer.drawerContentContainer"
          [actionsContainer]="drawer.drawerActionsContainer"
     >
-      <span class="resize-icon"></span>
+      <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
     </div>
   </ng-container>
   <ng-container *ngSwitchCase="'left'">
@@ -25,7 +25,7 @@
          [resizeMin]="drawer.drawerConfig.resize.minSide"
          [resizeMax]="drawer.drawerConfig.resize.maxSide"
     >
-      <span class="resize-icon"></span>
+    <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
     </div>
     <div class="side-container" #sideContainer>
       <div class="side-content">

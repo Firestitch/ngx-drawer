@@ -87,7 +87,6 @@
       height: 100%;
       display: flex;
       flex-direction: column;
-      border-left: 1px solid #ccc;
       user-select: none;
       white-space: nowrap;
 
@@ -114,23 +113,22 @@
 
     .resize-side {
       width: 24px;
-      border-left: 1px solid #ccc;
+      border-left: 1px solid #dcdcdc;
     }
 
     .resize-icon {
       position: absolute;
       display: block;
       top: 50%;
-      width: 7px;
-      height: 20px;
-      margin: -10px 0 0 17px;
-      border-style: solid;
-      border-color: #ccc;
       border-width: 0 1px;
       box-sizing: border-box;
-      line-height: 14px;
       user-select: none;
       z-index: 1;
+      cursor: col-resize;
+
+      .material-icons {
+        color: #B3B3B3;
+      }
     }
   }
 }
