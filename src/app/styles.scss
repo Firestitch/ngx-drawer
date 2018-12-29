@@ -1,5 +1,5 @@
 @import '~@angular/material/theming';
-@include mat-core();
+
 
 @mixin fs-drawer($theme) {
 
@@ -112,8 +112,8 @@
       }
     }
 
-    .resize {
-      width: 40px;
+    .resize-side {
+      width: 24px;
       border-left: 1px solid #ccc;
     }
 
@@ -132,11 +132,5 @@
       user-select: none;
       z-index: 1;
     }
-  }
-}
-
-fs-drawer.side-open {
-  .drawer-container .content-container .content {
-    padding-left: 0;
   }
 }
