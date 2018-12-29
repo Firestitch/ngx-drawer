@@ -6,6 +6,7 @@ export class Action {
   public close = false;
   public click: Function | null;
   public actions = [];
+  public component = null;
 
   constructor(data: any = {}) {
     this.icon = data.icon || '';
@@ -15,5 +16,6 @@ export class Action {
     this.click = data.click || null;
     this.close = !!data.close;
     this.actions = data.actions || [];
+    this.component = data.component || null;
   }
 }

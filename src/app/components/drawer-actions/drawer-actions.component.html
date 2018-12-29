@@ -30,6 +30,16 @@
       </fs-menu>
 
     </ng-container>
+
+    <ng-container *ngSwitchCase="actionTypes.component">
+      <button mat-icon-button
+              type="button"
+              [matTooltip]="action.tooltip"
+              [class.active]="action.name !== '' && action.name === activeAction"
+              (click)="actionClick(action, $event)">
+        <i class="material-icons">{{action.icon}}</i>
+      </button>
+    </ng-container>
   </ng-container>
 
 </div>

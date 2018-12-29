@@ -10,4 +10,6 @@ export interface IActionConfig {
   close?: boolean;
   click?: Function;
   actions?: IMenuAction[];
+  component?: any;
+  data?: any;
 }

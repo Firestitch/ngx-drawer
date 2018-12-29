@@ -1,28 +1,31 @@
 import {
+  OnInit,
   Component,
+  ViewChild,
+  HostBinding,
+  ElementRef,
   ComponentRef,
   EmbeddedViewRef,
-  OnInit,
-  ViewChild,
   ViewEncapsulation,
-  HostBinding,
-  ElementRef
 } from '@angular/core';
 
 import {
   BasePortalOutlet,
   CdkPortalOutlet,
   ComponentPortal,
-  TemplatePortal
+  TemplatePortal,
 } from '@angular/cdk/portal';
 
 import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerConfig } from '../../models/drawer-config.model';
+import { FsDrawerAction } from '../../helpers/action-type.enum';
+import { FsDrawerMenuService } from '../../services/drawer-menu.service';
 
 
 @Component({
   selector: 'fs-drawer',
   templateUrl: './drawer.component.html',
+  providers: [ FsDrawerMenuService ],
   host: {
     'class': 'fs-drawer-container',
   },
@@ -50,7 +53,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
   @ViewChild('drawerActionsContainer', { read: ElementRef })
   private _drawerActionsContainer: ElementRef;
 
-  constructor() {
+  constructor(private _drawerMenu: FsDrawerMenuService) {
     super();
   }
 
@@ -75,8 +78,20 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
   }
 
   public actionClick({ action, event }) {
+    if (action.type === FsDrawerAction.component) {
+      this._drawerMenu.create(action.component, event.srcElement, {});
+
+      return;
+    } else if (action.click) {
+      action.click.call(event);
+
+      return;
+    }
+
     if (action.click) {
       action.click.call(event);
+
+      return;
     }
 
     if (action.close) {
@@ -129,13 +144,12 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
    * Attach a TemplatePortal as content to this dialog container.
    * @param portal Portal to be attached as the dialog content.
    */
-  attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
+  public attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this._portalOutlet.hasAttached()) {
       throw Error('Drawer template already attached');
     }
 
     return this._portalOutlet.attachTemplatePortal(portal);
   }
-
 
 }

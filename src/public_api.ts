@@ -6,8 +6,11 @@ export { FsDrawerModule } from './app/fs-drawer.module';
 
 export { FsDrawerService } from './app/services/drawer.service';
 export { DRAWER_DATA } from './app/services/drawer-data';
+export { DRAWER_MENU_DATA } from './app/services/drawer-menu-data';
 
 export { DrawerRef } from './app/classes/drawer-ref';
+export { DrawerMenuRef } from './app/classes/drawer-menu-ref';
+
 export { DrawerData } from './app/classes/drawer-data';
 
 export { IDrawerConfig } from './app/interfaces/drawer-config.interface';

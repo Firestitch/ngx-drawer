@@ -9,6 +9,7 @@ import { FsMenuModule } from '@firestitch/menu';
 import { FsDrawerActionsComponent } from './components/drawer-actions/drawer-actions.component';
 import { FsDrawerComponent } from './components/drawer/drawer.component';
 import { FsDrawerSideComponent } from './components/drawer-side/drawer-side.component';
+import { FsDrawerMenuComponent } from './components/drawer-menu/drawer-menu.component';
 
 import { FsDrawerContentComponent } from './components/drawer-content/drawer-content.component';
 import { FsDrawerActionDirective } from './directives/drawer-action.directive';
@@ -36,6 +37,7 @@ import { FsDrawerService } from './services/drawer.service';
   ],
   entryComponents: [
     FsDrawerComponent,
+    FsDrawerMenuComponent,
   ],
   declarations: [
     FsDrawerSideComponent,
@@ -44,9 +46,7 @@ import { FsDrawerService } from './services/drawer.service';
     FsDrawerContentComponent,
     FsDrawerActionDirective,
     FsDrawerResizerDirective,
-  ],
-  providers: [
-    FsDrawerService,
+    FsDrawerMenuComponent,
   ],
 })
 export class FsDrawerModule {
