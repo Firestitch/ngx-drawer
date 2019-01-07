@@ -1,10 +1,12 @@
 import { ComponentRef } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { Observable, Subject, Subscription, Subscriber } from 'rxjs';
+import { DrawerData } from '@firestitch/drawer';
+
+import { Observable, Subject, Subscriber } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { FsDrawerMenuComponent } from '../components/drawer-menu/drawer-menu.component';
-import { takeUntil } from 'rxjs/operators';
 
 
 export class DrawerMenuRef<T, R = any> {
@@ -35,13 +37,22 @@ export class DrawerMenuRef<T, R = any> {
 
   private _isOpen = false;
 
-  /** Subscription of click out of menu */
-  private _backdropSub: Subscription;
 
-  constructor(private _overlayRef: OverlayRef) {
-    this._backdropSub = this._overlayRef.backdropClick().subscribe(() => {
-      this.close();
-    })
+  constructor(private _overlayRef: OverlayRef, private _dataFactory: DrawerData) {
+    this._overlayRef.backdropClick()
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this.close();
+      })
+  }
+
+  /**
+   * Getter for DRAWER_MENU_DATA for current drawer
+   */
+  get menuData() {
+    return { ...this._dataFactory.getValue() } // Like immutable.... TODO switch to Immer
   }
 
   /**
@@ -66,6 +77,21 @@ export class DrawerMenuRef<T, R = any> {
    */
   get isOpen(): boolean {
     return this._isOpen;
+  }
+
+  /**
+   * Gets an observable that is notified when data in DRAWER_DATA was changed
+   */
+  get dataChanged$(): Observable<void> {
+    return this._dataFactory.dataChange$;
+  }
+
+  /**
+   * Set value for DRAWER_DATA
+   * @param data
+   */
+  public dataChange(data) {
+    this._dataFactory.setValue(data);
   }
 
   /**
@@ -147,8 +173,9 @@ export class DrawerMenuRef<T, R = any> {
   public destroy() {
     this._overlayRef.detachBackdrop();
     this._overlayRef.detach();
-    this._backdropSub.unsubscribe();
     this._externalMenuComponentRef && this._externalMenuComponentRef.destroy();
+
+    this._dataFactory.destroy();
 
     this._destroy$.next();
     this._destroy$.complete();

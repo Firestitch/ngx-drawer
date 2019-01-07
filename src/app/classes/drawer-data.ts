@@ -17,10 +17,14 @@ export class DrawerData {
 
     return new Proxy(drawerData, {
       get(target, property) {
-        return typeof target[property] !== 'function'
-        && !(target[property] instanceof Observable)
-          ? target._data[property]
-          : target[property];
+        if (typeof target[property] === 'function'
+          || property === '_data'
+          || target[property] instanceof Observable
+        ) {
+          return target[property];
+        } else {
+          return target._data[property];
+        }
       },
 
       set(target, property, value) {

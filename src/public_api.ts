@@ -14,5 +14,6 @@ export { DrawerMenuRef } from './app/classes/drawer-menu-ref';
 export { DrawerData } from './app/classes/drawer-data';
 
 export { IDrawerConfig } from './app/interfaces/drawer-config.interface';
+export { DrawerDataProxy } from './app/interfaces/drawer-data.interface';
 
 export { FsDrawerAction } from './app/helpers/action-type.enum';

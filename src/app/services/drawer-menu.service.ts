@@ -4,8 +4,9 @@ import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/por
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
 import { FsDrawerMenuComponent } from '../components/drawer-menu/drawer-menu.component';
-import { DRAWER_MENU_DATA } from '../services/drawer-menu-data';
 import { DrawerMenuRef } from '../classes/drawer-menu-ref';
+import { DrawerData } from '../classes/drawer-data';
+import { DRAWER_MENU_DATA } from '../services/drawer-menu-data';
 
 
 @Injectable()
@@ -18,9 +19,10 @@ export class FsDrawerMenuService {
 
   public create(component: ComponentType<any>, container: Element, config?: any) {
     const overlayRef = this.createOverlay(container);
-    const menuRef = new DrawerMenuRef(overlayRef);
-    const containerRef = this.attachContainer(overlayRef, config);
-    const componentRef = this.attachComponent(component, containerRef, menuRef, config);
+    const dataFactory = DrawerData.createWithProxy(config.data);
+    const menuRef = new DrawerMenuRef(overlayRef, dataFactory);
+    const containerRef = this.attachContainer(overlayRef, dataFactory);
+    const componentRef = this.attachComponent(component, containerRef, menuRef, dataFactory);
     menuRef.containerRef = containerRef;
     containerRef.setDrawerMenuRef(menuRef);
 
@@ -62,9 +64,9 @@ export class FsDrawerMenuService {
     });
   }
 
-  private attachContainer<T, R>(overlayRef: OverlayRef, config: any) {
-    const menuRef = new DrawerMenuRef<T, R>(overlayRef);
-    const injector = this.createInjector(menuRef, config);
+  private attachContainer<T, R>(overlayRef: OverlayRef, dataFactory: DrawerData) {
+    const menuRef = new DrawerMenuRef<T, R>(overlayRef, dataFactory);
+    const injector = this.createInjector(menuRef, dataFactory);
     const containerPortal = new ComponentPortal(FsDrawerMenuComponent, undefined, injector);
     const containerRef = overlayRef.attach<FsDrawerMenuComponent>(containerPortal);
 
@@ -86,10 +88,10 @@ export class FsDrawerMenuService {
   }
 
 
-  private createInjector(componentRef, config) {
+  private createInjector(componentRef, dataFactory: DrawerData) {
     const injectionTokens = new WeakMap<any, any>([
       [DrawerMenuRef, componentRef],
-      [DRAWER_MENU_DATA, config]
+      [DRAWER_MENU_DATA, dataFactory]
     ]);
 
     return new PortalInjector(this._injector, injectionTokens);

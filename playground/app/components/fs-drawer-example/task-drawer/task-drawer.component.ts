@@ -1,5 +1,6 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DRAWER_DATA, DrawerRef } from '@firestitch/drawer';
+import { DRAWER_DATA, DrawerDataProxy, DrawerRef } from '@firestitch/drawer';
+
 
 
 @Component({
@@ -10,7 +11,7 @@ import { DRAWER_DATA, DrawerRef } from '@firestitch/drawer';
 export class TaskDrawerComponent implements OnInit {
 
   constructor(public drawer: DrawerRef<TaskDrawerComponent>,
-              @Inject(DRAWER_DATA) public data: any) {
+              @Inject(DRAWER_DATA) public data: DrawerDataProxy<any>) {
   }
 
   public ngOnInit() {

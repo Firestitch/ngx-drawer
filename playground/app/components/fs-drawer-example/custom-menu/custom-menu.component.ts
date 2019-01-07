@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DRAWER_MENU_DATA, DrawerMenuRef } from '@firestitch/drawer';
+import { DRAWER_MENU_DATA, DrawerDataProxy, DrawerMenuRef } from '@firestitch/drawer';
 
 
 @Component({
@@ -10,10 +10,10 @@ import { DRAWER_MENU_DATA, DrawerMenuRef } from '@firestitch/drawer';
 export class CustomMenuComponent implements OnInit {
 
   constructor(public drawer: DrawerMenuRef<CustomMenuComponent>,
-              @Inject(DRAWER_MENU_DATA) public data: any) {
+              @Inject(DRAWER_MENU_DATA) public data: DrawerDataProxy<any>) {
   }
 
   public ngOnInit() {
-    console.log(this.data, this.drawer);
+    console.log(this.data.getValue(), this.drawer);
   }
 }

@@ -79,7 +79,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
 
   public actionClick({ action, event }) {
     if (action.type === FsDrawerAction.component) {
-      this._drawerMenu.create(action.component, event.srcElement, action.data);
+      this._drawerMenu.create(action.component, event.srcElement, action);
 
       return;
     } else if (action.click) {
