@@ -1,13 +1,11 @@
 import { ComponentRef } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { DrawerData } from '@firestitch/drawer';
-
 import { Observable, Subject, Subscriber } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsDrawerMenuComponent } from '../components/drawer-menu/drawer-menu.component';
-
+import { DrawerData } from './drawer-data';
 
 export class DrawerMenuRef<T, R = any> {
 
