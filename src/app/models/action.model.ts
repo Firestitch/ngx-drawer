@@ -7,6 +7,7 @@ export class Action {
   public click: Function | null;
   public actions = [];
   public component = null;
+  public data: any = null;
 
   constructor(data: any = {}) {
     this.icon = data.icon || '';
@@ -17,5 +18,6 @@ export class Action {
     this.close = !!data.close;
     this.actions = data.actions || [];
     this.component = data.component || null;
+    this.data = data.data || {};
   }
 }
