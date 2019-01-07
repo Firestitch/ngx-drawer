@@ -90,6 +90,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this._renderer.removeStyle(this._el.nativeElement, 'cursor');
     this._el.nativeElement.removeEventListener('mousedown', this._dragStartHandler, false);
+    this._el.nativeElement.removeEventListener('touchstart', this._dragStartHandler, false);
 
     this._destroy$.next();
     this._destroy$.complete();
@@ -107,11 +108,11 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     this._updateMaxScreenWidth();
     this._setMinMaxStyles();
 
-    if (event.stopPropagation) event.stopPropagation();
-    if (event.preventDefault) event.preventDefault();
+    // if (event.stopPropagation) event.stopPropagation();
+    // if (event.preventDefault) event.preventDefault();
 
-    event.cancelBubble = true;
-    event.returnValue = false;
+    // event.cancelBubble = true;
+    // event.returnValue = false;
 
     document.addEventListener('touchmove', this._dragHandler, false);
     document.addEventListener('touchend', this._dragEndHandler, false);
