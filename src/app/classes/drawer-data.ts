@@ -46,7 +46,6 @@ export class DrawerData {
       },
 
       enumerate(target) {
-        console.log('en', Object.keys(target._data));
         return Object.keys(target._data);
       },
 

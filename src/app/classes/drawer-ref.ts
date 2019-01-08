@@ -3,11 +3,12 @@ import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
 import { Observable, Subject, Subscriber } from 'rxjs';
-import { filter, takeUntil } from 'rxjs/operators';
+import { filter, take, takeUntil } from 'rxjs/operators';
 
+import { DrawerData } from './drawer-data';
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerConfig } from '../models/drawer-config.model';
-import { DrawerData } from './drawer-data';
+import { DrawerMenuRef } from '../classes/drawer-menu-ref';
 
 
 export class DrawerRef<T, R = any> {
@@ -51,6 +52,8 @@ export class DrawerRef<T, R = any> {
   private _drawerActionsContainer: ElementRef;
 
   private _activeAction: string = null;
+
+  private _menuRefs = new Map<string, DrawerMenuRef<T, R>>();
 
   private _isOpen = false;
   private _isSideOpen = false;
@@ -287,6 +290,32 @@ export class DrawerRef<T, R = any> {
     this._activeActionChange$.next({ old: activeAction, current: this._activeAction });
   }
 
+  /**
+   * Store opened menu reference and subscribe for auto remove
+   * @param name
+   * @param ref
+   */
+  public addMenuRef(name: string, ref: DrawerMenuRef<T, R>) {
+    this._menuRefs.set(name, ref);
+
+    ref.afterClosed()
+      .pipe(
+        take(1),
+        takeUntil(this._destroy$)
+      )
+      .subscribe(() => {
+        this._menuRefs.delete(name);
+      })
+  }
+
+  /**
+   * Get opened menu reference by name
+   * @param name
+   */
+  public getMenuRef(name: string) {
+    return this._menuRefs.get(name);
+  }
+
   public destroy() {
     this._overlayRef.detachBackdrop();
     this._overlayRef.detach();
@@ -296,7 +325,6 @@ export class DrawerRef<T, R = any> {
     this._destroy$.next();
     this._destroy$.complete();
   }
-
 
 }
 

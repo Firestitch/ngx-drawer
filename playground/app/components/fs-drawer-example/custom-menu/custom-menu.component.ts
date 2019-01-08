@@ -10,7 +10,7 @@ import { DRAWER_MENU_DATA, DrawerDataProxy, DrawerMenuRef } from '@firestitch/dr
 export class CustomMenuComponent implements OnInit {
 
   constructor(public drawer: DrawerMenuRef<CustomMenuComponent>,
-              @Inject(DRAWER_MENU_DATA) public data: DrawerDataProxy<any>) {
+              @Inject(DRAWER_MENU_DATA) public data: DrawerDataProxy<{ task_id: number }>) {
   }
 
   public ngOnInit() {

@@ -9,17 +9,11 @@ import { DrawerData } from './drawer-data';
 
 export class DrawerMenuRef<T, R = any> {
 
-  /** Subject for notifying the user that the menu has finished opening. */
-  private readonly _afterOpened$ = new Subject<void>();
-
   /** Subject for notifying the user that the menu has finished closing. */
   private readonly _afterClosed$ = new Subject<R | undefined>();
 
   /** Subject for notifying the user that the menu has started closing. */
   private readonly _closeStart$ = new Subject<Subscriber<void>>();
-
-  /** Subject for notifying the user that the menu has started opening. */
-  private readonly _openStart$ = new Subject<Subscriber<void>>();
 
   /** Destroy notifier **/
   private readonly _destroy$ = new Subject<void>();
@@ -32,8 +26,6 @@ export class DrawerMenuRef<T, R = any> {
 
   /** Main menu component and template */
   private _externalMenuComponentRef: ComponentRef<T>;
-
-  private _isOpen = false;
 
 
   constructor(private _overlayRef: OverlayRef, private _dataFactory: DrawerData) {
@@ -70,14 +62,6 @@ export class DrawerMenuRef<T, R = any> {
   }
 
   /**
-   * Return actual status of the menu
-   * @returns boolean
-   */
-  get isOpen(): boolean {
-    return this._isOpen;
-  }
-
-  /**
    * Gets an observable that is notified when data in DRAWER_DATA was changed
    */
   get dataChanged$(): Observable<void> {
@@ -102,46 +86,8 @@ export class DrawerMenuRef<T, R = any> {
   /**
    * Gets an observable that is notified when the dialog is finished opening.
    */
-  public afterOpened(): Observable<void> {
-    return this._afterOpened$.pipe(takeUntil(this._destroy$));
-  }
-
-  /**
-   * Gets an observable that is notified when the dialog open starts.
-   */
-  public openStart(): Observable<Subscriber<void>> {
-    return this._openStart$.pipe(takeUntil(this._destroy$));
-  }
-
-  /**
-   * Gets an observable that is notified when the dialog is finished opening.
-   */
   public closeStart(): Observable<Subscriber<void>> {
     return this._closeStart$.pipe(takeUntil(this._destroy$));
-  }
-
-  /**
-   * Open menu and notify observable
-   */
-  public open() {
-    Observable.create((obs) => {
-      setTimeout(() => { // FIXME Crutch
-        if (this._openStart$.observers.length) {
-          this._openStart$.next(obs);
-        } else {
-          obs.next();
-          obs.complete();
-        }
-      });
-    }).subscribe({
-      next: () => {
-        this._afterOpened$.next();
-        this._afterOpened$.complete();
-      },
-      error: () => {
-        this.destroy();
-      },
-    });
   }
 
   /**

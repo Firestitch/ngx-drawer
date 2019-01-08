@@ -78,31 +78,34 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
   }
 
   public actionClick({ action, event }) {
-    if (action.type === FsDrawerAction.component) {
-      this._drawerMenu.create(action.component, event.srcElement, action);
 
-      return;
+    const hasComponentType = action.type === FsDrawerAction.component;
+
+    if (hasComponentType) {
+      const menuRef = this._drawerMenu.create(action.component, event.srcElement, action);
+
+      this.drawerRef.addMenuRef(action.menuRefName, menuRef);
+
+      // Call click
+      action.click.call(null, event, menuRef);
+
+      if (action.closeSide) {
+        this.drawerRef.closeSide();
+      }
     } else if (action.click) {
-      action.click.call(event);
-
-      return;
-    }
-
-    if (action.click) {
-      action.click.call(event);
-
-      return;
+      action.click.call(null, event);
     }
 
     if (action.close) {
       this.drawerRef.close();
-      return;
     }
 
-    if (this.drawerRef.isSideOpen && this.drawerRef.activeAction === action.name) {
-      this.drawerRef.toggleSide();
-    } else {
-      this.drawerRef.setActiveAction(action.name);
+    if (!hasComponentType || action.closeSide) {
+      if (this.drawerRef.isSideOpen && this.drawerRef.activeAction === action.name) {
+        this.drawerRef.toggleSide();
+      } else {
+        this.drawerRef.setActiveAction(action.name);
+      }
     }
   }
 

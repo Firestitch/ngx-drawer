@@ -21,7 +21,7 @@ export class FsDrawerMenuService {
     const overlayRef = this.createOverlay(container);
     const dataFactory = DrawerData.createWithProxy(config.data);
     const menuRef = new DrawerMenuRef(overlayRef, dataFactory);
-    const containerRef = this.attachContainer(overlayRef, dataFactory);
+    const containerRef = this.attachContainer(overlayRef, menuRef, dataFactory);
     const componentRef = this.attachComponent(component, containerRef, menuRef, dataFactory);
     menuRef.containerRef = containerRef;
     containerRef.setDrawerMenuRef(menuRef);
@@ -64,8 +64,7 @@ export class FsDrawerMenuService {
     });
   }
 
-  private attachContainer<T, R>(overlayRef: OverlayRef, dataFactory: DrawerData) {
-    const menuRef = new DrawerMenuRef<T, R>(overlayRef, dataFactory);
+  private attachContainer<T, R>(overlayRef: OverlayRef, menuRef: DrawerMenuRef<T, R>, dataFactory: DrawerData) {
     const injector = this.createInjector(menuRef, dataFactory);
     const containerPortal = new ComponentPortal(FsDrawerMenuComponent, undefined, injector);
     const containerRef = overlayRef.attach<FsDrawerMenuComponent>(containerPortal);

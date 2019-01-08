@@ -50,15 +50,20 @@ export class FsDrawerExampleComponent implements OnInit {
           type: FsDrawerAction.button,
           tooltip: 'Edit',
           click: (event) => {
-            drawerRef.openSide();
-            drawerRef.setActiveAction('edit');
           }
         },
         {
           icon: 'local_offer',
           type: FsDrawerAction.component,
           component: CustomMenuComponent,
-          data: { task_id: 10 }
+          data: { task_id: 10 },
+          closeSide: false,
+          click: (event, menuRef) => {
+
+            setTimeout(() => {
+              menuRef.dataChange({task_id: 1000});
+            }, 2000);
+          }
         },
         {
           icon: 'more_vert',
