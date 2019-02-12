@@ -44,6 +44,8 @@
     "@angular/platform-browser-dynamic": "^7.2.2",
     "@angular/router": "^7.2.4",
     "@compodoc/compodoc": "^1.1.7",
+    "@firestitch/checkboxgroup": "^0.2.0",
+    "@firestitch/common": "^0.5.1",
     "@firestitch/example": "^0.6.0",
     "@firestitch/iframe": "^0.2.0",
     "@firestitch/menu": "^0.1.6",

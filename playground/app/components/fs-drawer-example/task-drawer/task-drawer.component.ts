@@ -17,4 +17,12 @@ export class TaskDrawerComponent implements OnInit {
   public ngOnInit() {
     console.log(this.data, this.drawer);
   }
+
+  public toggleNotification() {
+    const notificationsAction = this.drawer.getAction('notifications');
+    if (notificationsAction) {
+      notificationsAction.data = !notificationsAction.data;
+      notificationsAction.icon = notificationsAction.data ? 'volume_up' : 'volume_off'
+    }
+  }
 }

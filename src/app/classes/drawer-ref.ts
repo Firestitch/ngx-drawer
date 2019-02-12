@@ -316,6 +316,10 @@ export class DrawerRef<T, R = any> {
     return this._menuRefs.get(name);
   }
 
+  public getAction(name: string) {
+    return this.drawerConfig.actions.find((action) => action.name === name);
+  }
+
   public destroy() {
     this._overlayRef.detachBackdrop();
     this._overlayRef.detach();

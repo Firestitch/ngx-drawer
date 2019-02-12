@@ -12,6 +12,8 @@ import { CustomMenuComponent } from './custom-menu';
 })
 export class FsDrawerExampleComponent implements OnInit {
 
+  public notificationsEnabled = false;
+
   constructor(public drawer: FsDrawerService) {}
 
   public openDrawer() {
@@ -50,6 +52,20 @@ export class FsDrawerExampleComponent implements OnInit {
           type: FsDrawerAction.button,
           tooltip: 'Edit',
           click: (event) => {
+          }
+        },
+        {
+          icon: this.notificationsIcon(),
+          name: 'notifications',
+          type: FsDrawerAction.button,
+          toggle: false,
+          tooltip: 'Notifications',
+          data: this.notificationsEnabled,
+          click: (data) => {
+            data.action.data = !data.action.data;
+            this.notificationsEnabled = data.action.data;
+
+            data.action.icon = this.notificationsIcon();
           }
         },
         {
@@ -98,7 +114,6 @@ export class FsDrawerExampleComponent implements OnInit {
       console.log('open starts');
       result.next();
     });
-
   }
 
   public ngOnInit() {
@@ -106,5 +121,9 @@ export class FsDrawerExampleComponent implements OnInit {
     setTimeout(() => {
       this.openDrawer();
     });
+  }
+
+  public notificationsIcon() {
+    return this.notificationsEnabled ? 'volume_up' : 'volume_off';
   }
 }

@@ -5,6 +5,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FsExampleModule } from '@firestitch/example';
 import { FsDrawerModule } from '@firestitch/drawer';
+import { FsCheckboxGroupModule } from '@firestitch/checkboxgroup';
 
 import { AppMaterialModule } from './material.module';
 
@@ -16,6 +17,7 @@ import {
   TaskDrawerComponent,
 } from './components';
 import { CustomMenuComponent } from './components/fs-drawer-example/custom-menu';
+
 
 const routes: Routes = [
   { path: '', component: ExamplesComponent },
@@ -30,6 +32,7 @@ const routes: Routes = [
     FsExampleModule.forRoot(),
     RouterModule.forRoot(routes),
     FsDrawerModule.forRoot(),
+    FsCheckboxGroupModule,
   ],
   entryComponents: [
     TaskDrawerComponent,
