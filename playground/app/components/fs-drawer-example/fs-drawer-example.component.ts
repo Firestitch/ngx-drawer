@@ -32,7 +32,7 @@ export class FsDrawerExampleComponent implements OnInit {
       actions: [
         {
           icon: 'clear',
-          type: FsDrawerAction.button,
+          type: FsDrawerAction.Button,
           close: true,
           click: (event) => {
             console.log('close clicked');
@@ -41,7 +41,7 @@ export class FsDrawerExampleComponent implements OnInit {
         {
           icon: 'settings',
           name: 'settings',
-          type: FsDrawerAction.button,
+          type: FsDrawerAction.Button,
           tooltip: 'Settings',
           click: (event) => {
           }
@@ -49,7 +49,7 @@ export class FsDrawerExampleComponent implements OnInit {
         {
           icon: 'edit',
           name: 'edit',
-          type: FsDrawerAction.button,
+          type: FsDrawerAction.Button,
           tooltip: 'Edit',
           click: (event) => {
           }
@@ -57,7 +57,7 @@ export class FsDrawerExampleComponent implements OnInit {
         {
           icon: this.notificationsIcon(),
           name: 'notifications',
-          type: FsDrawerAction.button,
+          type: FsDrawerAction.Button,
           toggle: false,
           tooltip: 'Notifications',
           data: this.notificationsEnabled,
@@ -70,7 +70,7 @@ export class FsDrawerExampleComponent implements OnInit {
         },
         {
           icon: 'local_offer',
-          type: FsDrawerAction.component,
+          type: FsDrawerAction.Component,
           component: CustomMenuComponent,
           data: { task_id: 10 },
           closeSide: false,
@@ -83,7 +83,7 @@ export class FsDrawerExampleComponent implements OnInit {
         },
         {
           icon: 'more_vert',
-          type: FsDrawerAction.menu,
+          type: FsDrawerAction.Menu,
           actions: [
             {
               icon: 'settings',

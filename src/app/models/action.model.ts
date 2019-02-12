@@ -28,7 +28,7 @@ export class Action {
     this._component = data.component || null;
     this._data = data.data === void 0 ? {} : data.data;
 
-    if (this._type === FsDrawerAction.component) {
+    if (this._type === FsDrawerAction.Component) {
       this._menuRefName = data.name || data.icon;
     }
   }

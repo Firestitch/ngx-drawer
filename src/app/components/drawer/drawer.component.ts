@@ -79,7 +79,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
 
   public actionClick({ action, event }) {
 
-    const hasComponentType = action.type === FsDrawerAction.component;
+    const hasComponentType = action.type === FsDrawerAction.Component;
 
     if (hasComponentType) {
       const menuRef = this._drawerMenu.create(action.component, event.srcElement, action);

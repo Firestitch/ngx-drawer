@@ -1,6 +1,5 @@
 export enum FsDrawerAction {
-  button = 'button',
-  menu = 'menu',
-  component = 'component',
-  toggle = 'toggle',
+  Button = 'button',
+  Menu = 'menu',
+  Component = 'component',
 }
