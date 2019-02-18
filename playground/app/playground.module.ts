@@ -6,6 +6,9 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { FsExampleModule } from '@firestitch/example';
 import { FsDrawerModule } from '@firestitch/drawer';
 import { FsCheckboxGroupModule } from '@firestitch/checkboxgroup';
+import { FsMessageModule } from '@firestitch/message';
+
+import { ToastrModule } from 'ngx-toastr';
 
 import { AppMaterialModule } from './material.module';
 
@@ -32,6 +35,8 @@ const routes: Routes = [
     FsExampleModule.forRoot(),
     RouterModule.forRoot(routes),
     FsDrawerModule.forRoot(),
+    ToastrModule.forRoot({ preventDuplicates: true }),
+    FsMessageModule.forRoot(),
     FsCheckboxGroupModule,
   ],
   entryComponents: [
