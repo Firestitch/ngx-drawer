@@ -86,7 +86,6 @@ export class FsDrawerExampleComponent implements OnInit {
           type: FsDrawerAction.Menu,
           actions: [
             {
-              icon: 'settings',
               label: 'Do something..',
               click: (event) => {
                 console.log('clicked sub menu action');
