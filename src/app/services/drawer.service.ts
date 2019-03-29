@@ -1,6 +1,9 @@
-import { Injectable, Injector } from '@angular/core';
+import { Injectable, Injector, OnDestroy } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
+
+import { Subject } from 'rxjs';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerRef } from '../classes/drawer-ref';
@@ -10,9 +13,17 @@ import { DRAWER_DATA } from './drawer-data';
 
 
 @Injectable()
-export class FsDrawerService {
+export class FsDrawerService implements OnDestroy {
+
+  private _drawerRefs = new Set<DrawerRef<any>>();
+  private _destroy$ = new Subject();
 
   constructor(private _overlay: Overlay, private _injector: Injector) {
+  }
+
+  public ngOnDestroy() {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public open(component: ComponentType<any>, config?: IDrawerConfig) {
@@ -32,7 +43,25 @@ export class FsDrawerService {
     drawerRef.events();
     drawerRef.open();
 
+    this.storeDrawerRef(drawerRef);
+
     return drawerRef;
+  }
+
+  public closeAll() {
+    this._drawerRefs.forEach((ref) => ref.close());
+  }
+
+  private storeDrawerRef(ref) {
+    this._drawerRefs.add(ref);
+    ref.destroy$
+      .pipe(
+        take(1),
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        this._drawerRefs.delete(ref);
+      });
   }
 
   private createOverlay(): OverlayRef {

@@ -75,6 +75,10 @@ export class DrawerRef<T, R = any> {
     return { ...this._dataFactory.getValue() } // Like immutable.... TODO switch to Immer
   }
 
+  get destroy$() {
+    return this._destroy$.asObservable();
+  }
+
   /**
    * Set reference to drawer container
    * @param value
