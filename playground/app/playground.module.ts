@@ -34,7 +34,7 @@ const routes: Routes = [
     AppMaterialModule,
     FsExampleModule.forRoot(),
     RouterModule.forRoot(routes),
-    FsDrawerModule.forRoot(),
+    FsDrawerModule,
     ToastrModule.forRoot({ preventDuplicates: true }),
     FsMessageModule.forRoot(),
     FsCheckboxGroupModule,
