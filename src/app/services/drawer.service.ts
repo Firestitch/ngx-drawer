@@ -1,4 +1,4 @@
-import { Injectable, Injector, OnDestroy } from '@angular/core';
+import { Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
 
@@ -18,7 +18,10 @@ export class FsDrawerService implements OnDestroy {
   private _drawerRefs = new Set<DrawerRef<any>>();
   private _destroy$ = new Subject();
 
-  constructor(private _overlay: Overlay, private _injector: Injector) {
+  constructor(
+    @Optional() @SkipSelf() private _parentDrawerService: FsDrawerService,
+    private _overlay: Overlay,
+    private _injector: Injector) {
   }
 
   public ngOnDestroy() {
@@ -50,6 +53,10 @@ export class FsDrawerService implements OnDestroy {
 
   public closeAll() {
     this._drawerRefs.forEach((ref) => ref.close());
+
+    if (this._parentDrawerService) {
+      this._parentDrawerService.closeAll();
+    }
   }
 
   private storeDrawerRef(ref) {

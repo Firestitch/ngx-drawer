@@ -49,12 +49,6 @@ import { FsDrawerService } from './services/drawer.service';
     FsDrawerResizerDirective,
     FsDrawerMenuComponent,
   ],
+  providers: [FsDrawerService],
 })
-export class FsDrawerModule {
-  static forRoot(): ModuleWithProviders {
-    return {
-      ngModule: FsDrawerModule,
-      providers: [FsDrawerService]
-    };
-  }
-}
+export class FsDrawerModule {}
