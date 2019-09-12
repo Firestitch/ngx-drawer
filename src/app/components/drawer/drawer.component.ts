@@ -109,9 +109,9 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
     }
   }
 
-  public menuActionClick({ action, event }) {
+  public menuActionClick({ action, data, event }) {
     if (action.click) {
-      action.click.call(event);
+      action.click.call(null, data, event);
     }
   }
 

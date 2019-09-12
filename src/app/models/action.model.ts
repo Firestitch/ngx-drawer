@@ -1,8 +1,10 @@
 import { FsDrawerAction } from '../helpers/action-type.enum';
+import { BaseAction } from './base-action';
+import { DrawerData } from '../classes/drawer-data';
+import { MenuAction } from './menu-action.model';
 
 
-export class Action {
-  private _icon: string;
+export class Action extends BaseAction {
   private _tooltip: string;
   private _data: any = null;
   private readonly _toggle: boolean;
@@ -10,26 +12,28 @@ export class Action {
   private readonly _name: string;
   private readonly _close: boolean = false;
   private readonly _closeSide: boolean = true;
-  private readonly _click: Function | null;
-  private readonly _actions = [];
+  private readonly _menuActions: MenuAction[] = [];
   private readonly _component = null;
   private readonly _menuRefName = null;
 
   constructor(data: any = {}) {
+    super(data);
     this._icon = data.icon || '';
     this._type = data.type || '';
     this._name = data.name || '';
     this._toggle = data.toggle === void 0 ? true : data.toggle;
     this._tooltip = data.tooltip || '';
-    this._click = data.click || null;
     this._close = !!data.close;
     this._closeSide = data.closeSide === void 0 ? true : !!data.closeSide;
-    this._actions = data.actions || [];
     this._component = data.component || null;
     this._data = data.data === void 0 ? {} : data.data;
 
     if (this._type === FsDrawerAction.Component) {
       this._menuRefName = data.name || data.icon;
+    }
+
+    if (Array.isArray(data.actions)) {
+      this._menuActions = data.actions.map((action) => new MenuAction(action));
     }
   }
 
@@ -69,12 +73,8 @@ export class Action {
     return this._closeSide;
   }
 
-  get click() {
-    return this._click;
-  }
-
-  get actions() {
-    return this._actions;
+  get menuActions() {
+    return this._menuActions;
   }
 
   get component() {
@@ -91,5 +91,19 @@ export class Action {
 
   get menuRefName() {
     return this._menuRefName;
+  }
+
+  public checkVisibility(data: DrawerData) {
+    super.checkVisibility(data);
+
+    if (this._menuActions.length > 0) {
+      this._menuActions.forEach((action) => {
+        action.checkVisibility(data);
+      })
+    }
+
+    if (this.menuActions.length > 0) {
+      this._visible = this.menuActions.some((action) => action.visible);
+    }
   }
 }

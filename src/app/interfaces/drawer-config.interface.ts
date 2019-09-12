@@ -1,4 +1,5 @@
 import { IActionConfig } from './action.iterface';
+import { DrawerData } from '../classes/drawer-data';
 
 export interface IDrawerConfig {
   data?: any;

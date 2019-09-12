@@ -1,4 +1,3 @@
-import { Actions } from './actions.model';
 import { Action } from './action.model';
 
 export class DrawerConfig {
@@ -7,7 +6,7 @@ export class DrawerConfig {
   public activeAction: string;
   public width: string;
   public resize: { min: number, max: number; minSide: number, maxSide: number };
-  public actions: Actions[] | null;
+  public actions: Action[] | null;
 
   constructor(data: any = {}) {
     this.disableClose = data.disableClose || false;

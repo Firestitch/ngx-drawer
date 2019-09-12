@@ -18,7 +18,7 @@ export class FsDrawerExampleComponent implements OnInit {
 
   public openDrawer() {
     const drawerRef = this.drawer.open(TaskDrawerComponent, {
-      data: { account: { name: 'Name', email: 'email@email.com' } },
+      data: { account: { name: 'Name', email: 'email@email.com', blocked: false } },
       disableClose: false,
       position: 'right',
       //activeAction: 'settings',
@@ -77,6 +77,7 @@ export class FsDrawerExampleComponent implements OnInit {
           click: (event, menuRef) => {
 
             setTimeout(() => {
+              drawerRef.dataChange({hello: 2});
               menuRef.dataChange({task_id: 1000});
             }, 2000);
           }
@@ -90,6 +91,34 @@ export class FsDrawerExampleComponent implements OnInit {
               click: (event) => {
                 console.log('clicked sub menu action');
               }
+            },
+            {
+              label: 'Group',
+              actions: [
+                {
+                  label: 'Sub Action',
+                  click: (data) => {
+                    console.log('group sub action', data);
+                  }
+                },
+                {
+                  label: 'Sub Action 2',
+                  click: (data) => {
+                    console.log('group sub action 2', data);
+                  },
+                  show: (data: any) => {
+                    return !data.blocked;
+                  }
+                },
+                {
+                  label: 'Sub Action 3',
+                  click: (data) => {
+                    data.blocked = !data.blocked;
+                    drawerRef.dataChange(data);
+                    console.log('group sub action 3', data);
+                  }
+                }
+              ]
             }
           ]
         },

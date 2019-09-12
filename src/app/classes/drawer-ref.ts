@@ -202,7 +202,7 @@ export class DrawerRef<T, R = any> {
    * Open drawer and notify observable
    */
   public open() {
-    Observable.create((obs) => {
+    new Observable<void>((obs) => {
       setTimeout(() => { // FIXME Crutch
         if (this._openStart$.observers.length) {
           this._openStart$.next(obs);
@@ -233,7 +233,7 @@ export class DrawerRef<T, R = any> {
    * @param result Optional result to return to the dialog opener.
    */
   public close(result?: R): void {
-    Observable.create((obs) => {
+    new Observable<void>((obs) => {
       if (this._closeStart$.observers.length) {
         this._closeStart$.next(obs);
       } else {

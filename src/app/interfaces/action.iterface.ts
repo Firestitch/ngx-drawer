@@ -13,12 +13,22 @@ export interface IActionConfig {
   close?: boolean;
   closeSide?: boolean;
   click?: <T, R>(data: IActionClickEvent, menuRef?: DrawerMenuRef<T, R>) => void;
-  actions?: IMenuAction[];
+  show?: IDrawerActionShowFn;
+  actions?: (IMenuActionGroup | IMenuAction)[];
   component?: any;
   data?: any;
+}
+
+export interface IMenuActionGroup {
+  label?: string;
+  actions: IMenuAction[]
 }
 
 export interface IActionClickEvent {
   event: MouseEvent,
   action: Action,
+}
+
+export interface IDrawerActionShowFn {
+  (data: any): boolean;
 }

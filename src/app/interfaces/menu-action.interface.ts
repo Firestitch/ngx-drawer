@@ -1,5 +1,9 @@
+import { IDrawerActionShowFn } from './action.iterface';
+
+
 export interface IMenuAction {
   label?: string;
   icon?: string;
-  click?: Function;
+  click?: (data: any, event: any) => void;
+  show?: IDrawerActionShowFn;
 }
