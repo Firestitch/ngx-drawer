@@ -5,7 +5,7 @@ import { takeUntil } from 'rxjs/operators';
 export class DrawerData {
 
   private _data;
-  private _dataChange = new Subject<void>();
+  private _dataChange = new Subject<any>();
   private _destroy = new Subject<void>();
 
   constructor(data: any = {}) {
@@ -65,7 +65,7 @@ export class DrawerData {
 
   public setValue(value) {
     this._data = value;
-    this._dataChange.next();
+    this._dataChange.next(this._data);
   }
 
   public destroy() {
