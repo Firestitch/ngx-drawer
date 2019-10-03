@@ -145,10 +145,7 @@ export class FsDrawerExampleComponent implements OnInit {
   }
 
   public ngOnInit() {
-    // Avoids: ExpressionChangedAfterItHasBeenCheckedError: Expression has changed after it was checked. Previous value: 'klass: undefined'
-    setTimeout(() => {
-      this.openDrawer();
-    });
+    this.openDrawer();
   }
 
   public notificationsIcon() {

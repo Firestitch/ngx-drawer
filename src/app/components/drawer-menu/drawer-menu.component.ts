@@ -24,7 +24,7 @@ import { DrawerMenuRef } from '../../classes/drawer-menu-ref';
 })
 export class FsDrawerMenuComponent extends BasePortalOutlet {
 
-  @ViewChild(CdkPortalOutlet) _portalOutlet: CdkPortalOutlet;
+  @ViewChild(CdkPortalOutlet, { static: true }) _portalOutlet: CdkPortalOutlet;
 
   public ref: DrawerMenuRef<any>;
 
