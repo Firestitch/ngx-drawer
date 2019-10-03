@@ -1,8 +1,16 @@
 import {
+  ChangeDetectionStrategy,
   Component,
-  ComponentRef, EmbeddedViewRef, ViewChild,
+  ComponentRef,
+  EmbeddedViewRef,
+  ViewChild,
 } from '@angular/core';
-import { BasePortalOutlet, CdkPortalOutlet, ComponentPortal, TemplatePortal} from '@angular/cdk/portal';
+import {
+  BasePortalOutlet,
+  CdkPortalOutlet,
+  ComponentPortal,
+  TemplatePortal
+} from '@angular/cdk/portal';
 import { DrawerMenuRef } from '../../classes/drawer-menu-ref';
 
 @Component({
@@ -11,7 +19,8 @@ import { DrawerMenuRef } from '../../classes/drawer-menu-ref';
   styleUrls: [ 'drawer-menu.component.scss' ],
   host: {
     'class': 'mat-elevation-z2'
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDrawerMenuComponent extends BasePortalOutlet {
 

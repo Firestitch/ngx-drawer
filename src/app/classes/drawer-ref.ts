@@ -33,6 +33,9 @@ export class DrawerRef<T, R = any> {
   /** Subject for notifying the user that the drawer has started opening. */
   private readonly _activeActionChange$ = new Subject<{ old: string, current: string }>();
 
+  /** Subject for notifying the user that the drawer has finished opening. */
+  private readonly _actionsUpdated$ = new Subject<void>();
+
   /** Destroy notifier **/
   private readonly _destroy$ = new Subject<void>();
 
@@ -127,6 +130,13 @@ export class DrawerRef<T, R = any> {
    */
   get isSideOpen(): boolean {
     return this._isSideOpen;
+  }
+
+  /**
+   * Gets an observable that action was updated and change detection should be started
+   */
+  get actionUpdated$(): Observable<void> {
+    return this._actionsUpdated$.pipe(takeUntil(this._destroy$));
   }
 
   /**
@@ -322,6 +332,22 @@ export class DrawerRef<T, R = any> {
 
   public getAction(name: string) {
     return this.drawerConfig.actions.find((action) => action.name === name);
+  }
+
+  public updateAction(name: string, data) {
+    const action = this.getAction(name);
+
+    if (action) {
+      const allowedFields = ['icon', 'type', 'toggle', 'tooltip', 'close', 'closeSide', 'component', 'data'];
+
+      const forUpdate = Object.keys(data).filter((key) => allowedFields.indexOf(key) > -1);
+
+      forUpdate.forEach((key) => {
+        action[key] = data[key];
+      });
+
+      this._actionsUpdated$.next();
+    }
   }
 
   public destroy() {

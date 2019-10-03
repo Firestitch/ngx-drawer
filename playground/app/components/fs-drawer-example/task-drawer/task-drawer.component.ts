@@ -20,9 +20,12 @@ export class TaskDrawerComponent implements OnInit {
 
   public toggleNotification() {
     const notificationsAction = this.drawer.getAction('notifications');
+
     if (notificationsAction) {
-      notificationsAction.data = !notificationsAction.data;
-      notificationsAction.icon = notificationsAction.data ? 'volume_up' : 'volume_off'
+      this.drawer.updateAction(notificationsAction.name, {
+        data: !notificationsAction.data,
+        icon: !notificationsAction.data ? 'volume_up' : 'volume_off'
+      });
     }
   }
 }
