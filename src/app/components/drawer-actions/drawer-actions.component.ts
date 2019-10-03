@@ -1,4 +1,12 @@
-import { Component, EventEmitter, Inject, Input, OnDestroy, OnInit, Output } from '@angular/core';
+import {
+  ChangeDetectionStrategy, ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnDestroy,
+  OnInit,
+  Output
+} from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { debounceTime, takeUntil } from 'rxjs/operators';
@@ -12,6 +20,7 @@ import { Action } from '../../models/action.model';
   selector: 'fs-drawer-actions',
   templateUrl: './drawer-actions.component.html',
   styleUrls: [ './drawer-actions.component.scss' ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDrawerActionsComponent implements OnInit, OnDestroy {
   @Input() public actions: Action[];
@@ -24,8 +33,12 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject<void>();
 
-  constructor(public drawer: DrawerRef<any>) {
-    this._subscribeToDataChanges();
+  constructor(
+    public drawer: DrawerRef<any>,
+    private _cdRef: ChangeDetectorRef,
+  ) {
+    this._listenDataChanges();
+    this._listenActionsChanges();
   }
 
   public ngOnInit() {
@@ -45,7 +58,7 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
     this.menuActionClicked.next({ action, data, event });
   }
 
-  private _subscribeToDataChanges() {
+  private _listenDataChanges() {
     this.drawer.dataChanged$
       .pipe(
         takeUntil(this._destroy$),
@@ -53,7 +66,19 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
       )
       .subscribe(() => {
         this._updateActionsVisibility();
+
+        this._cdRef.detectChanges();
       });
+  }
+
+  private _listenActionsChanges() {
+    this.drawer.actionUpdated$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+      this._cdRef.detectChanges();
+    })
   }
 
   private _updateActionsVisibility() {

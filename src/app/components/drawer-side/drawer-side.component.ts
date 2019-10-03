@@ -1,14 +1,15 @@
 import {
-  EventEmitter,
-  QueryList,
-  TemplateRef,
+  AfterViewInit,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
+  EventEmitter,
   HostBinding,
   Input,
-  OnInit,
   OnDestroy,
-  AfterViewInit,
+  OnInit,
+  QueryList,
+  TemplateRef,
 } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
@@ -21,7 +22,8 @@ import { FsDrawerActionDirective } from '../../directives/drawer-action.directiv
   templateUrl: './drawer-side.component.html',
   host: {
     'class': 'side',
-  }
+  },
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -37,6 +39,11 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
   public activeTemplate: TemplateRef<any> = null;
 
   private _destroy$ = new EventEmitter();
+
+  constructor(
+    private _cdRef: ChangeDetectorRef,
+  ) {
+  }
 
   public ngOnInit() {
     this.subscribeToActionChanges();
@@ -64,6 +71,8 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(() => {
         this.hidden = !this.drawer.isSideOpen;
         this.updateActiveActionTemplate();
+
+        this._cdRef.detectChanges();
       })
   }
 

@@ -1,11 +1,12 @@
 import {
-  OnInit,
+  ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  ViewChild,
-  HostBinding,
-  ElementRef,
   ComponentRef,
+  ElementRef,
   EmbeddedViewRef,
+  HostBinding, OnDestroy,
+  OnInit,
+  ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
 
@@ -20,6 +21,8 @@ import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerConfig } from '../../models/drawer-config.model';
 import { FsDrawerAction } from '../../helpers/action-type.enum';
 import { FsDrawerMenuService } from '../../services/drawer-menu.service';
+import { takeUntil } from 'rxjs/operators';
+import { Subject } from 'rxjs';
 
 
 @Component({
@@ -29,9 +32,10 @@ import { FsDrawerMenuService } from '../../services/drawer-menu.service';
   host: {
     'class': 'fs-drawer-container',
   },
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
+export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDestroy {
 
   @HostBinding('class.side-open')
   public sideOpen = false;
@@ -53,12 +57,23 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
   @ViewChild('drawerActionsContainer', { read: ElementRef })
   private _drawerActionsContainer: ElementRef;
 
-  constructor(private _drawerMenu: FsDrawerMenuService) {
+  private _destroy$ = new Subject();
+
+  constructor(
+    private _drawerMenu: FsDrawerMenuService,
+    private _drawerRef: DrawerRef<any>,
+    private _cdRef: ChangeDetectorRef,
+  ) {
     super();
   }
 
   public ngOnInit() {
-    // set config with defaults params
+    this._listenDataChanges();
+  }
+
+  public ngOnDestroy(): void {
+    this._destroy$.next();
+    this._destroy$.complete();
   }
 
   public open() {
@@ -155,4 +170,13 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit {
     return this._portalOutlet.attachTemplatePortal(portal);
   }
 
+  private _listenDataChanges() {
+    this._drawerRef.dataChanged$
+      .pipe(
+        takeUntil(this._destroy$)
+      )
+      .subscribe(() => {
+        this._cdRef.detectChanges();
+      });
+  }
 }
