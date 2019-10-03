@@ -48,13 +48,13 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
   public initialized = false;
 
-  @ViewChild(CdkPortalOutlet)
+  @ViewChild(CdkPortalOutlet, { static: true })
   private _portalOutlet: CdkPortalOutlet;
 
-  @ViewChild('drawerContentContainer')
+  @ViewChild('drawerContentContainer', { static: true })
   private _drawerContentContainer: ElementRef;
 
-  @ViewChild('drawerActionsContainer', { read: ElementRef })
+  @ViewChild('drawerActionsContainer', { read: ElementRef, static: true })
   private _drawerActionsContainer: ElementRef;
 
   private _destroy$ = new Subject();
