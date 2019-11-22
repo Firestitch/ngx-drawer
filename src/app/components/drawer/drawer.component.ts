@@ -93,8 +93,8 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   }
 
   public actionClick({ action, event }) {
-
     const hasComponentType = action.type === FsDrawerAction.Component;
+    const hasMenuType = action.type === FsDrawerAction.Menu;
 
     if (hasComponentType) {
       const menuRef = this._drawerMenu.create(action.component, event.srcElement, action);
@@ -115,7 +115,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
       this.drawerRef.close();
     }
 
-    if (action.toggle && (!hasComponentType || action.closeSide)) {
+    if (action.toggle && ((!hasComponentType && !hasMenuType) || action.closeSide)) {
       if (this.drawerRef.isSideOpen && this.drawerRef.activeAction === action.name) {
         this.drawerRef.toggleSide();
       } else {

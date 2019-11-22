@@ -24,12 +24,17 @@ export class Action extends BaseAction {
     this._toggle = data.toggle === void 0 ? true : data.toggle;
     this._tooltip = data.tooltip || '';
     this._close = !!data.close;
-    this._closeSide = data.closeSide === void 0 ? true : !!data.closeSide;
     this._component = data.component || null;
     this._data = data.data === void 0 ? {} : data.data;
 
     if (this._type === FsDrawerAction.Component) {
       this._menuRefName = data.name || data.icon;
+    }
+
+    if (this._type === FsDrawerAction.Menu && data.closeSide === void 0) {
+     this._closeSide = false;
+    } else {
+      this._closeSide = data.closeSide === void 0 ? true : !!data.closeSide;
     }
 
     if (Array.isArray(data.actions)) {
