@@ -62,10 +62,15 @@ export class FsDrawerExampleComponent implements OnInit {
           tooltip: 'Notifications',
           data: this.notificationsEnabled,
           click: (data) => {
-            data.action.data = !data.action.data;
-            this.notificationsEnabled = data.action.data;
+            this.notificationsEnabled = !data.action.data;
 
-            data.action.icon = this.notificationsIcon();
+            drawerRef.updateAction('notifications', {
+              data: !data.action.data,
+              icon: this.notificationsIcon(),
+            });
+
+            // OR only for icon
+            // drawerRef.updateActionIcon('notifications', this.notificationsIcon());
           }
         },
         {

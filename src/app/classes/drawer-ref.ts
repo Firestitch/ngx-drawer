@@ -334,6 +334,26 @@ export class DrawerRef<T, R = any> {
     return this.drawerConfig.actions.find((action) => action.name === name);
   }
 
+  /**
+   * Do update for icon for target action
+   * @param name
+   * @param icon
+   */
+  public updateActionIcon(name: string, icon: string) {
+    const action = this.getAction(name);
+
+    if (action) {
+      action.icon = icon;
+    }
+
+    this._actionsUpdated$.next();
+  }
+
+  /**
+   * Do update
+   * @param name
+   * @param data
+   */
   public updateAction(name: string, data) {
     const action = this.getAction(name);
 
