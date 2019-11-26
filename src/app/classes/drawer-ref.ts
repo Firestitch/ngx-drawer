@@ -189,7 +189,7 @@ export class DrawerRef<T, R = any> {
   /**
    * Gets an observable that is notified when data in DRAWER_DATA was changed
    */
-  get dataChanged$(): Observable<void> {
+  get dataChanged$(): Observable<any> {
     return this._dataFactory.dataChange$;
   }
 
