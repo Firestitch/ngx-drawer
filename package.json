@@ -23,7 +23,7 @@
     "package": "cd tools && npm run cli:package",
     "package:test": "cd tools && npm run cli:package:test",
     "package:publish": "cd tools && npm run cli:package:publish",
-    "demo:build": "cd tools && npm run cli:demo",
+    "demo:build": "cd tools && npm run cli:demo:aot-less",
     "serve": "cd tools && npm run cli:serve"
   },
   "devDependencies": {
@@ -64,7 +64,7 @@
     "typescript": "^3.4.5",
     "webpack": "^4.29.4",
     "webpack-dev-server": "^3.2.0",
-    "zone.js": "^0.8.29"
+    "zone.js": "^0.10.2"
   },
   "engines": {
     "node": ">=6.0.0"
