@@ -1,8 +1,8 @@
 import { IMenuAction } from './menu-action.interface';
-import { FsDrawerAction } from '../helpers/action-type.enum';
 import { DrawerMenuRef } from '../classes/drawer-menu-ref';
+import { DrawerRef } from '../classes/drawer-ref';
+import { FsDrawerAction } from '../helpers/action-type.enum';
 import { Action } from '../models/action.model';
-import { DrawerRef } from '@firestitch/drawer';
 
 
 export interface IActionConfig<TData = any> {

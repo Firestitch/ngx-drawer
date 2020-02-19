@@ -4,7 +4,7 @@ import {
   ComponentRef,
   ElementRef,
   EmbeddedViewRef,
-  HostBinding, OnDestroy,
+  OnDestroy,
   OnInit,
   ViewChild,
   ViewEncapsulation,
@@ -17,12 +17,14 @@ import {
   TemplatePortal,
 } from '@angular/cdk/portal';
 
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+
 import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerConfig } from '../../models/drawer-config.model';
 import { FsDrawerAction } from '../../helpers/action-type.enum';
 import { FsDrawerMenuService } from '../../services/drawer-menu.service';
-import { takeUntil } from 'rxjs/operators';
-import { Subject } from 'rxjs';
+
 
 
 @Component({
@@ -36,9 +38,6 @@ import { Subject } from 'rxjs';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDestroy {
-
-  @HostBinding('class.side-open')
-  public sideOpen = false;
 
   public config: DrawerConfig;
   public isOpen = false;
@@ -57,14 +56,27 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   @ViewChild('drawerActionsContainer', { read: ElementRef, static: true })
   private _drawerActionsContainer: ElementRef;
 
+  private _sideOpen = false;
   private _destroy$ = new Subject();
 
   constructor(
+    private _el: ElementRef<HTMLElement>,
     private _drawerMenu: FsDrawerMenuService,
     private _drawerRef: DrawerRef<any>,
     private _cdRef: ChangeDetectorRef,
   ) {
     super();
+  }
+
+  public get sideOpen() {
+    return this._sideOpen;
+  }
+
+  public set sideOpen(value: boolean) {
+    this._sideOpen = value;
+
+    this._el.nativeElement.classList
+      .toggle('side-open', this.sideOpen);
   }
 
   public ngOnInit() {
@@ -146,9 +158,13 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     this.drawerRef.drawerContentContainer = this._drawerContentContainer;
     this.drawerRef.drawerActionsContainer = this._drawerActionsContainer;
 
-    this.drawerRef.sideToggle().subscribe((opened) => {
-      this.sideOpen = opened;
-    });
+    this.drawerRef.sideToggle()
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe((opened) => {
+        this.sideOpen = opened;
+      });
 
     this.initialized = true;
   }
