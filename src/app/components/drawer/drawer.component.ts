@@ -101,14 +101,21 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
       this.drawerRef.addMenuRef(action.menuRefName, menuRef);
 
+      const params = {
+        event: event,
+        action: action,
+        drawerRef: this._drawerRef,
+        menuRef: menuRef
+      };
       // Call click
-      action.click.call(null, { event: event, action: action }, menuRef);
+      action.click.call(null, params);
 
       if (action.closeSide) {
         this.drawerRef.closeSide();
       }
     } else if (action.click) {
-      action.click.call(null, { event: event, action: action });
+      const params = { event: event, action: action };
+      action.click.call(null, params);
     }
 
     if (action.close) {

@@ -29,7 +29,7 @@ export class FsDrawerService implements OnDestroy {
     this._destroy$.complete();
   }
 
-  public open(component: ComponentType<any>, config?: IDrawerConfig) {
+  public open<TData = any>(component: ComponentType<any>, config?: IDrawerConfig<TData>) {
     const overlayRef = this.createOverlay();
 
     const dataFactory = DrawerData.createWithProxy(config.data);

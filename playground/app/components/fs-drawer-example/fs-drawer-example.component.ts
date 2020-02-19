@@ -4,6 +4,13 @@ import { FsDrawerAction, FsDrawerService } from '@firestitch/drawer';
 import { TaskDrawerComponent } from './task-drawer';
 import { CustomMenuComponent } from './custom-menu';
 
+interface ExampleDrawerData {
+  account: {
+    name?: string,
+    email?: string,
+    blocked?: boolean,
+  }
+}
 
 @Component({
   selector: 'fs-drawer-example',
@@ -17,7 +24,7 @@ export class FsDrawerExampleComponent implements OnInit {
   constructor(public drawer: FsDrawerService) {}
 
   public openDrawer() {
-    const drawerRef = this.drawer.open(TaskDrawerComponent, {
+    const drawerRef = this.drawer.open<ExampleDrawerData>(TaskDrawerComponent, {
       data: { account: { name: 'Name', email: 'email@email.com', blocked: false } },
       disableClose: false,
       position: 'right',
@@ -34,7 +41,7 @@ export class FsDrawerExampleComponent implements OnInit {
           icon: 'clear',
           type: FsDrawerAction.Button,
           close: true,
-          click: (event) => {
+          click: ({event}) => {
             console.log('close clicked');
           }
         },
@@ -61,11 +68,11 @@ export class FsDrawerExampleComponent implements OnInit {
           toggle: false,
           tooltip: 'Notifications',
           data: this.notificationsEnabled,
-          click: (data) => {
-            this.notificationsEnabled = !data.action.data;
+          click: ({action}) => {
+            this.notificationsEnabled = !action.data;
 
             drawerRef.updateAction('notifications', {
-              data: !data.action.data,
+              data: !action.data,
               icon: this.notificationsIcon(),
             });
 
@@ -79,10 +86,9 @@ export class FsDrawerExampleComponent implements OnInit {
           component: CustomMenuComponent,
           data: { task_id: 10 },
           closeSide: false,
-          click: (event, menuRef) => {
-
+          click: ({data, menuRef, action}) => {
             setTimeout(() => {
-              drawerRef.dataChange({hello: 2});
+              drawerRef.dataChange({account: {hello: 2}});
               menuRef.dataChange({task_id: 1000});
             }, 2000);
           }
@@ -93,7 +99,7 @@ export class FsDrawerExampleComponent implements OnInit {
           actions: [
             {
               label: 'Do something..',
-              click: (event) => {
+              click: ({ data }) => {
                 console.log('clicked sub menu action');
               }
             },
@@ -102,23 +108,23 @@ export class FsDrawerExampleComponent implements OnInit {
               actions: [
                 {
                   label: 'Sub Action',
-                  click: (data) => {
+                  click: ({ data }) => {
                     console.log('group sub action', data);
                   }
                 },
                 {
                   label: 'Sub Action 2',
-                  click: (data) => {
+                  click: ({ data }) => {
                     console.log('group sub action 2', data);
                   },
-                  show: (data: any) => {
-                    return !data.blocked;
+                  show: (data) => {
+                    return !data.account.blocked;
                   }
                 },
                 {
                   label: 'Sub Action 3',
-                  click: (data) => {
-                    data.blocked = !data.blocked;
+                  click: ({ data }) => {
+                    data.account.blocked = !data.account.blocked;
                     drawerRef.dataChange(data);
                     console.log('group sub action 3', data);
                   }

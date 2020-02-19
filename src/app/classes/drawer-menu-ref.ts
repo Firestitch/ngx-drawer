@@ -7,7 +7,7 @@ import { takeUntil } from 'rxjs/operators';
 import { FsDrawerMenuComponent } from '../components/drawer-menu/drawer-menu.component';
 import { DrawerData } from './drawer-data';
 
-export class DrawerMenuRef<T, R = any> {
+export class DrawerMenuRef<TCmp, R = any> {
 
   /** Subject for notifying the user that the menu has finished closing. */
   private readonly _afterClosed$ = new Subject<R | undefined>();
@@ -25,7 +25,7 @@ export class DrawerMenuRef<T, R = any> {
   private _externalMenuContainerRef: FsDrawerMenuComponent;
 
   /** Main menu component and template */
-  private _externalMenuComponentRef: ComponentRef<T>;
+  private _externalMenuComponentRef: ComponentRef<TCmp>;
 
 
   constructor(private _overlayRef: OverlayRef, private _dataFactory: DrawerData) {
@@ -57,7 +57,7 @@ export class DrawerMenuRef<T, R = any> {
    * Set reference to menu component
    * @param value
    */
-  set componentRef(value: ComponentRef<T>) {
+  set componentRef(value: ComponentRef<TCmp>) {
     this._externalMenuComponentRef = value;
   }
 

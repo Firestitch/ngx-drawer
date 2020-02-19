@@ -2,9 +2,10 @@ import { IMenuAction } from './menu-action.interface';
 import { FsDrawerAction } from '../helpers/action-type.enum';
 import { DrawerMenuRef } from '../classes/drawer-menu-ref';
 import { Action } from '../models/action.model';
+import { DrawerRef } from '@firestitch/drawer';
 
 
-export interface IActionConfig {
+export interface IActionConfig<TData = any> {
   icon: string;
   tooltip?: string;
   toggle?: boolean;
@@ -12,16 +13,24 @@ export interface IActionConfig {
   name?: string;
   close?: boolean;
   closeSide?: boolean;
-  click?: <T, R>(data: IActionClickEvent, menuRef?: DrawerMenuRef<T, R>) => void;
-  show?: IDrawerActionShowFn;
-  actions?: (IMenuActionGroup | IMenuAction)[];
+  click?: <T, R>(data: IMenuActionClick<TData, T, R>) => void;
+  show?: IDrawerActionShowFn<TData>;
+  actions?: (IMenuActionGroup<TData> | IMenuAction<TData>)[];
   component?: any;
   data?: any;
 }
 
-export interface IMenuActionGroup {
+export interface IMenuActionClick<TData = any, TCmp = any, R = any> {
+  data: TData;
+  event: MouseEvent;
+  action: Action;
+  drawerRef: DrawerRef<TCmp, R>;
+  menuRef: DrawerMenuRef<TCmp, R>;
+}
+
+export interface IMenuActionGroup<TData = any> {
   label?: string;
-  actions: IMenuAction[]
+  actions: IMenuAction<TData>[]
 }
 
 export interface IActionClickEvent {
@@ -29,6 +38,6 @@ export interface IActionClickEvent {
   action: Action,
 }
 
-export interface IDrawerActionShowFn {
-  (data: any): boolean;
+export interface IDrawerActionShowFn<TData = any> {
+  (data: TData): boolean;
 }
