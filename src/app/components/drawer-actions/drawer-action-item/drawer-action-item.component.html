@@ -1,0 +1,66 @@
+<ng-container [ngSwitch]="action.type">
+  <ng-container *ngSwitchCase="actionTypes.Button">
+    <button mat-icon-button
+            type="button"
+            *ngIf="action.visible"
+            [matTooltip]="action.tooltip"
+            [class.active]="isActive"
+            (click)="actionClick($event)">
+      <i class="material-icons">{{action.icon}}</i>
+    </button>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="actionTypes.Menu">
+    <ng-container *ngIf="action.visible">
+      <button mat-icon-button
+              type="button"
+              class="sub-action"
+              [fsMenuTriggerFor]="menu"
+              [matTooltip]="action.tooltip"
+              [class.active]="isActive"
+              (click)="actionClick($event)">
+        <i class="material-icons">{{action.icon}}</i>
+      </button>
+
+      <fs-menu #menu>
+        <ng-container *ngFor="let menuAction of action.menuActions">
+          <ng-container *ngIf="menuAction.isGroup else simpleMenuItem">
+            <fs-menu-group [label]="menuAction.label" [hidden]="!menuAction.visible">
+              <ng-container *ngFor="let groupAction of menuAction.actions">
+                <ng-template fs-menu-item
+                             [hidden]="!groupAction.visible"
+                             [link]="groupAction.routerLink?.link"
+                             [queryParams]="groupAction.routerLink?.queryParams"
+                             (click)="menuActionClick(groupAction, $event);">
+                  <mat-icon *ngIf="menuAction.icon">{{groupAction.icon}}</mat-icon>
+                  {{groupAction.label}}
+                </ng-template>
+              </ng-container>
+            </fs-menu-group>
+          </ng-container>
+          <ng-template #simpleMenuItem>
+            <ng-template fs-menu-item
+                         [hidden]="!menuAction.visible"
+                         [link]="menuAction.routerLink?.link"
+                         [queryParams]="menuAction.routerLink?.queryParams"
+                         (click)="menuActionClick(menuAction, $event);">
+              <i class="material-icons" *ngIf="menuAction.icon">{{menuAction.icon}}</i>
+              <span>{{menuAction.label}}</span>
+            </ng-template>
+          </ng-template>
+        </ng-container>
+      </fs-menu>
+    </ng-container>
+  </ng-container>
+
+  <ng-container *ngSwitchCase="actionTypes.Component">
+    <button mat-icon-button
+            type="button"
+            *ngIf="action.visible"
+            [matTooltip]="action.tooltip"
+            [class.active]="isActive"
+            (click)="actionClick($event)">
+      <i class="material-icons">{{action.icon}}</i>
+    </button>
+  </ng-container>
+</ng-container>

@@ -98,6 +98,18 @@ export class Action extends BaseAction {
     return this._menuRefName;
   }
 
+  public updateRouterLink(data) {
+    if (this._visible) {
+      super.updateRouterLink(data);
+
+      if (this._menuActions.length > 0) {
+        this._menuActions.forEach((action) => {
+          action.updateRouterLink(data);
+        })
+      }
+    }
+  }
+
   public checkVisibility(data: DrawerData) {
     super.checkVisibility(data);
 

@@ -1,4 +1,4 @@
-import { IActionConfig } from './action.iterface';
+import { IFsDrawerActionConfig } from './action.iterface';
 import { DrawerData } from '../classes/drawer-data';
 
 export interface IDrawerConfig<TData = any> {
@@ -7,6 +7,6 @@ export interface IDrawerConfig<TData = any> {
   position?: 'right' | 'left';
   activeAction?: string;
   width?: string;
-  actions?: IActionConfig<TData>[];
+  actions?: IFsDrawerActionConfig<TData>[];
   resize?: { min?: number, max?: number; minSide?: number, maxSide?: number }
 }

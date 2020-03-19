@@ -13,11 +13,12 @@ import { FsDrawerActionsComponent } from './components/drawer-actions/drawer-act
 import { FsDrawerComponent } from './components/drawer/drawer.component';
 import { FsDrawerSideComponent } from './components/drawer-side/drawer-side.component';
 import { FsDrawerMenuComponent } from './components/drawer-menu/drawer-menu.component';
+import { FsDrawerActionItemComponent } from './components/drawer-actions/drawer-action-item/drawer-action-item.component';
 
 import { FsDrawerContentComponent } from './components/drawer-content/drawer-content.component';
 import { FsDrawerActionDirective } from './directives/drawer-action.directive';
-import { FsDrawerResizerDirective } from './directives/drawer-resizer.directive';
 
+import { FsDrawerResizerDirective } from './directives/drawer-resizer.directive';
 import { FsDrawerService } from './services/drawer.service';
 
 
@@ -47,6 +48,7 @@ import { FsDrawerService } from './services/drawer.service';
     FsDrawerSideComponent,
     FsDrawerComponent,
     FsDrawerActionsComponent,
+    FsDrawerActionItemComponent,
     FsDrawerContentComponent,
     FsDrawerActionDirective,
     FsDrawerResizerDirective,

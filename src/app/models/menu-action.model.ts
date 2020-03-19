@@ -28,6 +28,17 @@ export class MenuAction extends BaseAction {
     return this._label;
   }
 
+  public updateRouterLink(data) {
+    super.updateRouterLink(data);
+
+    if (this.actions.length > 0) {
+      this.actions.forEach((action) => {
+        action.updateRouterLink(data);
+      })
+    }
+  }
+
+
   public checkVisibility(data: DrawerData) {
     super.checkVisibility(data);
 

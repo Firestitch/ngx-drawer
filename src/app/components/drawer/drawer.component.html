@@ -14,8 +14,6 @@
                        [direction]="config.position"
                        [actions]="config.actions"
                        [activeAction]="drawerRef.activeAction"
-                       (actionClicked)="actionClick($event)"
-                       (menuActionClicked)="menuActionClick($event)"
     ></fs-drawer-actions>
     <div class="drawer-container" #drawerContentContainer>
       <ng-template cdkPortalOutlet></ng-template>

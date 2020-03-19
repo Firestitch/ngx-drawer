@@ -34,7 +34,7 @@ export class DrawerRef<T, R = any> {
   private readonly _activeActionChange$ = new Subject<{ old: string, current: string }>();
 
   /** Subject for notifying the user that the drawer has finished opening. */
-  private readonly _actionsUpdated$ = new Subject<void>();
+  private readonly _actionsUpdated$ = new Subject<string>();
 
   /** Destroy notifier **/
   private readonly _destroy$ = new Subject<void>();
@@ -135,7 +135,7 @@ export class DrawerRef<T, R = any> {
   /**
    * Gets an observable that action was updated and change detection should be started
    */
-  get actionUpdated$(): Observable<void> {
+  get actionUpdated$(): Observable<string> {
     return this._actionsUpdated$.pipe(takeUntil(this._destroy$));
   }
 
@@ -344,9 +344,9 @@ export class DrawerRef<T, R = any> {
 
     if (action) {
       action.icon = icon;
-    }
 
-    this._actionsUpdated$.next();
+      this._actionsUpdated$.next('name');
+    }
   }
 
   /**
@@ -366,7 +366,7 @@ export class DrawerRef<T, R = any> {
         action[key] = data[key];
       });
 
-      this._actionsUpdated$.next();
+      this._actionsUpdated$.next(name);
     }
   }
 

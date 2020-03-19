@@ -1,9 +1,10 @@
-import { IDrawerActionShowFn } from './action.iterface';
+import { IDrawerActionLinkFn, IDrawerActionShowFn, IMenuActionClick } from './action.iterface';
 
 
 export interface IMenuAction<TData = any> {
-  label?: string;
+  label: string;
   icon?: string;
-  click?: (data: { data: TData, event: MouseEvent }) => void;
+  click?: <T, R>(data: IMenuActionClick<TData, T, R>) => void
+  link?: IDrawerActionLinkFn<TData>;
   show?: IDrawerActionShowFn<TData>;
 }

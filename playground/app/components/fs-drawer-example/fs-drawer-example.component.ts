@@ -99,13 +99,31 @@ export class FsDrawerExampleComponent implements OnInit {
           actions: [
             {
               label: 'Do something..',
-              click: ({ data }) => {
-                console.log('clicked sub menu action');
+              click: (data) => {
+                console.log('clicked sub menu action', data);
+              }
+            },
+            {
+              label: 'Link',
+              link: (data) => {
+                return {
+                  link: ['/to-some-url'],
+                  queryParams: { test: 1 }
+                }
               }
             },
             {
               label: 'Group',
               actions: [
+                {
+                  label: 'Sub Link',
+                  link: (data) => {
+                    return {
+                      link: ['/to-another-url'],
+                      queryParams: { test2: 555 }
+                    }
+                  }
+                },
                 {
                   label: 'Sub Action',
                   click: ({ data }) => {
