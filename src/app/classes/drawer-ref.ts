@@ -67,8 +67,11 @@ export class DrawerRef<T, R = any> {
     private _dataFactory: DrawerData,
     _config: any) {
     this.drawerConfig = new DrawerConfig(_config);
-
     this._activeAction = this.drawerConfig.activeAction;
+  }
+
+  get overlayRef() {
+    return this._overlayRef;
   }
 
   /**

@@ -2,14 +2,15 @@ import { Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/co
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
 
-import { Subject } from 'rxjs';
-import { take, takeUntil } from 'rxjs/operators';
+import { Subject, merge } from 'rxjs';
+import { take, takeUntil, delay } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerRef } from '../classes/drawer-ref';
 import { DrawerData } from '../classes/drawer-data';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DRAWER_DATA } from './drawer-data';
+import { remove } from 'lodash-es';
 
 
 @Injectable()
@@ -48,6 +49,17 @@ export class FsDrawerService implements OnDestroy {
 
     this.storeDrawerRef(drawerRef);
 
+    merge(
+      drawerRef.afterOpened(),
+      drawerRef.afterClosed()
+    )
+    .pipe(
+      takeUntil(this._destroy$)
+    )
+    .subscribe(() => {
+      this._applyBackdrop();
+    });
+
     return drawerRef;
   }
 
@@ -57,6 +69,17 @@ export class FsDrawerService implements OnDestroy {
     if (this._parentDrawerService) {
       this._parentDrawerService.closeAll();
     }
+  }
+
+  private _applyBackdrop() {
+    Array.from(this._drawerRefs).forEach((drawerRef, index) => {;
+      const backdrop = drawerRef.overlayRef.backdropElement;
+      if (index && index === (this._drawerRefs.size - 1)) {
+        backdrop.classList.add('fs-drawer-backdrop-active');
+      } else {
+        backdrop.classList.remove('fs-drawer-backdrop-active');
+      }
+    });
   }
 
   private storeDrawerRef(ref) {
@@ -69,6 +92,7 @@ export class FsDrawerService implements OnDestroy {
       .subscribe(() => {
         this._drawerRefs.delete(ref);
       });
+
   }
 
   private createOverlay(): OverlayRef {
@@ -77,7 +101,10 @@ export class FsDrawerService implements OnDestroy {
   }
 
   private getOverlayConfig(): OverlayConfig {
-    return new OverlayConfig();
+    return new OverlayConfig({
+      hasBackdrop: true,
+      backdropClass: 'fs-drawer-backdrop'
+    });
   }
 
   private attachDrawerContainer<T, R>(

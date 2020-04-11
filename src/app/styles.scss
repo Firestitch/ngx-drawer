@@ -132,3 +132,11 @@
     }
   }
 }
+
+.cdk-overlay-backdrop.fs-drawer-backdrop {
+  pointer-events: none;
+  transform: none;
+  &.fs-drawer-backdrop-active {
+    background: rgba(0, 0, 0, 0.32);
+  }
+}
