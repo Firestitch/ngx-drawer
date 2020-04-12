@@ -2,7 +2,7 @@ import { ComponentRef, ElementRef } from '@angular/core';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { Observable, Subject, Subscriber } from 'rxjs';
+import { Observable, Subject, Subscriber, zip } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 
 import { DrawerData } from './drawer-data';
@@ -246,21 +246,33 @@ export class DrawerRef<T, R = any> {
    * @param result Optional result to return to the dialog opener.
    */
   public close(result?: R): void {
-    new Observable<void>((obs) => {
+    new Observable<void>(observer => {
       if (this._closeStart$.observers.length) {
-        this._closeStart$.next(obs);
+        zip(...this._closeStart$.observers.map(item => {
+          return Observable.create(closeObserver => {
+            item.next(closeObserver);
+          });
+        }))
+        .pipe(
+          takeUntil(this._destroy$)
+        )
+        .subscribe(() => {
+          observer.next();
+          observer.complete();
+        }, () => {
+          observer.error();
+        });
       } else {
-        obs.next();
-        obs.complete();
+        observer.next();
+        observer.complete();
       }
+
     }).pipe(takeUntil(this._destroy$))
       .subscribe({
       next: () => {
         this._drawerContainerRef.close();
         this._result = result;
-
         this._afterClosed$.next(result);
-
         this.destroy();
       }
     });

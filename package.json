@@ -1,7 +1,7 @@
 {
   "name": "@firestitch/drawer",
   "description": "@firestitch/drawer",
-  "version": "8.3.0",
+  "version": "8.3.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-drawer"
@@ -47,6 +47,7 @@
     "@firestitch/checkboxgroup": "^0.2.0",
     "@firestitch/common": "^8.0.1",
     "@firestitch/example": "^8.0.0",
+    "@firestitch/form": "^8.7.15",
     "@firestitch/iframe": "^8.0.0",
     "@firestitch/menu": "^8.1.3",
     "@firestitch/message": "^8.1.0",

@@ -1,7 +1,7 @@
 import { ComponentRef } from '@angular/core';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { Observable, Subject, Subscriber } from 'rxjs';
+import { Observable, Subject, Subscriber, zip } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
 import { FsDrawerMenuComponent } from '../components/drawer-menu/drawer-menu.component';
@@ -95,19 +95,32 @@ export class DrawerMenuRef<TCmp, R = any> {
    * @param result Optional result to return to the dialog opener.
    */
   public close(result?: R): void {
-    Observable.create((obs) => {
+    new Observable<void>(observer => {
       if (this._closeStart$.observers.length) {
-        this._closeStart$.next(obs);
+        zip(...this._closeStart$.observers.map(item => {
+          return Observable.create(closeObserver => {
+            item.next(closeObserver);
+          });
+        }))
+        .pipe(
+          takeUntil(this._destroy$)
+        )
+        .subscribe(() => {
+          observer.next();
+          observer.complete();
+        }, () => {
+          observer.error();
+        });
       } else {
-        obs.next();
-        obs.complete();
+        observer.next();
+        observer.complete();
       }
-    }).subscribe({
+
+    }).pipe(takeUntil(this._destroy$))
+      .subscribe({
       next: () => {
         this._result = result;
-
         this._afterClosed$.next(result);
-
         this.destroy();
       }
     });
