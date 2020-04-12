@@ -20,9 +20,6 @@ import { FsDrawerActionDirective } from '../../directives/drawer-action.directiv
 @Component({
   selector: '[fsDrawerSide]',
   templateUrl: './drawer-side.component.html',
-  host: {
-    'class': 'side',
-  },
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
@@ -30,6 +27,7 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
   @Input('fsDrawerSide') public drawer: DrawerRef<any>;
 
   @HostBinding('hidden') public hidden = false;
+  @HostBinding('class.side') public classSide = true;
 
   @ContentChildren(FsDrawerActionDirective) actions: QueryList<FsDrawerActionDirective>;
 
@@ -42,19 +40,25 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private _cdRef: ChangeDetectorRef,
-  ) {
-  }
+  ) {}
 
   public ngOnInit() {
-    this.subscribeToActionChanges();
+
+    if (!this.drawer) {
+      console.error('Drawer reference is null for @Input("fsDrawerSide")');
+    }
+
+    this._subscribeToActionChanges();
   }
 
   public ngAfterViewInit() {
     setTimeout(() => {
       // Check current side status
-      this.hidden = !this.drawer.isSideOpen;
+      if (this.drawer) {
+        this.hidden = !this.drawer.isSideOpen;
+      }
 
-      this.updateActiveActionTemplate();
+      this._updateActiveActionTemplate();
     });
   }
 
@@ -63,30 +67,34 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
     this._destroy$.complete();
   }
 
-  private subscribeToActionChanges() {
-    this.drawer.activeActionChange()
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this.hidden = !this.drawer.isSideOpen;
-        this.updateActiveActionTemplate();
+  private _subscribeToActionChanges() {
+    if (this.drawer) {
+      this.drawer.activeActionChange()
+        .pipe(
+          takeUntil(this._destroy$),
+        )
+        .subscribe(() => {
+          this.hidden = !this.drawer.isSideOpen;
+          this._updateActiveActionTemplate();
 
-        this._cdRef.detectChanges();
-      })
+          this._cdRef.detectChanges();
+        });
+    }
   }
 
-  private updateActiveActionTemplate() {
-    const activatedAction = this.drawer.activeAction;
+  private _updateActiveActionTemplate() {
+    if (this.drawer) {
+      const activatedAction = this.drawer.activeAction;
 
-    if (activatedAction) {
-      const selectedActionIndex = this.actions
-        .toArray()
-        .findIndex((action) => action.name === activatedAction);
+      if (activatedAction) {
+        const selectedActionIndex = this.actions
+          .toArray()
+          .findIndex((action) => action.name === activatedAction);
 
-      this.activeTemplate = this.actionsTemplates.toArray()[selectedActionIndex];
-    } else {
-      this.activeTemplate = null;
+        this.activeTemplate = this.actionsTemplates.toArray()[selectedActionIndex];
+      } else {
+        this.activeTemplate = null;
+      }
     }
   }
 }

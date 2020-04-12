@@ -98,7 +98,7 @@ export class FsDrawerExampleComponent implements OnInit {
           type: FsDrawerAction.Menu,
           actions: [
             {
-              label: 'Do something..',
+              label: 'Do something',
               click: (data) => {
                 console.log('clicked sub menu action', data);
               }
@@ -170,6 +170,11 @@ export class FsDrawerExampleComponent implements OnInit {
     drawerRef.openStart().subscribe((result) => {
       console.log('open starts');
       result.next();
+    });
+
+    drawerRef.dataChanged()
+    .subscribe(changes => {
+      console.log('dataChanged', changes);
     });
   }
 

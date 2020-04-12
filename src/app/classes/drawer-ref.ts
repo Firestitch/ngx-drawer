@@ -196,6 +196,10 @@ export class DrawerRef<T, R = any> {
     return this._dataFactory.dataChange$;
   }
 
+  public dataChanged(): Observable<any> {
+    return this.dataChanged$.pipe(takeUntil(this._destroy$));
+  }
+
   /**
    * Set value for DRAWER_DATA
    * @param data

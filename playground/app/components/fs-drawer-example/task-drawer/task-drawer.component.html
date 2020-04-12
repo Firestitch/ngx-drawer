@@ -1,4 +1,4 @@
-<div [fsDrawerSide]="drawer">
+<div [fsDrawerSide]="drawerRef">
   <ng-template fsDrawerAction="settings">
     <h1 style="margin-top:0">Settings</h1>
 
@@ -15,8 +15,10 @@
     Edit action
   </ng-template>
 </div>
+
 <div fsDrawerContent>
-  <pre style="margin: 0">{{ data | json }}</pre>
+  <pre style="margin: 0">{{ account | json }}</pre>
 
   <button mat-raised-button color="primary" (click)="toggleNotification()">Toggle Notifications</button>
+  <button mat-raised-button color="primary" (click)="dataChange()">Data Change</button>
 </div>

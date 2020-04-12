@@ -2,8 +2,7 @@
      hidden
      [style.width]="config.width"
      [ngClass]="config.position"
-     [hidden]="!initialized"
->
+     [hidden]="!initialized">
   <ng-container>
     <fs-drawer-actions class="drawer-actions"
                        #drawerActionsContainer
@@ -13,8 +12,8 @@
                        [resizable]="!!config.resize"
                        [direction]="config.position"
                        [actions]="config.actions"
-                       [activeAction]="drawerRef.activeAction"
-    ></fs-drawer-actions>
+                       [activeAction]="drawerRef.activeAction">
+    </fs-drawer-actions>
     <div class="drawer-container" #drawerContentContainer>
       <ng-template cdkPortalOutlet></ng-template>
     </div>
