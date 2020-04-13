@@ -10,7 +10,6 @@ import { DrawerRef } from '../classes/drawer-ref';
 import { DrawerData } from '../classes/drawer-data';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DRAWER_DATA } from './drawer-data';
-import { remove } from 'lodash-es';
 
 
 @Injectable()
@@ -57,7 +56,9 @@ export class FsDrawerService implements OnDestroy {
       takeUntil(this._destroy$)
     )
     .subscribe(() => {
-      this._applyBackdrop();
+      setTimeout(() => {
+        this._applyBackdrop();
+      });
     });
 
     return drawerRef;
@@ -72,12 +73,15 @@ export class FsDrawerService implements OnDestroy {
   }
 
   private _applyBackdrop() {
-    Array.from(this._drawerRefs).forEach((drawerRef, index) => {;
+    Array.from(this._drawerRefs)
+    .forEach((drawerRef, index) => {;
       const backdrop = drawerRef.overlayRef.backdropElement;
-      if (index && index === (this._drawerRefs.size - 1)) {
-        backdrop.classList.add('fs-drawer-backdrop-active');
-      } else {
-        backdrop.classList.remove('fs-drawer-backdrop-active');
+      if (backdrop) {
+        if (index && index === (this._drawerRefs.size - 1)) {
+          backdrop.classList.add('fs-drawer-backdrop-active');
+        } else {
+          backdrop.classList.remove('fs-drawer-backdrop-active');
+        }
       }
     });
   }
