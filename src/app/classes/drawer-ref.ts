@@ -363,7 +363,7 @@ export class DrawerRef<T, R = any> {
     if (action) {
       action.icon = icon;
 
-      this._actionsUpdated$.next('name');
+      this._actionsUpdated$.next(name);
     }
   }
 
