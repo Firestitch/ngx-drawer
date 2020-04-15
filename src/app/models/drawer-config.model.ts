@@ -1,6 +1,5 @@
 import { Action } from './action.model';
-import { IDrawerConfig } from '@firestitch/drawer';
-import { IDrawerWidthConfig } from '../interfaces/drawer-config.interface';
+import { IDrawerConfig, IDrawerWidthConfig } from '../interfaces/drawer-config.interface';
 
 
 export class DrawerConfig {

@@ -141,7 +141,6 @@ export class DrawerSizeController implements OnDestroy {
 
   /**
    * Copy initial configs or set default values
-   * @private
    */
   private _initDefaultConfigs() {
     this._mainConfig =
@@ -174,7 +173,6 @@ export class DrawerSizeController implements OnDestroy {
 
   /**
    * Update min&max css props for containers
-   * @private
    */
   private _updateMinMaxStyles(): void {
     this.mainElRef.setMinMaxStyles();
