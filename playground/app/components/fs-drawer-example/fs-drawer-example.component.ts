@@ -159,20 +159,20 @@ export class FsDrawerExampleComponent implements OnInit {
       ]
     });
 
-    drawerRef.afterClosed().subscribe(() => {
+    drawerRef.afterClosed$.subscribe(() => {
       console.log('The drawer was closed');
     });
 
-    drawerRef.afterOpened().subscribe(() => {
+    drawerRef.afterOpened$.subscribe(() => {
       console.log('The drawer was opened');
     });
 
-    drawerRef.closeStart().subscribe((result) => {
+    drawerRef.closeStart$.subscribe((result) => {
       console.log('close starts');
       result.next();
     });
 
-    drawerRef.openStart().subscribe((result) => {
+    drawerRef.openStart$.subscribe((result) => {
       console.log('open starts');
       result.next();
     });

@@ -185,7 +185,7 @@ export class DrawerSizeController implements OnDestroy {
   }
 
   private _listenSideToggle(): void {
-    this._drawerRef.sideToggle()
+    this._drawerRef.sideToggle$
       .pipe(
         takeUntil(this._destroy$),
       )

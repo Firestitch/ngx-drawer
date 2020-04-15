@@ -49,8 +49,8 @@ export class FsDrawerService implements OnDestroy {
     this.storeDrawerRef(drawerRef);
 
     merge(
-      drawerRef.afterOpened(),
-      drawerRef.afterClosed()
+      drawerRef.afterOpened$,
+      drawerRef.afterClosed$
     )
     .pipe(
       takeUntil(this._destroy$)

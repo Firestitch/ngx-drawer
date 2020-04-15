@@ -72,18 +72,18 @@ export class DrawerRef<T, R = any> {
     this._activeAction.next(this.drawerConfig.activeAction);
   }
 
-  get overlayRef() {
+  public get overlayRef() {
     return this._overlayRef;
   }
 
   /**
    * Getter for DRAWER_DATA for current drawer
    */
-  get drawerData() {
+  public get drawerData() {
     return { ...this._dataFactory.getValue() } // Like immutable.... TODO switch to Immer
   }
 
-  get destroy$() {
+  public get destroy$() {
     return this._destroy$.asObservable();
   }
 
@@ -91,7 +91,7 @@ export class DrawerRef<T, R = any> {
    * Set reference to drawer container
    * @param value
    */
-  set containerRef(value: FsDrawerComponent) {
+  public set containerRef(value: FsDrawerComponent) {
     this._drawerContainerRef = value;
   }
 
@@ -99,61 +99,103 @@ export class DrawerRef<T, R = any> {
    * Set reference to drawer component
    * @param value
    */
-  set componentRef(value: ComponentRef<T>) {
+  public set componentRef(value: ComponentRef<T>) {
     this._drawerComponentRef = value;
   }
 
-  set drawerContentContainer(value: ElementRef) {
+  public set drawerContentContainer(value: ElementRef) {
     this._drawerContentContainer = value;
   }
 
-  set drawerActionsContainer(value: ElementRef) {
+  public set drawerActionsContainer(value: ElementRef) {
     this._drawerActionsContainer = value;
   }
 
-  get drawerContentContainer(): ElementRef {
+  public get drawerContentContainer(): ElementRef {
     return this._drawerContentContainer;
   }
 
-  get drawerActionsContainer(): ElementRef {
+  public get drawerActionsContainer(): ElementRef {
     return this._drawerActionsContainer;
   }
 
-  get activeAction() {
+  public get activeAction() {
     return this._activeAction.getValue();
   }
 
-  get activeAction$() {
+  public get activeAction$() {
     return this._activeAction.pipe(takeUntil(this._destroy$));
   }
 
   /**
    * Return actual status of the drawer
    */
-  get isOpen(): boolean {
+  public get isOpen(): boolean {
     return this._isOpen;
   }
 
   /**
    * Return actual status of the side of the drawer
    */
-  get isSideOpen(): boolean {
+  public get isSideOpen(): boolean {
     return this._isSideOpen;
+  }
+
+  public set resizeController(value: DrawerSizeController) {
+    this._resizeController = value;
+  }
+
+  public get resizeController(): DrawerSizeController {
+    return this._resizeController;
   }
 
   /**
    * Gets an observable that action was updated and change detection should be started
    */
-  get actionUpdated$(): Observable<string> {
+  public get actionUpdated$(): Observable<string> {
     return this._actionsUpdated$.pipe(takeUntil(this._destroy$));
   }
 
-  set resizeController(value: DrawerSizeController) {
-    this._resizeController = value;
+  /**
+   * Gets an observable that is notified when the dialog is finished closing.
+   */
+  public get afterClosed$(): Observable<R | undefined> {
+    return this._afterClosed$.pipe(takeUntil(this._destroy$));
   }
 
-  get resizeController(): DrawerSizeController {
-    return this._resizeController;
+  /**
+   * Gets an observable that is notified when the dialog is finished opening.
+   */
+  public get afterOpened$(): Observable<void> {
+    return this._afterOpened$.pipe(takeUntil(this._destroy$));
+  }
+
+  /**
+   * Gets an observable that is notified when the dialog open starts.
+   */
+  public get openStart$(): Observable<Subscriber<void>> {
+    return this._openStart$.pipe(takeUntil(this._destroy$));
+  }
+
+  /**
+   * Gets an observable that is notified when the dialog is finished opening.
+   */
+  public get closeStart$(): Observable<Subscriber<void>> {
+    return this._closeStart$.pipe(takeUntil(this._destroy$));
+  }
+
+  /**
+   * Gets an observable that is notified when data in DRAWER_DATA was changed
+   */
+  public get dataChanged$(): Observable<any> {
+    return this._dataFactory.dataChange$;
+  }
+
+  /**
+   * Gets an observable that is notify that side status toggled
+   */
+  public get sideToggle$(): Observable<boolean> {
+    return this._sideToggle.pipe(takeUntil(this._destroy$));
   }
 
   /**
@@ -169,53 +211,11 @@ export class DrawerRef<T, R = any> {
   }
 
   /**
-   * Gets an observable that is notified when the dialog is finished closing.
-   */
-  public afterClosed(): Observable<R | undefined> {
-    return this._afterClosed$.pipe(takeUntil(this._destroy$));
-  }
-
-  /**
-   * Gets an observable that is notified when the dialog is finished opening.
-   */
-  public afterOpened(): Observable<void> {
-    return this._afterOpened$.pipe(takeUntil(this._destroy$));
-  }
-
-  /**
-   * Gets an observable that is notified when the dialog open starts.
-   */
-  public openStart(): Observable<Subscriber<void>> {
-    return this._openStart$.pipe(takeUntil(this._destroy$));
-  }
-
-  /**
-   * Gets an observable that is notified when the dialog is finished opening.
-   */
-  public closeStart(): Observable<Subscriber<void>> {
-    return this._closeStart$.pipe(takeUntil(this._destroy$));
-  }
-
-  /**
-   * Gets an observable that is notified when data in DRAWER_DATA was changed
-   */
-  get dataChanged$(): Observable<any> {
-    return this._dataFactory.dataChange$;
-  }
-
-  /**
    * Set value for DRAWER_DATA
    * @param data
    */
   public dataChange(data) {
     this._dataFactory.setValue(data);
-  }
-
-  /**
-   * Gets an observable that is notify that side status toggled
-   */
-  public sideToggle(): Observable<boolean> {
-    return this._sideToggle.pipe(takeUntil(this._destroy$));
   }
 
   /**

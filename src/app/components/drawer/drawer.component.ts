@@ -118,7 +118,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     this.drawerRef.drawerContentContainer = this._drawerContentContainer;
     this.drawerRef.drawerActionsContainer = this._drawerActionsContainer;
 
-    this.drawerRef.sideToggle()
+    this.drawerRef.sideToggle$
       .pipe(
         takeUntil(this._destroy$),
       )
