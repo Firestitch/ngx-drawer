@@ -17,8 +17,26 @@
 </div>
 
 <div fsDrawerContent>
-  <pre style="margin: 0">{{ account | json }}</pre>
+  <fs-label-field>
+    <fs-label>Actual Drawer Data</fs-label>
+    <pre style="margin: 0">{{ account | json }}</pre>
+  </fs-label-field>
 
-  <button mat-raised-button color="primary" (click)="toggleNotification()">Toggle Notifications</button>
-  <button mat-raised-button color="primary" (click)="dataChange()">Data Change</button>
+  <fs-label-field>
+    <fs-label>Change Drawer Data</fs-label>
+    <button mat-raised-button color="primary" (click)="toggleNotification()">Toggle Notifications</button>
+    <br><br>
+    <button mat-raised-button color="primary" (click)="dataChange()">Data Change</button><br>
+  </fs-label-field>
+
+  <fs-label-field>
+    <fs-label>Change Drawer Width</fs-label>
+    <button mat-raised-button color="primary" (click)="updateWidth()">Update Main Width</button>
+    <br><br>
+    <button mat-raised-button color="primary"
+            *ngIf="drawerRef.isSideOpen"
+            (click)="updateSideWidth()">
+      Update Side Width
+    </button>
+  </fs-label-field>
 </div>

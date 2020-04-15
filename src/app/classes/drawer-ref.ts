@@ -9,6 +9,8 @@ import { DrawerData } from './drawer-data';
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerConfig } from '../models/drawer-config.model';
 import { DrawerMenuRef } from '../classes/drawer-menu-ref';
+import { IDrawerConfig } from '../interfaces/drawer-config.interface';
+import { DrawerSizeController } from './drawer-size-controller';
 
 
 export class DrawerRef<T, R = any> {
@@ -54,6 +56,8 @@ export class DrawerRef<T, R = any> {
   /** Drawer Actions Template */
   private _drawerActionsContainer: ElementRef;
 
+  private _resizeController: DrawerSizeController;
+
   private _activeAction: string = null;
 
   private _menuRefs = new Map<string, DrawerMenuRef<T, R>>();
@@ -65,7 +69,8 @@ export class DrawerRef<T, R = any> {
   constructor(
     private _overlayRef: OverlayRef,
     private _dataFactory: DrawerData,
-    _config: any) {
+    _config: IDrawerConfig
+  ) {
     this.drawerConfig = new DrawerConfig(_config);
     this._activeAction = this.drawerConfig.activeAction;
   }
@@ -142,6 +147,14 @@ export class DrawerRef<T, R = any> {
     return this._actionsUpdated$.pipe(takeUntil(this._destroy$));
   }
 
+  set resizeController(value: DrawerSizeController) {
+    this._resizeController = value;
+  }
+
+  get resizeController(): DrawerSizeController {
+    return this._resizeController;
+  }
+
   /**
    * Subscribe on keydown events to react on escape
    */
@@ -194,10 +207,6 @@ export class DrawerRef<T, R = any> {
    */
   get dataChanged$(): Observable<any> {
     return this._dataFactory.dataChange$;
-  }
-
-  public dataChanged(): Observable<any> {
-    return this.dataChanged$.pipe(takeUntil(this._destroy$));
   }
 
   /**
@@ -387,6 +396,14 @@ export class DrawerRef<T, R = any> {
 
       this._actionsUpdated$.next(name);
     }
+  }
+
+  public updateDrawerWidth(width: number) {
+    this.resizeController.updateMainWidth(width);
+  }
+
+  public updateSideDrawerWidth(width: number) {
+    this.resizeController.updateSideWidth(width);
   }
 
   public destroy() {

@@ -23,13 +23,16 @@ import { takeUntil } from 'rxjs/operators';
 import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerConfig } from '../../models/drawer-config.model';
 import { FsDrawerMenuService } from '../../services/drawer-menu.service';
-
+import { DrawerSizeController } from '../../classes/drawer-size-controller';
 
 
 @Component({
   selector: 'fs-drawer',
   templateUrl: './drawer.component.html',
-  providers: [ FsDrawerMenuService ],
+  providers: [
+    FsDrawerMenuService,
+    DrawerSizeController,
+  ],
   host: {
     'class': 'fs-drawer-container',
   },
@@ -63,8 +66,11 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     private _drawerMenu: FsDrawerMenuService,
     private _drawerRef: DrawerRef<any>,
     private _cdRef: ChangeDetectorRef,
+    private _resizeController: DrawerSizeController,
   ) {
     super();
+
+    this._drawerRef.resizeController = this._resizeController;
   }
 
   public get sideOpen() {

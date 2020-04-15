@@ -8,9 +8,10 @@
     <div class="resize-side"
          resizable="true"
          direction="left"
+         type="side"
          [fsDrawerResizer]="sideContainer"
-         [resizeMin]="drawer.drawerConfig.resize.minSide"
-         [resizeMax]="drawer.drawerConfig.resize.maxSide"
+         [resizable]="drawer.drawerConfig.resizable"
+         [sizeController]="drawer.resizeController"
          [parentContainer]="drawer.drawerContentContainer"
          [actionsContainer]="drawer.drawerActionsContainer"
     >
@@ -22,8 +23,6 @@
          resizable="true"
          direction="right"
          [fsDrawerResizer]="sideContainer"
-         [resizeMin]="drawer.drawerConfig.resize.minSide"
-         [resizeMax]="drawer.drawerConfig.resize.maxSide"
     >
     <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
     </div>

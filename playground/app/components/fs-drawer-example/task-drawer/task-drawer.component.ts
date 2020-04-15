@@ -33,4 +33,12 @@ export class TaskDrawerComponent implements OnInit {
     this.account.name = 'Name Changed!';
     this.drawerRef.dataChange({ account: this.account });
   }
+
+  public updateWidth() {
+    this.drawerRef.updateDrawerWidth(700);
+  }
+
+  public updateSideWidth() {
+    this.drawerRef.updateSideDrawerWidth(1000);
+  }
 }

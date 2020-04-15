@@ -49,6 +49,7 @@
     "@firestitch/example": "^8.0.0",
     "@firestitch/form": "^8.7.15",
     "@firestitch/iframe": "^8.0.0",
+    "@firestitch/label": "^8.2.1",
     "@firestitch/menu": "^8.1.3",
     "@firestitch/message": "^8.1.0",
     "codelyzer": "^5.0.1",

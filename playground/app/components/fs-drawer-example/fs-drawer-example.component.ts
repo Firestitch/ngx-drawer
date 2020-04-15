@@ -28,14 +28,19 @@ export class FsDrawerExampleComponent implements OnInit {
       data: { account: { name: 'Name', email: 'email@email.com', blocked: false } },
       disableClose: false,
       position: 'right',
-      //activeAction: 'settings',
-      width: 'auto',
-      resize: {
-        min: 200,
-        max: 99999,
-        //minSide: 100,
-        //maxSide: 300,
+      width: {
+        main: {
+          initial: 500,
+          min: 200,
+          max: 1000,
+        },
+        side: {
+          initial: 300,
+          min: 200,
+          max: 500,
+        }
       },
+      // activeAction: 'settings',
       actions: [
         {
           icon: 'clear',
@@ -172,10 +177,10 @@ export class FsDrawerExampleComponent implements OnInit {
       result.next();
     });
 
-    drawerRef.dataChanged()
-    .subscribe(changes => {
-      console.log('dataChanged', changes);
-    });
+    drawerRef.dataChanged$
+      .subscribe(changes => {
+        console.log('dataChanged', changes);
+      });
   }
 
   public ngOnInit() {

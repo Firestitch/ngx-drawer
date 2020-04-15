@@ -7,6 +7,7 @@ import { FsExampleModule } from '@firestitch/example';
 import { FsDrawerModule } from '@firestitch/drawer';
 import { FsCheckboxGroupModule } from '@firestitch/checkboxgroup';
 import { FsMessageModule } from '@firestitch/message';
+import { FsLabelModule } from '@firestitch/label';
 
 import { ToastrModule } from 'ngx-toastr';
 
@@ -38,6 +39,7 @@ const routes: Routes = [
     ToastrModule.forRoot({ preventDuplicates: true }),
     FsMessageModule.forRoot(),
     FsCheckboxGroupModule,
+    FsLabelModule,
   ],
   entryComponents: [
     TaskDrawerComponent,

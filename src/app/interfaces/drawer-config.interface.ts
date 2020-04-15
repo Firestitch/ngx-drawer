@@ -6,7 +6,18 @@ export interface IDrawerConfig<TData = any> {
   disableClose?: boolean;
   position?: 'right' | 'left';
   activeAction?: string;
-  width?: string;
   actions?: IFsDrawerActionConfig<TData>[];
-  resize?: { min?: number, max?: number; minSide?: number, maxSide?: number }
+  resizable?: boolean;
+  width?: IDrawerWidthConfig,
+}
+
+export interface IDrawerWidthConfig {
+  main?: IDrawerWidthDefinition;
+  side?: IDrawerWidthDefinition;
+}
+
+export interface IDrawerWidthDefinition {
+  initial?: number;
+  min?: number;
+  max?: number;
 }

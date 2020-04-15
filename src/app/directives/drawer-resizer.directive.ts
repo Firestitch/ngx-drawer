@@ -1,20 +1,32 @@
-import { Directive, ElementRef, Input, OnDestroy, OnInit, Renderer2, } from '@angular/core';
-import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import {
+  Directive,
+  ElementRef,
+  Input,
+  NgZone,
+  OnDestroy,
+  OnInit,
+  Renderer2,
+} from '@angular/core';
+import { Subject } from 'rxjs';
+
+import { DrawerSizeController } from '../classes/drawer-size-controller';
 
 
 @Directive({
   selector: '[fsDrawerResizer]',
+  host: {
+    '[style.cursor]': '"col-resize"',
+  }
 })
 export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   @Input() public fsDrawerResizer = this._el.nativeElement;
-  @Input() public resizeMin = -Infinity;
-  @Input() public resizeMax = Infinity;
+  @Input() public type: 'main' | 'side';
   @Input() public direction = 'left';
-  @Input() public resizable = false;
+  @Input() public resizable = true;
   @Input() public parentContainer: ElementRef;
   @Input() public actionsContainer: ElementRef;
+  @Input() public sizeController: DrawerSizeController;
 
   private _dragStartHandler = this._dragStart.bind(this);
   private _dragHandler = this._drag.bind(this);
@@ -24,25 +36,32 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   private _width = 0;
   private _actionsWidth = 0;
 
-  private readonly _borderPadding = 0;
-
-  private _maxWidthByScreen: number;
-
   private _destroy$ = new Subject();
 
-  constructor(private _el: ElementRef, private _renderer: Renderer2) {}
+  constructor(
+    private _el: ElementRef,
+    private _renderer: Renderer2,
+    private _ngZone: NgZone,
+  ) {}
 
-  private get minWidth() {
-    if (this.resizeMin && this.resizeMin >= 0) {
-      if (this.resizeMin > this._maxWidthByScreen) {
-        return this._maxWidthByScreen;
+  public get width(): number {
+    return this._width;
+  }
+
+  private get minWidth(): number {
+    const minWidth = this.sizeController.getMinWidth(this.type);
+
+    if (minWidth && minWidth >= 0) {
+      if (minWidth > this.sizeController.screenWidth) {
+        return this.sizeController.screenWidth;
       } else {
-        return this.resizeMin;
+        return minWidth;
       }
     }
   }
 
-  private get maxWidth() {
+  private get maxWidth(): number {
+    const maxWidth = this.sizeController.getMaxWidth(this.type);
     let parentContainerWidth = null;
 
     if (this.parentContainer) {
@@ -50,50 +69,68 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     }
 
     if (parentContainerWidth !== null) {
-      return !this.resizeMax || this.resizeMax >= parentContainerWidth
+      return !maxWidth || maxWidth >= parentContainerWidth
         ? parentContainerWidth - this._actionsWidth * 2
-        : this.resizeMax;
+        : maxWidth;
     } else {
-      return !this.resizeMax || this.resizeMax >= this._maxWidthByScreen
-        ? this._maxWidthByScreen
-        : this.resizeMax;
+      return !maxWidth || maxWidth >= this.sizeController.screenWidth
+        ? this.sizeController.screenWidth
+        : maxWidth;
     }
   }
 
   public ngOnInit() {
 
-    if (this.resizable) {
-      this._el.nativeElement.addEventListener('mousedown', this._dragStartHandler, false);
-      this._el.nativeElement.addEventListener('touchstart', this._dragStartHandler, false);
+    this.sizeController.registerElRef(this);
 
-      this._renderer.setStyle(this._el.nativeElement, 'cursor', 'col-resize');
+    if (this.resizable) {
+      this._ngZone.runOutsideAngular(() => {
+        this._el.nativeElement.addEventListener('mousedown', this._dragStartHandler, false);
+        this._el.nativeElement.addEventListener('touchstart', this._dragStartHandler, false);
+      });
 
       if (this.actionsContainer) {
         this._actionsWidth = this._getElementWidth(this.actionsContainer.nativeElement)
       }
 
-      this._updateMaxScreenWidth();
-      this._setMinMaxStyles();
+      this.setMinMaxStyles();
 
-      this._width = this._getElementWidth(this.fsDrawerResizer);
+      const minWidth = this.sizeController.getMinWidth(this.type);
+      let width = this.sizeController.getInitialWidth(this.type)
+        || this._getElementWidth(this.fsDrawerResizer);
 
-      if (this._width < this.resizeMin) {
-        this._width = this.resizeMin;
+      if (width < minWidth) {
+        width = minWidth;
       }
 
-      this._listenWindowResize();
-
-      this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`);
+      this.updateWidth(width);
     }
   }
 
+  public updateWidth(width) {
+    this._width = width;
+
+    requestAnimationFrame(() => {
+      this._renderer.setStyle(this.fsDrawerResizer, 'width', `${width}px`);
+    });
+  }
+
   public ngOnDestroy() {
-    this._renderer.removeStyle(this._el.nativeElement, 'cursor');
     this._el.nativeElement.removeEventListener('mousedown', this._dragStartHandler, false);
     this._el.nativeElement.removeEventListener('touchstart', this._dragStartHandler, false);
 
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  /**
+   * Set inline styles min/max width
+   */
+  public setMinMaxStyles() {
+    requestAnimationFrame(() => {
+      this._renderer.setStyle(this.fsDrawerResizer, 'min-width', `${this.minWidth}px`);
+      this._renderer.setStyle(this.fsDrawerResizer, 'max-width', `${this.maxWidth}px`)
+    });
   }
 
   /**
@@ -105,14 +142,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     this._x = this._getClientX(event);
     this._width = this._getElementWidth(this.fsDrawerResizer);
 
-    this._updateMaxScreenWidth();
-    this._setMinMaxStyles();
-
-    // if (event.stopPropagation) event.stopPropagation();
-    // if (event.preventDefault) event.preventDefault();
-
-    // event.cancelBubble = true;
-    // event.returnValue = false;
+    this.setMinMaxStyles();
 
     document.addEventListener('touchmove', this._dragHandler, false);
     document.addEventListener('touchend', this._dragEndHandler, false);
@@ -146,21 +176,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   }
 
   /**
-   * Listen for browser resize and update restrictions
-   */
-  private _listenWindowResize() {
-    fromEvent(window, 'resize')
-      .pipe(
-        debounceTime(50),
-        takeUntil(this._destroy$),
-      )
-      .subscribe(() => {
-        this._updateMaxScreenWidth();
-        this._setMinMaxStyles();
-      })
-  }
-
-  /**
    *
    * @param event
    */
@@ -168,22 +183,12 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     return event.touches ? event.touches[0].clientX : event.clientX;
   }
 
-
   /**
    * Will return width of element
    * @param el
    */
   private _getElementWidth(el) {
-    let width = null;
-
-    try {
-      width = window.getComputedStyle(el, null)
-        .getPropertyValue('width');
-    } catch (error) {
-      width = el.currentStyle.width;
-    }
-
-    return parseFloat(width);
+    return el.getBoundingClientRect().width;
   }
 
   /**
@@ -193,9 +198,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    */
   private _updatePosition(clientX: number, width: number) {
     this._x = clientX;
-    this._width = width < 0 ? 0 : width;
-
-    this._renderer.setStyle(this.fsDrawerResizer, 'width', `${this._width}px`)
+    this.updateWidth(width < 0 ? 0 : width)
   }
 
   /**
@@ -207,21 +210,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     const directionSign = direction === 'left' ? -1 : 1;
 
     return this._width + (this._x - clientX) * directionSign;
-  }
-
-  /**
-   * Set inline styles min/max width
-   */
-  private _setMinMaxStyles() {
-    this._renderer.setStyle(this.fsDrawerResizer, 'min-width', `${this.minWidth}px`);
-    this._renderer.setStyle(this.fsDrawerResizer, 'max-width', `${this.maxWidth}px`)
-  }
-
-  /**
-   * Update current window size
-   */
-  private _updateMaxScreenWidth() {
-    this._maxWidthByScreen = (window.innerWidth - this._borderPadding);
   }
 
   /**
