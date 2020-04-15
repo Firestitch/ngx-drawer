@@ -69,7 +69,7 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _subscribeToActionChanges() {
     if (this.drawer) {
-      this.drawer.activeAction$
+      this.drawer.sideToggle$
         .pipe(
           takeUntil(this._destroy$),
         )
