@@ -21,6 +21,9 @@ import { FsDrawerActionDirective } from '../../directives/drawer-action.directiv
   selector: '[fsDrawerSide]',
   templateUrl: './drawer-side.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrls: [
+    './drawer-side.component.scss',
+  ],
 })
 export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 

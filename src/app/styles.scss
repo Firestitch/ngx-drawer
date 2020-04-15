@@ -1,5 +1,5 @@
 @import '~@angular/material/theming';
-
+@import './styles/variables';
 
 @mixin fs-drawer($theme) {
 
@@ -112,19 +112,24 @@
     }
 
     .resize-side {
-      width: 24px;
+      display: flex;
+      align-items: center;
+      width: $drawer-side-delimiter-width;
       border-left: 1px solid #dcdcdc;
     }
 
     .resize-icon {
-      position: absolute;
-      display: block;
-      top: 50%;
+      display: flex;
+      width: 100%;
       border-width: 0 1px;
       box-sizing: border-box;
       user-select: none;
       z-index: 1;
       cursor: col-resize;
+
+      span {
+        width: 100%;
+      }
 
       .material-icons {
         color: #B3B3B3;

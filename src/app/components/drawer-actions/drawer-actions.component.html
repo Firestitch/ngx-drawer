@@ -1,8 +1,12 @@
-<div *ngFor="let action of actions" class="action-btn">
-  <fs-drawer-action-item [action]="action"
-                         [activeAction]="activeAction"
-                         (actionClicked)="actionClick(action, $event)">
-  </fs-drawer-action-item>
+<div class="actions-container">
+  <div *ngFor="let action of actions" class="action-btn">
+    <fs-drawer-action-item [action]="action"
+                           [activeAction]="activeAction"
+                           (actionClicked)="actionClick(action, $event)">
+    </fs-drawer-action-item>
+  </div>
 </div>
 
-<a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
+<div class="drag-icon">
+  <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
+</div>
