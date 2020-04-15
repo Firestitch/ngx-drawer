@@ -1,5 +1,6 @@
 <div *ngFor="let action of actions" class="action-btn">
   <fs-drawer-action-item [action]="action"
+                         [activeAction]="activeAction"
                          (actionClicked)="actionClick(action, $event)">
   </fs-drawer-action-item>
 </div>

@@ -11,7 +11,7 @@
                        [sizeController]="drawerRef.resizeController"
                        [direction]="config.position"
                        [actions]="config.actions"
-                       [activeAction]="drawerRef.activeAction">
+                       [activeAction]="drawerRef.activeAction$ | async">
     </fs-drawer-actions>
     <div class="drawer-container" #drawerContentContainer>
       <ng-template cdkPortalOutlet></ng-template>

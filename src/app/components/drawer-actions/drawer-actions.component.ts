@@ -1,15 +1,12 @@
 import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
-  EventEmitter,
   Input,
   OnDestroy,
   OnInit,
-  Output
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { FsDrawerAction } from '../../helpers/action-type.enum';
 import { DrawerRef } from '../../classes/drawer-ref';

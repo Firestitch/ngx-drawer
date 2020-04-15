@@ -2,7 +2,7 @@ import { ComponentRef, ElementRef } from '@angular/core';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { Observable, Subject, Subscriber, zip } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, Subscriber, zip } from 'rxjs';
 import { filter, take, takeUntil } from 'rxjs/operators';
 
 import { DrawerData } from './drawer-data';
@@ -32,9 +32,6 @@ export class DrawerRef<T, R = any> {
   /** Subject for notifying the user that the drawer has started closing. */
   private readonly _sideToggle = new Subject<boolean>();
 
-  /** Subject for notifying the user that the drawer has started opening. */
-  private readonly _activeActionChange$ = new Subject<{ old: string, current: string }>();
-
   /** Subject for notifying the user that the drawer has finished opening. */
   private readonly _actionsUpdated$ = new Subject<string>();
 
@@ -58,7 +55,7 @@ export class DrawerRef<T, R = any> {
 
   private _resizeController: DrawerSizeController;
 
-  private _activeAction: string = null;
+  private _activeAction = new BehaviorSubject<string>(void 0);
 
   private _menuRefs = new Map<string, DrawerMenuRef<T, R>>();
 
@@ -72,7 +69,7 @@ export class DrawerRef<T, R = any> {
     _config: IDrawerConfig
   ) {
     this.drawerConfig = new DrawerConfig(_config);
-    this._activeAction = this.drawerConfig.activeAction;
+    this._activeAction.next(this.drawerConfig.activeAction);
   }
 
   get overlayRef() {
@@ -123,7 +120,11 @@ export class DrawerRef<T, R = any> {
   }
 
   get activeAction() {
-    return this._activeAction;
+    return this._activeAction.getValue();
+  }
+
+  get activeAction$() {
+    return this._activeAction.pipe(takeUntil(this._destroy$));
   }
 
   /**
@@ -165,13 +166,6 @@ export class DrawerRef<T, R = any> {
         takeUntil(this._destroy$),
       )
       .subscribe(() => this.close());
-  }
-
-  /**
-   * Event provides change of active action
-   */
-  public activeActionChange() {
-    return this._activeActionChange$.pipe(takeUntil(this._destroy$));
   }
 
   /**
@@ -321,15 +315,11 @@ export class DrawerRef<T, R = any> {
    * @param name
    */
   public setActiveAction(name: string) {
-    const activeAction = this._activeAction;
-
-    this._activeAction = name;
+    this._activeAction.next(name);
 
     if (name) {
       this.openSide();
     }
-
-    this._activeActionChange$.next({ old: activeAction, current: this._activeAction });
   }
 
   /**
