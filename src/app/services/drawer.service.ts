@@ -58,6 +58,7 @@ export class FsDrawerService implements OnDestroy {
     .subscribe(() => {
       setTimeout(() => {
         this._applyBackdrop();
+        this._applyBodyOpenClass();
       });
     });
 
@@ -84,6 +85,14 @@ export class FsDrawerService implements OnDestroy {
         }
       }
     });
+  }
+
+  private _applyBodyOpenClass() {
+    if (Array.from(this._drawerRefs).length) {
+      document.body.classList.add('fs-drawer-open');
+    } else {
+      document.body.classList.remove('fs-drawer-open');
+    }
   }
 
   private storeDrawerRef(ref) {
