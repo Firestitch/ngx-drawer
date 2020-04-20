@@ -32,12 +32,12 @@ export class FsDrawerExampleComponent implements OnInit {
         main: {
           initial: 500,
           min: 200,
-          max: 1000,
+          // max: 1000,
         },
         side: {
           initial: 300,
           min: 200,
-          max: 500,
+          // max: 500,
         }
       },
       // activeAction: 'settings',

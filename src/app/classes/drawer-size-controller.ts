@@ -9,6 +9,7 @@ import { IDrawerWidthDefinition } from '../interfaces/drawer-config.interface';
 
 const MAIN_DRAWER_DEFAULT_WIDTH = 500;
 const SIDE_DRAWER_DEFAULT_WIDTH = 200;
+const SIDE_RESIZE_BAR_WIDTH = 25;
 
 @Injectable()
 export class DrawerSizeController implements OnDestroy {
@@ -195,13 +196,14 @@ export class DrawerSizeController implements OnDestroy {
         this._sideOpened = opened;
 
         if (opened) {
+          debugger;
           const currentWidth = this.mainElRef.width;
           const sideWidth = this.getInitialWidth('side');
 
-          this._mainElRef.updateWidth(currentWidth + sideWidth);
+          this._mainElRef.updateWidth(currentWidth + sideWidth + SIDE_RESIZE_BAR_WIDTH);
         } else {
           const actualSideWidth = this.sideElRef.fsDrawerResizer.getBoundingClientRect().width;
-          const mainWidth = this.mainElRef.width - actualSideWidth;
+          const mainWidth = this.mainElRef.width - actualSideWidth - SIDE_RESIZE_BAR_WIDTH;
 
           this._mainElRef.updateWidth(mainWidth);
         }
