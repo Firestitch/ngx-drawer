@@ -196,7 +196,6 @@ export class DrawerSizeController implements OnDestroy {
         this._sideOpened = opened;
 
         if (opened) {
-          debugger;
           const currentWidth = this.mainElRef.width;
           const sideWidth = this.getInitialWidth('side');
 
