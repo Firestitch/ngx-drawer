@@ -89,7 +89,7 @@ export class FsDrawerService implements OnDestroy {
   }
 
   private _applyBodyOpenClass() {
-    if (Array.from(this._drawerRefs).length) {
+    if (this._drawerRefs.size) {
       document.body.classList.add('fs-drawer-open');
     } else {
       document.body.classList.remove('fs-drawer-open');
@@ -127,6 +127,8 @@ export class FsDrawerService implements OnDestroy {
    */
   private _pushDrawersCascade() {
     if (this._drawerRefs.size > 1) {
+      // SetTimeout should be here because we must wait render newly opened drawer
+      // to be able to get his width
       setTimeout(() => {
         const refsArr = Array.from(this._drawerRefs.values());
 
