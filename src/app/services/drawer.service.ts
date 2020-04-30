@@ -30,13 +30,13 @@ export class FsDrawerService implements OnDestroy {
   }
 
   public open<TData = any>(component: ComponentType<any>, config?: IDrawerConfig<TData>) {
-    const overlayRef = this.createOverlay();
+    const overlayRef = this._createOverlay();
 
     const dataFactory = DrawerData.createWithProxy(config.data);
     const drawerRef = new DrawerRef(overlayRef, dataFactory, config);
 
-    const containerRef = this.attachDrawerContainer(overlayRef, drawerRef, dataFactory);
-    const componentRef = this.attachComponent(component, containerRef, drawerRef, dataFactory);
+    const containerRef = this._attachDrawerContainer(overlayRef, drawerRef, dataFactory);
+    const componentRef = this._attachComponent(component, containerRef, drawerRef, dataFactory);
 
     drawerRef.containerRef = containerRef;
     containerRef.setDrawerRef(drawerRef);
@@ -46,7 +46,7 @@ export class FsDrawerService implements OnDestroy {
     drawerRef.events();
     drawerRef.open();
 
-    this.storeDrawerRef(drawerRef);
+    this._storeDrawerRef(drawerRef);
 
     merge(
       drawerRef.afterOpened$,
@@ -75,8 +75,9 @@ export class FsDrawerService implements OnDestroy {
 
   private _applyBackdrop() {
     Array.from(this._drawerRefs)
-    .forEach((drawerRef, index) => {;
+    .forEach((drawerRef, index) => {
       const backdrop = drawerRef.overlayRef.backdropElement;
+
       if (backdrop) {
         if (index && index === (this._drawerRefs.size - 1)) {
           backdrop.classList.add('fs-drawer-backdrop-active');
@@ -95,10 +96,10 @@ export class FsDrawerService implements OnDestroy {
     }
   }
 
-  private storeDrawerRef(ref) {
+  private _storeDrawerRef(ref) {
     this._drawerRefs.add(ref);
 
-    this.pushDrawersCascade();
+    this._pushDrawersCascade();
 
     ref.destroy$
       .pipe(
@@ -124,7 +125,7 @@ export class FsDrawerService implements OnDestroy {
    * Where d1, d2 - previously opened drawers
    * d1 and d2 must be pushed left to be visible under just opened d3
    */
-  private pushDrawersCascade() {
+  private _pushDrawersCascade() {
     if (this._drawerRefs.size > 1) {
       setTimeout(() => {
         const refsArr = Array.from(this._drawerRefs.values());
@@ -139,38 +140,38 @@ export class FsDrawerService implements OnDestroy {
     }
   }
 
-  private createOverlay(): OverlayRef {
-    const overlayConfig = this.getOverlayConfig();
+  private _createOverlay(): OverlayRef {
+    const overlayConfig = this._getOverlayConfig();
     return this._overlay.create(overlayConfig);
   }
 
-  private getOverlayConfig(): OverlayConfig {
+  private _getOverlayConfig(): OverlayConfig {
     return new OverlayConfig({
       hasBackdrop: true,
       backdropClass: 'fs-drawer-backdrop'
     });
   }
 
-  private attachDrawerContainer<T, R>(
+  private _attachDrawerContainer<T, R>(
     overlayRef: OverlayRef,
     drawerRef: DrawerRef<T, R>,
     dataFactory: DrawerData
   ) {
-    const injector = this.createInjector(drawerRef, dataFactory);
+    const injector = this._createInjector(drawerRef, dataFactory);
     const containerPortal = new ComponentPortal(FsDrawerComponent, undefined, injector);
     const containerRef = overlayRef.attach<FsDrawerComponent>(containerPortal);
 
     return containerRef.instance;
   }
 
-  private attachComponent<T, R>(
+  private _attachComponent<T, R>(
     componentRef: ComponentType<T>,
     drawerContainer: FsDrawerComponent,
     drawerRef: DrawerRef<T, R>,
     dataFactory: DrawerData,
   ) {
 
-    const injector = this.createInjector(drawerRef, dataFactory);
+    const injector = this._createInjector(drawerRef, dataFactory);
 
     return drawerContainer.attachComponentPortal<T>(
       new ComponentPortal<T>(componentRef, undefined, injector)
@@ -178,7 +179,7 @@ export class FsDrawerService implements OnDestroy {
   }
 
 
-  private createInjector(componentRef, dataFactory) {
+  private _createInjector(componentRef, dataFactory) {
     const injectionTokens = new WeakMap<any, any>([
       [DrawerRef, componentRef],
       [DRAWER_DATA, dataFactory]
