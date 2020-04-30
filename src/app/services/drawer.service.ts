@@ -97,6 +97,9 @@ export class FsDrawerService implements OnDestroy {
 
   private storeDrawerRef(ref) {
     this._drawerRefs.add(ref);
+
+    this.pushDrawersCascade();
+
     ref.destroy$
       .pipe(
         take(1),
@@ -105,7 +108,35 @@ export class FsDrawerService implements OnDestroy {
       .subscribe(() => {
         this._drawerRefs.delete(ref);
       });
+  }
 
+  /**
+   * In case, when we want to open more than 1 drawer
+   * our previously opened drawers should be visible
+   *
+   *      d1   d2   d3
+   *     ---- ---- ---
+   *    | x  | x1 | x2
+   *    | y  | y1 | y2
+   *    | z  | z1 | z2
+   *     ---- ---- ---
+   *
+   * Where d1, d2 - previously opened drawers
+   * d1 and d2 must be pushed left to be visible under just opened d3
+   */
+  private pushDrawersCascade() {
+    if (this._drawerRefs.size > 1) {
+      setTimeout(() => {
+        const refsArr = Array.from(this._drawerRefs.values());
+
+        for (let i = refsArr.length - 1; i > 0; i--) {
+          const prevRef = refsArr[i - 1];
+          const currRef = refsArr[i];
+
+          prevRef.resizeController.pushMainWidth(currRef);
+        }
+      })
+    }
   }
 
   private createOverlay(): OverlayRef {
