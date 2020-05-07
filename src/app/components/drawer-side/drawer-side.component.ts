@@ -3,12 +3,14 @@ import {
   ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ContentChildren,
+  ElementRef,
   EventEmitter,
   HostBinding,
   Input,
   OnDestroy,
   OnInit,
   QueryList,
+  Renderer2,
   TemplateRef,
 } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
@@ -29,7 +31,6 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 
   @Input('fsDrawerSide') public drawer: DrawerRef<any>;
 
-  @HostBinding('hidden') public hidden = false;
   @HostBinding('class.side') public classSide = true;
 
   @ContentChildren(FsDrawerActionDirective) actions: QueryList<FsDrawerActionDirective>;
@@ -39,13 +40,27 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 
   public activeTemplate: TemplateRef<any> = null;
 
+  private _hidden = false;
   private _destroy$ = new EventEmitter();
 
   constructor(
     private _cdRef: ChangeDetectorRef,
+    private _renderer: Renderer2,
+    private _elRef: ElementRef,
   ) {}
 
+  public set hidden(value: boolean) {
+    this._hidden = value;
+
+    if (this._hidden) {
+      this._renderer.setAttribute(this._elRef.nativeElement, 'hidden', 'true');
+    } else {
+      this._renderer.removeAttribute(this._elRef.nativeElement, 'hidden');
+    }
+  }
   public ngOnInit() {
+
+    this.hidden = true;
 
     if (!this.drawer) {
       console.error('Drawer reference is null for @Input("fsDrawerSide")');
