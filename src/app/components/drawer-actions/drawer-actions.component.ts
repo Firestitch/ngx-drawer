@@ -79,8 +79,4 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
     }
   }
 
-  public preventMouseEvent(event: MouseEvent) {
-    event.stopImmediatePropagation();
-    event.preventDefault();
-  }
 }
