@@ -217,7 +217,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    */
   private _emitResizeEvent() {
     const resizeEvent = window.document.createEvent('UIEvents');
-    resizeEvent.initUIEvent('resize', true, false, window, 0);
+    resizeEvent.initEvent('resize', true, false);
 
     window.dispatchEvent(resizeEvent);
   }
