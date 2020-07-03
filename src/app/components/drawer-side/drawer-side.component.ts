@@ -104,7 +104,7 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.drawer) {
       const activatedAction = this.drawer.activeAction;
 
-      if (activatedAction) {
+      if (this.drawer.isSideOpen && activatedAction) {
         const selectedActionIndex = this.actions
           .toArray()
           .findIndex((action) => action.name === activatedAction);
