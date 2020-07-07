@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FsExampleModule } from '@firestitch/example';
-import { FsDrawerModule } from '@firestitch/drawer';
+import { FsDrawerModule } from 'fs-package';
 import { FsCheckboxGroupModule } from '@firestitch/checkboxgroup';
 import { FsMessageModule } from '@firestitch/message';
 import { FsLabelModule } from '@firestitch/label';

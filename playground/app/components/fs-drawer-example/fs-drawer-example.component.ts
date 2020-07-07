@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FsDrawerAction, FsDrawerService } from '@firestitch/drawer';
+import { FsDrawerAction, FsDrawerService } from 'fs-package';
 
 import { TaskDrawerComponent } from './task-drawer';
 import { CustomMenuComponent } from './custom-menu';

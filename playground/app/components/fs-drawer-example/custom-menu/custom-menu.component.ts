@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { DRAWER_MENU_DATA, DrawerDataProxy, DrawerMenuRef } from '@firestitch/drawer';
+import { DRAWER_MENU_DATA, DrawerDataProxy, DrawerMenuRef } from 'fs-package';
 
 
 @Component({

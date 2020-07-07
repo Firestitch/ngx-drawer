@@ -2,7 +2,7 @@
   "extends": "./tools/config/tsconfig.cli.json",
   "compilerOptions": {
     "paths": {
-      "@firestitch/drawer": [
+      "fs-package": [
         "src/public_api.ts"
       ]
     }

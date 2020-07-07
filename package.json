@@ -1,5 +1,5 @@
 {
-  "name": "@firestitch/drawer",
+  "name": "@firestitch/drawer_tmp-name",
   "description": "@firestitch/drawer",
   "version": "9.0.0",
   "repository": {
@@ -46,6 +46,7 @@
     "@compodoc/compodoc": "^1.1.8",
     "@firestitch/checkboxgroup": "^8.1.1",
     "@firestitch/common": "^8.0.1",
+    "@firestitch/drawer": "^9.0.0",
     "@firestitch/example": "^9.0.0",
     "@firestitch/form": "^9.2.6",
     "@firestitch/iframe": "^8.0.0",
