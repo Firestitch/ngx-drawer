@@ -40,10 +40,6 @@ import { FsDrawerService } from './services/drawer.service';
     FsDrawerActionDirective,
     FsDrawerResizerDirective,
   ],
-  entryComponents: [
-    FsDrawerComponent,
-    FsDrawerMenuComponent,
-  ],
   declarations: [
     FsDrawerSideComponent,
     FsDrawerComponent,

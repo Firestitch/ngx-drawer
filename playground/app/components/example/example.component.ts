@@ -7,7 +7,7 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 })
 export class ExampleComponent implements OnInit {
 
-  @ViewChild('drawer', { static: false }) drawer;
+  @ViewChild('drawer') drawer;
 
   public ngOnInit() {
     console.log(this.drawer);
