@@ -77,6 +77,8 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
       }
 
       this._updateActiveActionTemplate();
+
+      this._cdRef.detectChanges();
     });
   }
 
