@@ -1,11 +1,12 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, delay, takeUntil } from 'rxjs/operators';
+import { debounceTime, takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../classes/drawer-ref';
 import { FsDrawerResizerDirective } from '../directives/drawer-resizer.directive';
 import { IDrawerWidthDefinition } from '../interfaces/drawer-config.interface';
+import { FsDrawerPersistanceController } from './persistance-controller';
 
 const MAIN_DRAWER_DEFAULT_WIDTH = 500;
 const SIDE_DRAWER_DEFAULT_WIDTH = 200;
@@ -31,12 +32,8 @@ export class DrawerSizeController implements OnDestroy {
   constructor(
     private _drawerRef: DrawerRef<any>,
     private _ngZone: NgZone,
-  ) {
-    this._initDefaultConfigs();
-    this._updateScreenWidth();
-    this._listenWindowResize();
-    this._listenSideToggle();
-  }
+    private _persistanceController: FsDrawerPersistanceController,
+  ) {}
 
   public get mainElRef() {
     return this._mainElRef;
@@ -58,18 +55,47 @@ export class DrawerSizeController implements OnDestroy {
     return this._screenWidth;
   }
 
+  private get persistedMainWidth(): number {
+    return this._persistanceController.enabled
+      ? this._persistanceController.getDataFromScope('mainWidth')
+      : null;
+  }
+
+  private get persistedSideWidth(): number {
+    return this._persistanceController.enabled
+      ? this._persistanceController.getDataFromScope('sideWidth')
+      : null;
+  }
+
+  public init(): void {
+    this._initDefaultConfigs();
+    this._updateScreenWidth();
+    this._listenWindowResize();
+    this._listenSideToggle();
+  }
+
   public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
   }
 
   public registerElRef(el: FsDrawerResizerDirective) {
-    if (el.type === 'main') {
+    if (el.isMainDrawer) {
       this._registerMainRef(el);
-    } else if (el.type === 'side') {
+      this._listenWidthChanges(el);
+    } else if (el.isSideDrawer) {
       this._registerSideRef(el);
+      this._listenWidthChanges(el);
     } else {
       throw Error('Unrecognized resize element type')
+    }
+  }
+
+  public removeElRef(el: FsDrawerResizerDirective) {
+    if (el.isMainDrawer) {
+      this._removeMainRef();
+    } else if (el.isSideDrawer) {
+      this._removeSideRef();
     }
   }
 
@@ -157,17 +183,25 @@ export class DrawerSizeController implements OnDestroy {
    * Copy initial configs or set default values
    */
   private _initDefaultConfigs() {
+    // Main initialization
+    debugger;
     this._mainConfig =
       (this._drawerRef.drawerConfig.width && this._drawerRef.drawerConfig.width.main)
       || {};
 
-    this._mainConfig.initial = this._mainConfig.initial || MAIN_DRAWER_DEFAULT_WIDTH;
+    this._mainConfig.initial = this.persistedMainWidth
+      || this._mainConfig.initial
+      || MAIN_DRAWER_DEFAULT_WIDTH;
 
+
+    // Side initialization
     this._sideConfig =
       (this._drawerRef.drawerConfig.width && this._drawerRef.drawerConfig.width.side)
       || {};
 
-    this._sideConfig.initial = this._sideConfig.initial || SIDE_DRAWER_DEFAULT_WIDTH;
+    this._sideConfig.initial = this.persistedSideWidth
+      || this._sideConfig.initial
+      || SIDE_DRAWER_DEFAULT_WIDTH;
   }
 
   private _registerMainRef(el: FsDrawerResizerDirective) {
@@ -176,6 +210,14 @@ export class DrawerSizeController implements OnDestroy {
 
   private _registerSideRef(el: FsDrawerResizerDirective) {
     this._sideElRef = el;
+  }
+
+  private _removeMainRef() {
+    this._mainElRef = null;
+  }
+
+  private _removeSideRef() {
+    this._sideElRef = null;
   }
 
   /**
@@ -218,6 +260,32 @@ export class DrawerSizeController implements OnDestroy {
           const mainWidth = this.mainElRef.width - actualSideWidth - SIDE_RESIZE_BAR_WIDTH;
 
           this._mainElRef.updateWidth(mainWidth);
+        }
+      })
+  }
+
+  private _listenWidthChanges(el: FsDrawerResizerDirective) {
+    el.width$
+      .pipe(
+        debounceTime(200),
+      )
+      .subscribe({
+        next: () => {
+          const sideWidth = this._sideElRef?.width || 0;
+
+          if (this._mainElRef) {
+            this._persistanceController.saveDataToScope(
+              'mainWidth',
+              this._mainElRef.width - sideWidth
+            );
+          }
+
+          if (this._sideElRef) {
+            this._persistanceController.saveDataToScope(
+              'sideWidth',
+              sideWidth
+            );
+          }
         }
       })
   }

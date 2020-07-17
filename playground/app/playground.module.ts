@@ -21,6 +21,7 @@ import {
   TaskDrawerComponent,
 } from './components';
 import { CustomMenuComponent } from './components/fs-drawer-example/custom-menu';
+import { FsStoreModule } from '@firestitch/store';
 
 
 const routes: Routes = [
@@ -38,6 +39,7 @@ const routes: Routes = [
     FsDrawerModule,
     ToastrModule.forRoot({ preventDuplicates: true }),
     FsMessageModule.forRoot(),
+    FsStoreModule.forRoot(),
     FsCheckboxGroupModule,
     FsLabelModule,
   ],

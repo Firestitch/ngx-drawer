@@ -28,6 +28,7 @@ export class FsDrawerExampleComponent implements OnInit {
       data: { account: { name: 'Name', email: 'email@email.com', blocked: false } },
       disableClose: false,
       position: 'right',
+      persist: true,
       width: {
         main: {
           initial: 500,

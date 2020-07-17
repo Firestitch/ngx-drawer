@@ -45,7 +45,7 @@
     "@angular/router": "^9.1.11",
     "@compodoc/compodoc": "^1.1.8",
     "@firestitch/checkboxgroup": "^8.1.1",
-    "@firestitch/common": "^8.0.1",
+    "@firestitch/common": "^8.0.5",
     "@firestitch/drawer": "^9.0.0",
     "@firestitch/example": "^9.1.0",
     "@firestitch/form": "^9.2.6",
@@ -53,8 +53,10 @@
     "@firestitch/label": "^8.2.1",
     "@firestitch/menu": "^9.1.3",
     "@firestitch/message": "^8.1.0",
+    "@firestitch/store": "^8.1.0",
     "codelyzer": "^5.1.2",
     "cpx": "^1.5.0",
+    "date-fns": "^2.14.0",
     "hammerjs": "^2.0.8",
     "highlight.js": "^9.18.1",
     "lodash-es": "^4.17.15",
@@ -72,7 +74,9 @@
     "node": ">=6.0.0"
   },
   "peerDependencies": {
-    "@firestitch/menu": ">=7.0.9"
+    "@firestitch/menu": ">=7.0.9",
+    "@firestitch/store": ">=8.1.0",
+    "@firestitch/common": ">=8.0.5"
   },
   "dependencies": {
     "tslib": "^1.10.0"

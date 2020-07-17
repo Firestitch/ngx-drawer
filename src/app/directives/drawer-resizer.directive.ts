@@ -7,9 +7,10 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
-import { Subject } from 'rxjs';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
 
 import { DrawerSizeController } from '../classes/drawer-size-controller';
+import { takeUntil } from 'rxjs/operators';
 
 
 @Directive({
@@ -33,7 +34,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   private _dragEndHandler = this._dragEnd.bind(this);
 
   private _x = 0;
-  private _width = 0;
+  private _width$ = new BehaviorSubject<number>(0);
   private _actionsWidth = 0;
 
   private _destroy$ = new Subject();
@@ -44,8 +45,20 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     private _ngZone: NgZone,
   ) {}
 
+  public get isMainDrawer(): boolean {
+    return this.type === 'main';
+  }
+
+  public get isSideDrawer(): boolean {
+    return this.type === 'side';
+  }
+
   public get width(): number {
-    return this._width;
+    return this._width$.getValue();
+  }
+
+  public get width$(): Observable<number> {
+    return this._width$.pipe(takeUntil(this._destroy$));
   }
 
   private get minWidth(): number {
@@ -108,7 +121,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   }
 
   public updateWidth(width) {
-    this._width = width;
+    this._width$.next(width);
 
     requestAnimationFrame(() => {
       this._renderer.setStyle(this.fsDrawerResizer, 'width', `${width}px`);
@@ -118,6 +131,8 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   public ngOnDestroy() {
     this._el.nativeElement.removeEventListener('mousedown', this._dragStartHandler, false);
     this._el.nativeElement.removeEventListener('touchstart', this._dragStartHandler, false);
+
+    this.sizeController.removeElRef(this);
 
     this._destroy$.next();
     this._destroy$.complete();
@@ -140,7 +155,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   private _dragStart(event: MouseEvent) {
 
     this._x = this._getClientX(event);
-    this._width = this._getElementWidth(this.fsDrawerResizer);
+    this._width$.next(this._getElementWidth(this.fsDrawerResizer));
 
     this.setMinMaxStyles();
 
@@ -209,7 +224,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   private _calcWidth(direction, clientX) {
     const directionSign = direction === 'left' ? -1 : 1;
 
-    return this._width + (this._x - clientX) * directionSign;
+    return this.width + (this._x - clientX) * directionSign;
   }
 
   /**

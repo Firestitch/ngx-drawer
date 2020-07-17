@@ -1,5 +1,5 @@
 import { Action } from './action.model';
-import { IDrawerConfig, IDrawerWidthConfig } from '../interfaces/drawer-config.interface';
+import { IDrawerConfig, IDrawerWidthConfig, IFsDrawerPersistance } from '../interfaces/drawer-config.interface';
 
 
 export class DrawerConfig {
@@ -9,11 +9,13 @@ export class DrawerConfig {
   public resizable: boolean;
   public width: IDrawerWidthConfig;
   public actions: Action[] | null;
+  public persist: IFsDrawerPersistance;
 
   constructor(data: IDrawerConfig = {}) {
     this.disableClose = data.disableClose || false;
     this.position = data.position || 'right';
     this.activeAction = data.activeAction || '';
+    this.persist = data.persist;
 
     this.resizable = data.resizable === void 0 ? true : data.resizable;
 

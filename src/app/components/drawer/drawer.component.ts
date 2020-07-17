@@ -9,6 +9,7 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
+import { Location } from '@angular/common';
 
 import {
   BasePortalOutlet,
@@ -24,6 +25,8 @@ import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerConfig } from '../../models/drawer-config.model';
 import { FsDrawerMenuService } from '../../services/drawer-menu.service';
 import { DrawerSizeController } from '../../classes/drawer-size-controller';
+import { FsDrawerPersistanceController } from '../../classes/persistance-controller';
+import { getNormalizedPath } from '@firestitch/common';
 
 
 @Component({
@@ -31,6 +34,7 @@ import { DrawerSizeController } from '../../classes/drawer-size-controller';
   templateUrl: './drawer.component.html',
   providers: [
     FsDrawerMenuService,
+    FsDrawerPersistanceController,
     DrawerSizeController,
   ],
   host: {
@@ -67,6 +71,8 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     private _drawerRef: DrawerRef<any>,
     private _cdRef: ChangeDetectorRef,
     private _resizeController: DrawerSizeController,
+    private _persistanceController: FsDrawerPersistanceController,
+    private _location: Location,
   ) {
     super();
 
@@ -86,6 +92,14 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
   public ngOnInit() {
     this._listenDataChanges();
+
+    this.config = this.drawerRef.drawerConfig;
+    if (this.config.persist) {
+      const namespace = getNormalizedPath(this._location);
+      this._persistanceController.setConfig(this.config.persist, namespace);
+    }
+
+    this._resizeController.init();
   }
 
   public ngOnDestroy(): void {
@@ -111,8 +125,6 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
   public setDrawerRef(value: DrawerRef<any>) {
     this.drawerRef = value;
-
-    this.config = this.drawerRef.drawerConfig;
 
     // Need to be like a parent for children resize
     this.drawerRef.drawerContentContainer = this._drawerContentContainer;
