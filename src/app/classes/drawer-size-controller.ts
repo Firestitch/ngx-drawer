@@ -184,7 +184,6 @@ export class DrawerSizeController implements OnDestroy {
    */
   private _initDefaultConfigs() {
     // Main initialization
-    debugger;
     this._mainConfig =
       (this._drawerRef.drawerConfig.width && this._drawerRef.drawerConfig.width.main)
       || {};
