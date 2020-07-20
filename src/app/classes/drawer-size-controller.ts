@@ -1,7 +1,7 @@
 import { Injectable, NgZone, OnDestroy } from '@angular/core';
 
 import { fromEvent, Subject } from 'rxjs';
-import { debounceTime, takeUntil } from 'rxjs/operators';
+import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../classes/drawer-ref';
 import { FsDrawerResizerDirective } from '../directives/drawer-resizer.directive';
@@ -264,6 +264,10 @@ export class DrawerSizeController implements OnDestroy {
   }
 
   private _listenWidthChanges(el: FsDrawerResizerDirective) {
+    if (!this._persistanceController.enabled) {
+      return;
+    }
+
     el.width$
       .pipe(
         debounceTime(200),
