@@ -79,4 +79,8 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
     }
   }
 
+  public muteEvent(e) {
+    e.stopImmediatePropagation();
+    e.stopPropagation();
+  }
 }

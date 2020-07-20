@@ -19,6 +19,9 @@ import { Action } from '../../../models/action.model';
 @Component({
   selector: 'fs-drawer-action-item',
   templateUrl: './drawer-action-item.component.html',
+  styleUrls: [
+    './drawer-action-item.component.scss',
+  ],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDrawerActionItemComponent implements OnInit, OnChanges {

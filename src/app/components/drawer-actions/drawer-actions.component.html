@@ -1,4 +1,4 @@
-<div class="actions-container">
+<div class="actions-container" (mousedown)="muteEvent($event)" (dragstart)="muteEvent($event)">
   <div *ngFor="let action of actions" class="action-btn">
     <fs-drawer-action-item [action]="action"
                            [activeAction]="activeAction"
