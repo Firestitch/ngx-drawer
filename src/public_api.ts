@@ -13,6 +13,7 @@ export { FsDrawerResizerDirective } from './app/directives/drawer-resizer.direct
 export { FsDrawerService } from './app/services/drawer.service';
 export { DRAWER_DATA } from './app/services/drawer-data';
 export { DRAWER_MENU_DATA } from './app/services/drawer-menu-data';
+export { DRAWER_DEFAULT_CONFIG } from './app/services/drawer-default-config';
 
 export { DrawerRef } from './app/classes/drawer-ref';
 export { DrawerMenuRef } from './app/classes/drawer-menu-ref';

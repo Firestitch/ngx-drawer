@@ -1,16 +1,17 @@
-import { Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
+import { Inject, Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
 
 import { Subject, merge } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
-
+import { merge as _merge } from 'lodash-es';
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerRef } from '../classes/drawer-ref';
 import { DrawerData } from '../classes/drawer-data';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DRAWER_DATA } from './drawer-data';
 import { DrawerStoreService } from './drawer-store.service';
+import { DRAWER_DEFAULT_CONFIG } from './drawer-default-config';
 
 
 @Injectable({
@@ -22,6 +23,7 @@ export class FsDrawerService implements OnDestroy {
 
   constructor(
     @Optional() @SkipSelf() private _parentDrawerService: FsDrawerService,
+    @Optional() @Inject(DRAWER_DEFAULT_CONFIG) private _defaultConfig,
     private _overlay: Overlay,
     private _injector: Injector,
     private _drawerStore: DrawerStoreService,
@@ -36,6 +38,10 @@ export class FsDrawerService implements OnDestroy {
     const overlayRef = this._createOverlay();
 
     const dataFactory = DrawerData.createWithProxy(config.data);
+
+    delete config.data;
+    config = _merge(this._defaultConfig || {}, config);
+
     const drawerRef = new DrawerRef(overlayRef, dataFactory, config);
 
     const containerRef = this._attachDrawerContainer(overlayRef, drawerRef, dataFactory);

@@ -4,7 +4,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 import { FsExampleModule } from '@firestitch/example';
-import { FsDrawerModule } from 'fs-package';
+import { DRAWER_DEFAULT_CONFIG, FsDrawerModule } from 'fs-package';
 import { FsCheckboxGroupModule } from '@firestitch/checkboxgroup';
 import { FsMessageModule } from '@firestitch/message';
 import { FsLabelModule } from '@firestitch/label';
@@ -56,6 +56,16 @@ const routes: Routes = [
     CustomMenuComponent,
   ],
   providers: [
+    {
+      provide: DRAWER_DEFAULT_CONFIG,
+      useValue: {
+        width: {
+          side: {
+            min: 300,
+          },
+        },
+      },
+    }
   ],
 })
 export class PlaygroundModule {
