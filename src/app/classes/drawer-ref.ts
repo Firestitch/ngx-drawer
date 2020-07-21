@@ -69,7 +69,7 @@ export class DrawerRef<T, R = any> {
     _config: IDrawerConfig
   ) {
     this.drawerConfig = new DrawerConfig(_config);
-    this._activeAction.next(this.drawerConfig.activeAction);
+    this._initActiveAction();
   }
 
   public get overlayRef() {
@@ -404,6 +404,21 @@ export class DrawerRef<T, R = any> {
 
     this._destroy$.next();
     this._destroy$.complete();
+  }
+
+  private _initActiveAction() {
+    if (this.drawerConfig.activeAction) {
+      const action = this.drawerConfig.actions
+        .find((a) => a.name === this.drawerConfig.activeAction);
+
+      if (action) {
+        this._activeAction.next(this.drawerConfig.activeAction);
+      } else {
+        console.warn(
+          `Drawer active action - "${this.drawerConfig.activeAction}" does not exists
+        `);
+      }
+    }
   }
 
 }
