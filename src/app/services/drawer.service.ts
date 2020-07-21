@@ -3,26 +3,29 @@ import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
 
 import { Subject, merge } from 'rxjs';
-import { take, takeUntil, delay } from 'rxjs/operators';
+import { take, takeUntil } from 'rxjs/operators';
 
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerRef } from '../classes/drawer-ref';
 import { DrawerData } from '../classes/drawer-data';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DRAWER_DATA } from './drawer-data';
+import { DrawerStoreService } from './drawer-store.service';
 
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class FsDrawerService implements OnDestroy {
 
-  private _drawerRefs = new Set<DrawerRef<any>>();
   private _destroy$ = new Subject();
 
   constructor(
     @Optional() @SkipSelf() private _parentDrawerService: FsDrawerService,
     private _overlay: Overlay,
-    private _injector: Injector) {
-  }
+    private _injector: Injector,
+    private _drawerStore: DrawerStoreService,
+  ) {}
 
   public ngOnDestroy() {
     this._destroy$.next();
@@ -66,7 +69,8 @@ export class FsDrawerService implements OnDestroy {
   }
 
   public closeAll() {
-    this._drawerRefs.forEach((ref) => ref.close());
+    this._drawerStore.drawerRefs
+      .forEach((ref) => ref.close());
 
     if (this._parentDrawerService) {
       this._parentDrawerService.closeAll();
@@ -74,22 +78,22 @@ export class FsDrawerService implements OnDestroy {
   }
 
   private _applyBackdrop() {
-    Array.from(this._drawerRefs)
-    .forEach((drawerRef, index) => {
-      const backdrop = drawerRef.overlayRef.backdropElement;
+    Array.from(this._drawerStore.drawerRefs)
+      .forEach((drawerRef, index) => {
+        const backdrop = drawerRef.overlayRef.backdropElement;
 
-      if (backdrop) {
-        if (index && index === (this._drawerRefs.size - 1)) {
-          backdrop.classList.add('fs-drawer-backdrop-active');
-        } else {
-          backdrop.classList.remove('fs-drawer-backdrop-active');
+        if (backdrop) {
+          if (index && index === (this._drawerStore.numberOfOpenedDrawers - 1)) {
+            backdrop.classList.add('fs-drawer-backdrop-active');
+          } else {
+            backdrop.classList.remove('fs-drawer-backdrop-active');
+          }
         }
-      }
-    });
+      });
   }
 
   private _applyBodyOpenClass() {
-    if (this._drawerRefs.size) {
+    if (this._drawerStore.numberOfOpenedDrawers) {
       document.body.classList.add('fs-drawer-open');
     } else {
       document.body.classList.remove('fs-drawer-open');
@@ -97,9 +101,7 @@ export class FsDrawerService implements OnDestroy {
   }
 
   private _storeDrawerRef(ref) {
-    this._drawerRefs.add(ref);
-
-    this._pushDrawersCascade();
+    this._drawerStore.addRef(ref);
 
     ref.destroy$
       .pipe(
@@ -107,39 +109,8 @@ export class FsDrawerService implements OnDestroy {
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this._drawerRefs.delete(ref);
+        this._drawerStore.deleteRef(ref);
       });
-  }
-
-  /**
-   * In case, when we want to open more than 1 drawer
-   * our previously opened drawers should be visible
-   *
-   *      d1   d2   d3
-   *     ---- ---- ---
-   *    | x  | x1 | x2
-   *    | y  | y1 | y2
-   *    | z  | z1 | z2
-   *     ---- ---- ---
-   *
-   * Where d1, d2 - previously opened drawers
-   * d1 and d2 must be pushed left to be visible under just opened d3
-   */
-  private _pushDrawersCascade() {
-    if (this._drawerRefs.size > 1) {
-      // SetTimeout should be here because we must wait render newly opened drawer
-      // to be able to get his width
-      setTimeout(() => {
-        const refsArr = Array.from(this._drawerRefs.values());
-
-        for (let i = refsArr.length - 1; i > 0; i--) {
-          const prevRef = refsArr[i - 1];
-          const currRef = refsArr[i];
-
-          prevRef.resizeController.pushMainWidth(currRef);
-        }
-      })
-    }
   }
 
   private _createOverlay(): OverlayRef {

@@ -8,9 +8,10 @@ import {
   Renderer2,
 } from '@angular/core';
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { DrawerSizeController } from '../classes/drawer-size-controller';
-import { takeUntil } from 'rxjs/operators';
+import { DrawerRef } from '../classes/drawer-ref';
 
 
 @Directive({
@@ -43,7 +44,12 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     private _el: ElementRef,
     private _renderer: Renderer2,
     private _ngZone: NgZone,
+    private _drawerRef: DrawerRef<any>,
   ) {}
+
+  public get drawerRef(): DrawerRef<any> {
+    return this._drawerRef;
+  }
 
   public get isMainDrawer(): boolean {
     return this.type === 'main';

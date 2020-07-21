@@ -7,11 +7,13 @@ import { DrawerRef } from '../classes/drawer-ref';
 import { FsDrawerResizerDirective } from '../directives/drawer-resizer.directive';
 import { IDrawerWidthDefinition } from '../interfaces/drawer-config.interface';
 import { FsDrawerPersistanceController } from './persistance-controller';
+import { DrawerStoreService } from '../services/drawer-store.service';
 
 const MAIN_DRAWER_DEFAULT_WIDTH = 500;
 const SIDE_DRAWER_DEFAULT_WIDTH = 200;
 const SIDE_RESIZE_BAR_WIDTH = 25;
 const MAIN_RESIZE_ACTION_BAR_WIDTH = 40;
+
 
 @Injectable()
 export class DrawerSizeController implements OnDestroy {
@@ -33,6 +35,7 @@ export class DrawerSizeController implements OnDestroy {
     private _drawerRef: DrawerRef<any>,
     private _ngZone: NgZone,
     private _persistanceController: FsDrawerPersistanceController,
+    private _drawerStore: DrawerStoreService,
   ) {}
 
   public get mainElRef() {
@@ -271,6 +274,9 @@ export class DrawerSizeController implements OnDestroy {
     el.width$
       .pipe(
         debounceTime(200),
+        filter(() => {
+          return this._drawerStore.getLevelForRef(el.drawerRef) === this._drawerStore.numberOfOpenedDrawers;
+        }),
       )
       .subscribe({
         next: () => {

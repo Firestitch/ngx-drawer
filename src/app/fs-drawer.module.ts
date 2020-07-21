@@ -19,7 +19,6 @@ import { FsDrawerContentComponent } from './components/drawer-content/drawer-con
 import { FsDrawerActionDirective } from './directives/drawer-action.directive';
 
 import { FsDrawerResizerDirective } from './directives/drawer-resizer.directive';
-import { FsDrawerService } from './services/drawer.service';
 
 
 @NgModule({
@@ -50,6 +49,5 @@ import { FsDrawerService } from './services/drawer.service';
     FsDrawerResizerDirective,
     FsDrawerMenuComponent,
   ],
-  providers: [FsDrawerService],
 })
 export class FsDrawerModule {}
