@@ -40,7 +40,7 @@ export class FsDrawerService implements OnDestroy {
     const dataFactory = DrawerData.createWithProxy(config.data);
 
     delete config.data;
-    config = _merge(this._defaultConfig || {}, config);
+    config = _merge({}, this._defaultConfig || {}, config);
 
     const drawerRef = new DrawerRef(overlayRef, dataFactory, config);
 
