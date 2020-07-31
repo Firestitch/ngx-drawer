@@ -41,4 +41,12 @@ export class TaskDrawerComponent implements OnInit {
   public updateSideWidth() {
     this.drawerRef.updateSideDrawerWidth(1000);
   }
+
+  public enableClose() {
+    this.drawerRef.enableAction('close');
+  }
+
+  public disableClose() {
+    this.drawerRef.disableAction('close');
+  }
 }

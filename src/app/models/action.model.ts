@@ -7,6 +7,8 @@ import { MenuAction } from './menu-action.model';
 export class Action extends BaseAction {
   private _tooltip: string;
   private _data: any = null;
+  private _disabled = false;
+
   private readonly _toggle: boolean;
   private readonly _type: FsDrawerAction;
   private readonly _name: string;
@@ -26,6 +28,7 @@ export class Action extends BaseAction {
     this._close = !!data.close;
     this._component = data.component || null;
     this._data = data.data === void 0 ? {} : data.data;
+    this._disabled = data.disabled ?? false;
 
     if (this._type === FsDrawerAction.Component) {
       this._menuRefName = data.name || data.icon;
@@ -96,6 +99,14 @@ export class Action extends BaseAction {
 
   get menuRefName() {
     return this._menuRefName;
+  }
+
+  get disabled(): boolean {
+    return this._disabled;
+  }
+
+  set disabled(value: boolean) {
+    this._disabled = value;
   }
 
   public updateRouterLink(data) {

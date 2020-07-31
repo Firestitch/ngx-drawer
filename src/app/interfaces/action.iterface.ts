@@ -12,6 +12,7 @@ export interface IFsDrawerActionConfig<TData = any> {
   type?: FsDrawerAction;
   name?: string;
   close?: boolean;
+  disabled?: boolean;
   closeSide?: boolean;
   click?: <T, R>(data: IMenuActionClick<TData, T, R>) => void;
   show?: IDrawerActionShowFn<TData>;

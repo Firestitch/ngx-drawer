@@ -4,6 +4,7 @@
             type="button"
             *ngIf="action.visible"
             [matTooltip]="action.tooltip"
+            [disabled]="action.disabled"
             [class.active]="isActive"
             (click)="actionClick($event)">
       <i class="material-icons">{{action.icon}}</i>
@@ -17,6 +18,7 @@
               class="sub-action"
               [fsMenuTriggerFor]="menu"
               [matTooltip]="action.tooltip"
+              [disabled]="action.disabled"
               [class.active]="isActive"
               (click)="actionClick($event)">
         <i class="material-icons">{{action.icon}}</i>
@@ -58,6 +60,7 @@
             type="button"
             *ngIf="action.visible"
             [matTooltip]="action.tooltip"
+            [disabled]="action.disabled"
             [class.active]="isActive"
             (click)="actionClick($event)">
       <i class="material-icons">{{action.icon}}</i>

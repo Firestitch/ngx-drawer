@@ -45,8 +45,10 @@ export class FsDrawerExampleComponent implements OnInit {
       actions: [
         {
           icon: 'clear',
+          name: 'close',
           type: FsDrawerAction.Button,
           close: true,
+          disabled: true,
           click: ({event}) => {
             console.log('close clicked');
           }

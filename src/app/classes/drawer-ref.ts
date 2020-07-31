@@ -322,6 +322,24 @@ export class DrawerRef<T, R = any> {
     }
   }
 
+  public enableAction(name: string): void {
+    const action = this.getAction(name);
+
+    if (action) {
+      action.disabled = false;
+      this._actionsUpdated$.next(name);
+    }
+  }
+
+  public disableAction(name: string): void {
+    const action = this.getAction(name);
+
+    if (action) {
+      action.disabled = true;
+      this._actionsUpdated$.next(name);
+    }
+  }
+
   /**
    * Store opened menu reference and subscribe for auto remove
    * @param name
