@@ -74,7 +74,7 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
       if (this._drawerRef.isSideOpen && this._drawerRef.activeAction === action.name) {
         this._drawerRef.toggleSide();
       } else {
-        this._drawerRef.setActiveAction(action.name);
+        this._drawerRef.activateAction(action.name);
       }
     }
   }

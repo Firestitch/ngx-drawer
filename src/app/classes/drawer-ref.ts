@@ -300,7 +300,7 @@ export class DrawerRef<T, R = any> {
     this._isSideOpen = false;
     this._sideToggle.next(this._isSideOpen);
 
-    this.setActiveAction(null);
+    this.activateAction(null);
   }
 
   /**
@@ -314,7 +314,7 @@ export class DrawerRef<T, R = any> {
    * Change active action
    * @param name
    */
-  public setActiveAction(name: string) {
+  public activateAction(name: string) {
     this._activeAction.next(name);
 
     if (name) {
