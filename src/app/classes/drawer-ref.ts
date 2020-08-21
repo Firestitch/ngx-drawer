@@ -48,7 +48,7 @@ export class DrawerRef<T, R = any> {
   private _drawerComponentRef: ComponentRef<T>;
 
   /** Drawer Content Template */
-  private _drawerContentContainer: ElementRef;
+  private _drawerContainer: ElementRef;
 
   /** Drawer Actions Template */
   private _drawerActionsContainer: ElementRef;
@@ -103,16 +103,16 @@ export class DrawerRef<T, R = any> {
     this._drawerComponentRef = value;
   }
 
-  public set drawerContentContainer(value: ElementRef) {
-    this._drawerContentContainer = value;
+  public set drawerContainer(value: ElementRef) {
+    this._drawerContainer = value;
   }
 
   public set drawerActionsContainer(value: ElementRef) {
     this._drawerActionsContainer = value;
   }
 
-  public get drawerContentContainer(): ElementRef {
-    return this._drawerContentContainer;
+  public get drawerContainer(): ElementRef {
+    return this._drawerContainer;
   }
 
   public get drawerActionsContainer(): ElementRef {

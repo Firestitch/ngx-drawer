@@ -56,8 +56,8 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   @ViewChild(CdkPortalOutlet, { static: true })
   private _portalOutlet: CdkPortalOutlet;
 
-  @ViewChild('drawerContentContainer', { static: true })
-  private _drawerContentContainer: ElementRef;
+  @ViewChild('drawerContainer', { static: true })
+  private _drawerContainer: ElementRef;
 
   @ViewChild('drawerActionsContainer', { read: ElementRef, static: true })
   private _drawerActionsContainer: ElementRef;
@@ -127,7 +127,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     this.drawerRef = value;
 
     // Need to be like a parent for children resize
-    this.drawerRef.drawerContentContainer = this._drawerContentContainer;
+    this.drawerRef.drawerContainer = this._drawerContainer;
     this.drawerRef.drawerActionsContainer = this._drawerActionsContainer;
 
     this.drawerRef.sideToggle$

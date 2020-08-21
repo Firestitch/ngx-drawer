@@ -13,7 +13,7 @@
                        [actions]="config.actions"
                        [activeAction]="drawerRef.activeAction$ | async">
     </fs-drawer-actions>
-    <div class="drawer-container" #drawerContentContainer>
+    <div class="drawer-container" #drawerContainer>
       <ng-template cdkPortalOutlet></ng-template>
     </div>
   </ng-container>
