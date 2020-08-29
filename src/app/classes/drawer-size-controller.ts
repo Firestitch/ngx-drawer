@@ -11,8 +11,8 @@ import { DrawerStoreService } from '../services/drawer-store.service';
 
 const MAIN_DRAWER_DEFAULT_WIDTH = 500;
 const SIDE_DRAWER_DEFAULT_WIDTH = 200;
-const SIDE_RESIZE_BAR_WIDTH = 25;
-const MAIN_RESIZE_ACTION_BAR_WIDTH = 40;
+const SIDE_RESIZE_BAR_WIDTH = 46;
+const MAIN_RESIZE_ACTION_BAR_WIDTH = 45;
 
 
 @Injectable()

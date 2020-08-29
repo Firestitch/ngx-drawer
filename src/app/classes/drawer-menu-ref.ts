@@ -97,7 +97,7 @@ export class DrawerMenuRef<TCmp, R = any> {
   public close(result?: R): void {
     new Observable<void>(observer => {
       if (this._closeStart$.observers.length) {
-        zip(...this._closeStart$.observers.map(item => {
+        zip(...this._closeStart$.observers.map((item) => {
           return Observable.create(closeObserver => {
             item.next(closeObserver);
           });

@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { DRAWER_DATA, DrawerDataProxy, DrawerRef } from 'fs-package';
-
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'fs-task-drawer',
   templateUrl: 'task-drawer.component.html',
-  styleUrls: ['./task-drawer.component.scss']
+  styleUrls: ['./task-drawer.component.scss'],
 })
 export class TaskDrawerComponent implements OnInit {
 
@@ -32,6 +32,18 @@ export class TaskDrawerComponent implements OnInit {
   public dataChange() {
     this.account.name = 'Name Changed!';
     this.drawerRef.dataChange({ account: this.account });
+
+
+    new Observable((observer) => {
+      setTimeout(() => {
+        observer.next();
+        observer.complete();
+      }, 3000)
+    }).pipe(
+      this.drawerRef.closeWhen(),
+    ).subscribe(() => {
+      debugger;
+    })
   }
 
   public updateWidth() {

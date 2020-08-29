@@ -48,7 +48,7 @@
       height: 100%;
 
       > *:first-child {
-        margin-left: 40px;
+        margin-left: 45px;
         display: flex;
         align-content: space-between;
         height: 100%;
@@ -83,18 +83,19 @@
 
     .drawer-actions {
       position: absolute;
-      width: 39px;
+      width: 45px;
       height: 100%;
       display: flex;
       flex-direction: column;
       user-select: none;
       white-space: nowrap;
+      user-select: none;
 
       .action-btn {
         position: relative;
         margin-bottom: 5px;
-        background: #fff;
         z-index: 5;
+        text-align: center;
 
         > button {
           border: none;
@@ -109,13 +110,23 @@
       button.active .material-icons {
         color: mat-color($primary);
       }
-    }
 
-    .resize-side {
-      display: flex;
-      align-items: center;
-      width: $drawer-side-delimiter-width;
-      border-left: 1px solid #dcdcdc;
+      &:hover {
+
+        .drag-icon {
+          opacity: 1;
+        }
+
+        .drag-ripple {
+          background: #F9F9F9;
+        }
+
+        .actions-container:hover {
+          ~ * {
+            display: none;
+          }
+        }
+      }
     }
 
     .resize-icon {
@@ -135,6 +146,29 @@
         color: #B3B3B3;
       }
     }
+
+    .resize-side {
+      display: flex;
+      align-items: center;
+      width: $drawer-side-delimiter-width;
+      border-left: 1px solid #dcdcdc;
+      background: transparent;
+      transition: 200ms;
+      user-select: none;
+
+      .resize-icon {
+        opacity: 0;
+        transition: 200ms;
+      }
+
+      &:hover {
+        background: #F9F9F9;
+        .resize-icon {
+          opacity: 1;
+        }
+      }
+    }
+
   }
 }
 

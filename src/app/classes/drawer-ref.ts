@@ -2,8 +2,8 @@ import { ComponentRef, ElementRef } from '@angular/core';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { BehaviorSubject, Observable, Subject, Subscriber, zip } from 'rxjs';
-import { filter, take, takeUntil } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, Subscriber, zip, pipe } from 'rxjs';
+import { filter, take, takeUntil, tap, switchMap, map } from 'rxjs/operators';
 
 import { DrawerData } from './drawer-data';
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
@@ -182,6 +182,59 @@ export class DrawerRef<T, R = any> {
    */
   public get closeStart$(): Observable<Subscriber<void>> {
     return this._closeStart$.pipe(takeUntil(this._destroy$));
+  }
+
+  public closeWhen(): any {
+    return (source: Observable<T>) => {
+      this._closeStart$
+        .pipe(
+          switchMap((observer) => {
+            return source.pipe(
+              map(() => {
+                return observer;
+              })
+            );
+          })
+        )
+        .subscribe((observer) => {
+          observer.next();
+          observer.complete();
+        });
+
+
+
+        //   switchMap(() => {
+        //     debugger;
+        //     return source;
+        //   })
+        // )
+        // .subscribe((observer) => {
+        // source.pipe(
+        //   tap(() => {
+        //     debugger;
+        //     observer.next();
+        //     observer.complete();
+        //   }),
+        // );
+
+
+    return source;
+      // return new Observable(subscriber => {
+      //   source.subscribe({
+      //     next(value) {
+      //       if (value !== undefined && value !== null) {
+      //         subscriber.next(value);
+      //       }
+      //     },
+      //     error(error) {
+      //       subscriber.error(error);
+      //     },
+      //     complete() {
+      //       subscriber.complete();
+      //     }
+      //   })
+      // });
+    }
   }
 
   /**
