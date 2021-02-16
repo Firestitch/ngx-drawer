@@ -1,0 +1,4 @@
+export const MAIN_DRAWER_DEFAULT_WIDTH = 500;
+export const SIDE_DRAWER_DEFAULT_WIDTH = 200;
+export const SIDE_RESIZE_BAR_WIDTH = 46;
+export const MAIN_RESIZE_ACTION_BAR_WIDTH = 45;

@@ -12,6 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { DrawerSizeController } from '../classes/drawer-size-controller';
 import { DrawerRef } from '../classes/drawer-ref';
+import { MAIN_RESIZE_ACTION_BAR_WIDTH } from '../consts/sizes.cont';
 
 
 @Directive({
@@ -72,7 +73,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
     if (minWidth && minWidth >= 0) {
       if (minWidth > this.sizeController.screenWidth) {
-        return this.sizeController.screenWidth;
+        return this.sizeController.screenWidth - MAIN_RESIZE_ACTION_BAR_WIDTH;
       } else {
         return minWidth;
       }

@@ -8,11 +8,11 @@ import { FsDrawerResizerDirective } from '../directives/drawer-resizer.directive
 import { IDrawerWidthDefinition } from '../interfaces/drawer-config.interface';
 import { FsDrawerPersistanceController } from './persistance-controller';
 import { DrawerStoreService } from '../services/drawer-store.service';
-
-const MAIN_DRAWER_DEFAULT_WIDTH = 500;
-const SIDE_DRAWER_DEFAULT_WIDTH = 200;
-const SIDE_RESIZE_BAR_WIDTH = 46;
-const MAIN_RESIZE_ACTION_BAR_WIDTH = 45;
+import {
+  MAIN_DRAWER_DEFAULT_WIDTH,
+  MAIN_RESIZE_ACTION_BAR_WIDTH,
+  SIDE_DRAWER_DEFAULT_WIDTH, SIDE_RESIZE_BAR_WIDTH
+} from '../consts/sizes.cont';
 
 
 @Injectable()
@@ -158,7 +158,8 @@ export class DrawerSizeController implements OnDestroy {
    * @param inFrontDrawer
    */
   public pushMainWidth(inFrontDrawer: DrawerRef<any>) {
-    const inFrontDrawerTotalWidth = inFrontDrawer.resizeController.mainElRef.width + MAIN_RESIZE_ACTION_BAR_WIDTH;
+    const inFrontDrawerTotalWidth = inFrontDrawer.resizeController.mainElRef.width
+      + MAIN_RESIZE_ACTION_BAR_WIDTH;
 
     if (this.mainElRef.width <= inFrontDrawerTotalWidth) {
       this.updateMainWidth(inFrontDrawerTotalWidth);
