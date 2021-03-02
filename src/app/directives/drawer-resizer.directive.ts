@@ -128,6 +128,15 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   }
 
   public updateWidth(width) {
+    const minWidth = this.sizeController.getMinWidth(this.type);
+    const maxWidth = this.sizeController.getMaxWidth(this.type);
+
+    width = Math.max(minWidth, Math.min(width, maxWidth));
+
+    if (width === this.width) {
+      return;
+    }
+
     this._width$.next(width);
 
     requestAnimationFrame(() => {
@@ -162,7 +171,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   private _dragStart(event: MouseEvent) {
 
     this._x = this._getClientX(event);
-    this._width$.next(this._getElementWidth(this.fsDrawerResizer));
+    this.updateWidth(this._getElementWidth(this.fsDrawerResizer))
 
     this.setMinMaxStyles();
 
@@ -183,7 +192,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     const predictedWidth = this._calcWidth(this.direction, clientX);
 
     this._updatePosition(clientX, predictedWidth);
-    this._emitResizeEvent();
+    // this._emitResizeEvent();
   }
 
   /**
@@ -234,13 +243,13 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     return this.width + (this._x - clientX) * directionSign;
   }
 
-  /**
-   * Resize event for Window
-   */
-  private _emitResizeEvent() {
-    const resizeEvent = window.document.createEvent('UIEvents');
-    resizeEvent.initEvent('resize', true, false);
-
-    window.dispatchEvent(resizeEvent);
-  }
+  // /**
+  //  * Resize event for Window
+  //  */
+  // private _emitResizeEvent() {
+  //   const resizeEvent = window.document.createEvent('UIEvents');
+  //   resizeEvent.initEvent('resize', true, false);
+  //
+  //   window.dispatchEvent(resizeEvent);
+  // }
 }

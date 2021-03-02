@@ -114,21 +114,21 @@ export class DrawerSizeController implements OnDestroy {
 
   public getMinWidth(type: 'main' | 'side'): number {
     if (type === 'main') {
-      return this.mainConfig.min;
+      return this.mainConfig.min ?? 0;
     } else if (type === 'side') {
-      return this.sideConfig.min;
+      return this.sideConfig.min ?? 0;
     } else {
-      return void 0;
+      return 0;
     }
   }
 
   public getMaxWidth(type: 'main' | 'side'): number {
     if (type === 'main') {
-      return this.mainConfig.max;
+      return this.mainConfig.max ?? window.innerWidth;
     } else if (type === 'side') {
-      return this.sideConfig.max;
+      return this.sideConfig.max ?? window.innerWidth;
     } else {
-      return void 0;
+      return window.innerWidth;
     }
   }
 
@@ -286,7 +286,7 @@ export class DrawerSizeController implements OnDestroy {
           if (this._mainElRef) {
             this._persistanceController.saveDataToScope(
               'mainWidth',
-              this._mainElRef.width - sideWidth
+              this._mainElRef.width - sideWidth - SIDE_RESIZE_BAR_WIDTH,
             );
           }
 
