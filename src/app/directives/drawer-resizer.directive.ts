@@ -12,7 +12,7 @@ import { takeUntil } from 'rxjs/operators';
 
 import { DrawerSizeController } from '../classes/drawer-size-controller';
 import { DrawerRef } from '../classes/drawer-ref';
-import { MAIN_RESIZE_ACTION_BAR_WIDTH } from '../consts/sizes.cont';
+import { MAIN_RESIZE_ACTION_BAR_WIDTH, SIDE_RESIZE_BAR_WIDTH } from '../consts/sizes.cont';
 
 
 @Directive({
@@ -72,8 +72,11 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     const minWidth = this.sizeController.getMinWidth(this.type);
 
     if (minWidth && minWidth >= 0) {
-      if (minWidth > this.sizeController.screenWidth) {
-        return this.sizeController.screenWidth - MAIN_RESIZE_ACTION_BAR_WIDTH;
+      const screenWidth = this.sizeController.screenWidth;
+      const barWidth = this.barWidth;
+
+      if (screenWidth - minWidth < barWidth) {
+        return this.sizeController.screenWidth - barWidth;
       } else {
         return minWidth;
       }
@@ -97,6 +100,12 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
         ? this.sizeController.screenWidth
         : maxWidth;
     }
+  }
+
+  public get barWidth(): number {
+    return this.isMainDrawer
+      ? MAIN_RESIZE_ACTION_BAR_WIDTH
+      : SIDE_RESIZE_BAR_WIDTH;
   }
 
   public ngOnInit() {
@@ -128,10 +137,16 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   }
 
   public updateWidth(width) {
-    const minWidth = this.sizeController.getMinWidth(this.type);
-    const maxWidth = this.sizeController.getMaxWidth(this.type);
+    const minConfiguredWidth = this.sizeController.getMinWidth(this.type);
+    const maxConfiguredWidth = this.sizeController.getMaxWidth(this.type);
+    const availableWidth = this.sizeController.screenWidth;
 
-    width = Math.max(minWidth, Math.min(width, maxWidth));
+    // newWidth should not be
+    // greater than maxConfiguredWidth
+    // and not lesser than minConfiguredWidth
+    width = Math.max(minConfiguredWidth, Math.min(width, maxConfiguredWidth));
+    // and sure it shouldn't be greater than screen width
+    width = Math.min(width, availableWidth);
 
     if (width === this.width) {
       return;
