@@ -61,7 +61,7 @@
     "highlight.js": "^9.18.1",
     "lodash-es": "^4.17.15",
     "ncp": "^2.0.0",
-    "ng-packagr": "^9.0.0",
+    "ng-packagr": "^10.1.1",
     "ngx-highlightjs": "^4.1.0-beta",
     "ngx-toastr": "^12.1.0",
     "npm-run-all": "^4.1.5",
