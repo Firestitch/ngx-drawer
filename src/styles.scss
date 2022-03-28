@@ -1,9 +1,9 @@
-@import '~@angular/material/theming';
+@use '~@angular/material' as mat;
 @import './app/styles/variables';
 
 @mixin fs-drawer($theme) {
 
-  $primary: mat-palette($theme);
+  $primary: mat.define-palette($theme);
 
   [hidden] {
     display: none !important;
@@ -108,7 +108,7 @@
       }
 
       button.active .material-icons {
-        color: mat-color($primary);
+        color: mat.get-color-from-palette($primary);
       }
 
       &:hover {

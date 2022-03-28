@@ -45,10 +45,6 @@ export class DrawerData {
         return Object.keys(target._data);
       },
 
-      enumerate(target) {
-        return Object.keys(target._data);
-      },
-
       getOwnPropertyDescriptor(target, property) {
         return Object.getOwnPropertyDescriptor(target._data, property);
       }

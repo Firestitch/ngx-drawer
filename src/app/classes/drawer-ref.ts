@@ -6,7 +6,7 @@ import { BehaviorSubject, Observable, Subject, Subscriber, zip, pipe } from 'rxj
 import { filter, take, takeUntil, tap, switchMap, map } from 'rxjs/operators';
 
 import { DrawerData } from './drawer-data';
-import { FsDrawerComponent } from '../components/drawer/drawer.component';
+import type { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerConfig } from '../models/drawer-config.model';
 import { DrawerMenuRef } from '../classes/drawer-menu-ref';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
