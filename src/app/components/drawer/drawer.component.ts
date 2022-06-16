@@ -1,5 +1,6 @@
 import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ComponentRef,
   ElementRef,
@@ -21,12 +22,13 @@ import {
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { getNormalizedPath } from '@firestitch/common';
+
 import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerConfig } from '../../models/drawer-config.model';
 import { FsDrawerMenuService } from '../../services/drawer-menu.service';
 import { DrawerSizeController } from '../../classes/drawer-size-controller';
 import { FsDrawerPersistanceController } from '../../classes/persistance-controller';
-import { getNormalizedPath } from '@firestitch/common';
 
 
 @Component({
@@ -48,10 +50,6 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   public config: DrawerConfig;
   public isOpen = false;
   public isOpenSide = false;
-
-  public drawerRef: DrawerRef<any>;
-
-  public initialized = false;
 
   @ViewChild(CdkPortalOutlet, { static: true })
   private _portalOutlet: CdkPortalOutlet;
@@ -79,7 +77,11 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     this._drawerRef.resizeController = this._resizeController;
   }
 
-  public get sideOpen() {
+  public get drawerRef(): DrawerRef<unknown> {
+    return this._drawerRef;
+  }
+
+  public get sideOpen(): boolean {
     return this._sideOpen;
   }
 
@@ -92,8 +94,13 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
   public ngOnInit() {
     this._listenDataChanges();
+    this._listenSideToggle();
 
-    this.config = this.drawerRef.drawerConfig;
+    // Need to be like a parent for children resize
+    this._drawerRef.drawerContainer = this._drawerContainer;
+    this._drawerRef.drawerActionsContainer = this._drawerActionsContainer;
+
+    this.config = this._drawerRef.drawerConfig;
     if (this.config.persist) {
       const namespace = getNormalizedPath(this._location);
       this._persistanceController.setConfig(this.config.persist, namespace);
@@ -123,27 +130,9 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     this.isOpenSide = false;
   }
 
-  public setDrawerRef(value: DrawerRef<any>) {
-    this.drawerRef = value;
-
-    // Need to be like a parent for children resize
-    this.drawerRef.drawerContainer = this._drawerContainer;
-    this.drawerRef.drawerActionsContainer = this._drawerActionsContainer;
-
-    this.drawerRef.sideToggle$
-      .pipe(
-        takeUntil(this._destroy$),
-      )
-      .subscribe((opened) => {
-        this.sideOpen = opened;
-      });
-
-    this.initialized = true;
-  }
-
   /**
-   * Attach a ComponentPortal as content to this dialog container.
-   * @param portal Portal to be attached as the dialog content.
+   * Attach a ComponentPortal as content to this drawer container.
+   * @param portal Portal to be attached as the drawer content.
    */
   public attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
     if (this._portalOutlet.hasAttached()) {
@@ -154,8 +143,8 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   }
 
   /**
-   * Attach a TemplatePortal as content to this dialog container.
-   * @param portal Portal to be attached as the dialog content.
+   * Attach a TemplatePortal as content to this drawer container.
+   * @param portal Portal to be attached as the drawer content.
    */
   public attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
     if (this._portalOutlet.hasAttached()) {
@@ -165,13 +154,23 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     return this._portalOutlet.attachTemplatePortal(portal);
   }
 
-  private _listenDataChanges() {
+  private _listenDataChanges(): void {
     this._drawerRef.dataChanged$
       .pipe(
         takeUntil(this._destroy$)
       )
       .subscribe(() => {
         this._cdRef.detectChanges();
+      });
+  }
+
+  private _listenSideToggle(): void {
+    this._drawerRef.sideToggle$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe((opened) => {
+        this.sideOpen = opened;
       });
   }
 }

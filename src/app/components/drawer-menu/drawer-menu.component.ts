@@ -39,8 +39,8 @@ export class FsDrawerMenuComponent extends BasePortalOutlet {
   }
 
   /**
-   * Attach a ComponentPortal as content to this dialog container.
-   * @param portal Portal to be attached as the dialog content.
+   * Attach a ComponentPortal as content to this drawer container.
+   * @param portal Portal to be attached as the drawer content.
    */
   public attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
 
@@ -52,8 +52,8 @@ export class FsDrawerMenuComponent extends BasePortalOutlet {
   }
 
   /**
-   * Attach a TemplatePortal as content to this dialog container.
-   * @param portal Portal to be attached as the dialog content.
+   * Attach a TemplatePortal as content to this drawer container.
+   * @param portal Portal to be attached as the drawer content.
    */
   public attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
 

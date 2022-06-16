@@ -77,14 +77,14 @@ export class DrawerMenuRef<TCmp, R = any> {
   }
 
   /**
-   * Gets an observable that is notified when the dialog is finished closing.
+   * Gets an observable that is notified when the drawer is finished closing.
    */
   public afterClosed(): Observable<R | undefined> {
     return this._afterClosed$.pipe(takeUntil(this._destroy$));
   }
 
   /**
-   * Gets an observable that is notified when the dialog is finished opening.
+   * Gets an observable that is notified when the drawer is finished opening.
    */
   public closeStart(): Observable<Subscriber<void>> {
     return this._closeStart$.pipe(takeUntil(this._destroy$));
@@ -92,7 +92,7 @@ export class DrawerMenuRef<TCmp, R = any> {
 
   /**
    * Close the menu.
-   * @param result Optional result to return to the dialog opener.
+   * @param result Optional result to return to the drawer opener.
    */
   public close(result?: R): void {
     new Observable<void>(observer => {

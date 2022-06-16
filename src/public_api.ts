@@ -23,5 +23,7 @@ export { DrawerData } from './app/classes/drawer-data';
 export { IDrawerConfig } from './app/interfaces/drawer-config.interface';
 export { DrawerDataProxy } from './app/interfaces/drawer-data.interface';
 export { IFsDrawerActionConfig } from './app/interfaces/action.iterface';
+export { IDrawerComponent } from './app/interfaces/drawer-component.interface';
 
 export { FsDrawerAction } from './app/helpers/action-type.enum';
+export { fsDrawerRoute } from './app/helpers/drawer-route';

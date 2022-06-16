@@ -1,10 +1,12 @@
 import { Inject, Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
+import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 
-import { Subject, merge } from 'rxjs';
+import { Subject, merge, Observable } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
+
 import { merge as _merge } from 'lodash-es';
+
 import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { DrawerRef } from '../classes/drawer-ref';
 import { DrawerData } from '../classes/drawer-data';
@@ -29,12 +31,16 @@ export class FsDrawerService implements OnDestroy {
     private _drawerStore: DrawerStoreService,
   ) {}
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
     this._destroy$.next();
     this._destroy$.complete();
   }
 
-  public open<TData = any>(component: ComponentType<any>, config?: IDrawerConfig<TData>) {
+  public open<TData = any>(
+    component: ComponentType<any>,
+    config?: IDrawerConfig<TData>,
+    parentInjector?: Injector
+  ): DrawerRef<TData> {
     const overlayRef = this._createOverlay();
 
     const dataFactory = DrawerData.createWithProxy(config.data);
@@ -42,20 +48,27 @@ export class FsDrawerService implements OnDestroy {
     delete config.data;
     config = _merge({}, this._defaultConfig || {}, config);
 
-    const drawerRef = new DrawerRef(overlayRef, dataFactory, config);
+    const drawerRef = new DrawerRef<TData>(overlayRef, dataFactory, config);
 
-    const containerRef = this._attachDrawerContainer(overlayRef, drawerRef, dataFactory);
-    const componentRef = this._attachComponent(component, containerRef, drawerRef, dataFactory);
-
+    const containerRef = this._attachDrawerContainer(
+      overlayRef,
+      drawerRef,
+      dataFactory,
+      parentInjector,
+    );
     drawerRef.containerRef = containerRef;
-    containerRef.setDrawerRef(drawerRef);
-
-    drawerRef.componentRef = componentRef;
+    drawerRef.componentRef = this._attachComponent(
+      component,
+      containerRef,
+      drawerRef,
+      dataFactory,
+      parentInjector,
+    );
 
     drawerRef.events();
     drawerRef.open();
 
-    this._storeDrawerRef(drawerRef);
+    this._storeDrawerRef(component, drawerRef);
 
     merge(
       drawerRef.afterOpened$,
@@ -74,13 +87,17 @@ export class FsDrawerService implements OnDestroy {
     return drawerRef;
   }
 
-  public closeAll() {
+  public closeAll(): void {
     this._drawerStore.drawerRefs
       .forEach((ref) => ref.close());
 
     if (this._parentDrawerService) {
       this._parentDrawerService.closeAll();
     }
+  }
+
+  public drawerRef$<T = any>(component: ComponentType<unknown>): Observable<DrawerRef<T>> {
+    return this._drawerStore.dialogRef$(component);
   }
 
   private _applyBackdrop() {
@@ -106,16 +123,16 @@ export class FsDrawerService implements OnDestroy {
     }
   }
 
-  private _storeDrawerRef(ref) {
-    this._drawerStore.addRef(ref);
+  private _storeDrawerRef(component: ComponentType<unknown>, drawerRef): void {
+    this._drawerStore.addRef(component, drawerRef);
 
-    ref.destroy$
+    drawerRef.destroy$
       .pipe(
         take(1),
         takeUntil(this._destroy$),
       )
       .subscribe(() => {
-        this._drawerStore.deleteRef(ref);
+        this._drawerStore.deleteRef(component, drawerRef);
       });
   }
 
@@ -134,9 +151,10 @@ export class FsDrawerService implements OnDestroy {
   private _attachDrawerContainer<T, R>(
     overlayRef: OverlayRef,
     drawerRef: DrawerRef<T, R>,
-    dataFactory: DrawerData
+    dataFactory: DrawerData,
+    parentInjector?: Injector,
   ) {
-    const injector = this._createInjector(drawerRef, dataFactory);
+    const injector = this._createInjector(drawerRef, dataFactory, parentInjector);
     const containerPortal = new ComponentPortal(FsDrawerComponent, undefined, injector);
     const containerRef = overlayRef.attach<FsDrawerComponent>(containerPortal);
 
@@ -148,9 +166,10 @@ export class FsDrawerService implements OnDestroy {
     drawerContainer: FsDrawerComponent,
     drawerRef: DrawerRef<T, R>,
     dataFactory: DrawerData,
+    parentInjector?: Injector,
   ) {
 
-    const injector = this._createInjector(drawerRef, dataFactory);
+    const injector = this._createInjector(drawerRef, dataFactory, parentInjector);
 
     return drawerContainer.attachComponentPortal<T>(
       new ComponentPortal<T>(componentRef, undefined, injector)
@@ -158,14 +177,19 @@ export class FsDrawerService implements OnDestroy {
   }
 
 
-  private _createInjector(componentRef, dataFactory) {
-    const injectionTokens = new WeakMap<any, any>([
-      [DrawerRef, componentRef],
-      [DRAWER_DATA, dataFactory]
-    ]);
-
-    return new PortalInjector(this._injector, injectionTokens);
+  private _createInjector(componentRef, dataFactory, parentInjector?: Injector) {
+    return Injector.create({
+      providers: [
+        {
+          provide: DrawerRef,
+          useValue: componentRef,
+        },
+        {
+          provide: DRAWER_DATA,
+          useValue: dataFactory,
+        },
+      ],
+      parent: parentInjector || this._injector,
+    })
   }
-
-
 }

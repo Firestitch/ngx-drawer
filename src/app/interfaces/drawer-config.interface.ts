@@ -1,6 +1,7 @@
-import { IFsDrawerActionConfig } from './action.iterface';
-import { DrawerData } from '../classes/drawer-data';
 import { FsPersistance } from '@firestitch/store';
+
+import { IFsDrawerActionConfig } from './action.iterface';
+
 
 export interface IDrawerConfig<TData = any> {
   data?: TData;

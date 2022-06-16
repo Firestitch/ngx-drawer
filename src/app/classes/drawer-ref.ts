@@ -2,8 +2,8 @@ import { ComponentRef, ElementRef } from '@angular/core';
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
-import { BehaviorSubject, Observable, Subject, Subscriber, zip, pipe } from 'rxjs';
-import { filter, take, takeUntil, tap, switchMap, map } from 'rxjs/operators';
+import { BehaviorSubject, Observable, Subject, Subscriber, zip } from 'rxjs';
+import { filter, take, takeUntil, switchMap, map } from 'rxjs/operators';
 
 import { DrawerData } from './drawer-data';
 import type { FsDrawerComponent } from '../components/drawer/drawer.component';
@@ -11,11 +11,13 @@ import { DrawerConfig } from '../models/drawer-config.model';
 import { DrawerMenuRef } from '../classes/drawer-menu-ref';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DrawerSizeController } from './drawer-size-controller';
+import { IDrawerComponent } from '../interfaces/drawer-component.interface';
+import { IFsDrawerActionConfig } from '../interfaces/action.iterface';
 
 
 export class DrawerRef<T, R = any> {
 
-  public readonly drawerConfig: DrawerConfig;
+  public drawerConfig: DrawerConfig;
 
   /** Subject for notifying the user that the drawer has finished opening. */
   private readonly _afterOpened$ = new Subject<void>();
@@ -72,7 +74,7 @@ export class DrawerRef<T, R = any> {
     this._initActiveAction();
   }
 
-  public get overlayRef() {
+  public get overlayRef(): OverlayRef {
     return this._overlayRef;
   }
 
@@ -83,7 +85,7 @@ export class DrawerRef<T, R = any> {
     return { ...this._dataFactory.getValue() } // Like immutable.... TODO switch to Immer
   }
 
-  public get destroy$() {
+  public get destroy$(): Observable<void> {
     return this._destroy$.asObservable();
   }
 
@@ -101,6 +103,12 @@ export class DrawerRef<T, R = any> {
    */
   public set componentRef(value: ComponentRef<T>) {
     this._drawerComponentRef = value;
+
+    this._readComponentRefConfig();
+  }
+
+  public get componentRef() {
+    return this._drawerComponentRef;
   }
 
   public set drawerContainer(value: ElementRef) {
@@ -157,34 +165,34 @@ export class DrawerRef<T, R = any> {
   }
 
   /**
-   * Gets an observable that is notified when the dialog is finished closing.
+   * Gets an observable that is notified when the drawer is finished closing.
    */
   public get afterClosed$(): Observable<R | undefined> {
     return this._afterClosed$.pipe(takeUntil(this._destroy$));
   }
 
   /**
-   * Gets an observable that is notified when the dialog is finished opening.
+   * Gets an observable that is notified when the drawer is finished opening.
    */
   public get afterOpened$(): Observable<void> {
     return this._afterOpened$.pipe(takeUntil(this._destroy$));
   }
 
   /**
-   * Gets an observable that is notified when the dialog open starts.
+   * Gets an observable that is notified when the drawer open starts.
    */
   public get openStart$(): Observable<Subscriber<void>> {
     return this._openStart$.pipe(takeUntil(this._destroy$));
   }
 
   /**
-   * Gets an observable that is notified when the dialog is finished opening.
+   * Gets an observable that is notified when the drawer is finished opening.
    */
   public get closeStart$(): Observable<Subscriber<void>> {
     return this._closeStart$.pipe(takeUntil(this._destroy$));
   }
 
-  public closeWhen(): any {
+  public closeWhen(): (source: Observable<T>) => Observable<unknown> {
     return (source: Observable<T>) => {
       this._closeStart$
         .pipe(
@@ -201,39 +209,7 @@ export class DrawerRef<T, R = any> {
           observer.complete();
         });
 
-
-
-        //   switchMap(() => {
-        //     debugger;
-        //     return source;
-        //   })
-        // )
-        // .subscribe((observer) => {
-        // source.pipe(
-        //   tap(() => {
-        //     debugger;
-        //     observer.next();
-        //     observer.complete();
-        //   }),
-        // );
-
-
-    return source;
-      // return new Observable(subscriber => {
-      //   source.subscribe({
-      //     next(value) {
-      //       if (value !== undefined && value !== null) {
-      //         subscriber.next(value);
-      //       }
-      //     },
-      //     error(error) {
-      //       subscriber.error(error);
-      //     },
-      //     complete() {
-      //       subscriber.complete();
-      //     }
-      //   })
-      // });
+      return source;
     }
   }
 
@@ -303,7 +279,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Close the drawer.
-   * @param result Optional result to return to the dialog opener.
+   * @param result Optional result to return to the drawer opener.
    */
   public close(result?: R): void {
     new Observable<void>(observer => {
@@ -394,6 +370,13 @@ export class DrawerRef<T, R = any> {
   }
 
   /**
+   * Set new config for actions
+   */
+  public setActions(actions: IFsDrawerActionConfig<unknown>[]) {
+    this.drawerConfig.setActions(actions);
+  }
+
+  /**
    * Store opened menu reference and subscribe for auto remove
    * @param name
    * @param ref
@@ -479,18 +462,31 @@ export class DrawerRef<T, R = any> {
 
   private _initActiveAction() {
     if (this.drawerConfig.activeAction) {
-      const action = this.drawerConfig.actions
-        .find((a) => a.name === this.drawerConfig.activeAction);
+      this.drawerConfig.actions$
+        .pipe(
+          takeUntil(this._destroy$),
+        )
+        .subscribe((actions) => {
+          const action = actions
+            .find((a) => a.name === this.drawerConfig.activeAction);
 
-      if (action) {
-        this._activeAction.next(this.drawerConfig.activeAction);
-      } else {
-        console.warn(
-          `Drawer active action - "${this.drawerConfig.activeAction}" does not exists
+          if (action) {
+            this._activeAction.next(this.drawerConfig.activeAction);
+          } else {
+            console.warn(
+              `Drawer active action - "${this.drawerConfig.activeAction}" does not exists
         `);
-      }
+          }
+        })
     }
   }
 
+  private _readComponentRefConfig(): void {
+    const inComponentConfig = (this._drawerComponentRef.instance as unknown as IDrawerComponent).drawerConfig as IDrawerConfig;
+
+    if (inComponentConfig) {
+      this.drawerConfig = new DrawerConfig(inComponentConfig);
+    }
+  }
 }
 

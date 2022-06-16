@@ -1,4 +1,9 @@
 import { Injectable } from '@angular/core';
+import { ComponentType } from '@angular/cdk/portal';
+
+import { BehaviorSubject, Observable } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
+
 import { DrawerRef } from '../classes/drawer-ref';
 
 
@@ -8,6 +13,8 @@ import { DrawerRef } from '../classes/drawer-ref';
 export class DrawerStoreService {
 
   private _openedDrawers: DrawerRef<any>[] = [];
+  private _openedDrawersMap = new WeakMap<ComponentType<unknown>, DrawerRef<unknown>>();
+  private _drawerOpened$ = new BehaviorSubject<void>(null);
 
   public get drawerRefs(): DrawerRef<any>[] {
     return [...this._openedDrawers];
@@ -21,17 +28,31 @@ export class DrawerStoreService {
     return this._openedDrawers.indexOf(value) + 1;
   }
 
-  public addRef(value: DrawerRef<any>): void {
+  public addRef(componentRef: ComponentType<unknown>, value: DrawerRef<any>): void {
     if (this._openedDrawers.indexOf(value) === -1) {
       this._openedDrawers.push(value);
+      this._openedDrawersMap.set(componentRef, value);
+      this._drawerOpened$.next();
 
       this._pushDrawersCascade();
     }
   }
 
-  public deleteRef(value: DrawerRef<any>): void {
+  public deleteRef(component: ComponentType<unknown>, value: DrawerRef<any>): void {
     this._openedDrawers = this._openedDrawers
       .filter((ref) => ref !== value);
+
+    this._openedDrawersMap.delete(component);
+  }
+
+  public dialogRef$(component: ComponentType<unknown>): Observable<DrawerRef<any>> {
+    return this._drawerOpened$
+      .pipe(
+        filter(() => {
+          return this._openedDrawersMap.has(component);
+        }),
+        map(() => this._openedDrawersMap.get(component)),
+      );
   }
 
   /**

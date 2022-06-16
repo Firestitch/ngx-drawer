@@ -1,0 +1,65 @@
+.nav-bottom {
+  background: #d7d7d7;
+  padding: 10px;
+}
+
+.nav-bottom a {
+  color: #777;
+}
+
+.page-stack {
+  width: 300px;
+
+  .route-data {
+    flex: 0 0 100%;
+    margin: 0 10px;
+
+    font-size: 12px;
+    color: #000;
+    opacity: 0.4;
+  }
+}
+
+::ng-deep {
+  mat-list-item {
+    .mat-list-item-content {
+      flex-wrap: wrap;
+    }
+  }
+}
+
+.container {
+  margin: 20px;
+}
+
+::ng-deep .full-width {
+  display: block !important;
+}
+
+.sidenav {
+  padding: 20px 0;
+  button {
+    margin: 0 10px 10px 10px;
+  }
+}
+
+.index {
+  background: #2196F3;
+  color: #fff;
+  border-radius: 50%;
+  display: inline-block;
+  min-width: 18px;
+  height: 18px;
+  text-align: center;
+  font-size: 13px;
+  line-height: 19px;
+}
+
+.last-url {
+  font-size: 12px;
+}
+
+.counts {
+  font-size: 12px;
+  color: #868686;
+}

@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { RouterModule } from '@angular/router';
 import { PortalModule } from '@angular/cdk/portal';
 import { OverlayModule } from '@angular/cdk/overlay';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,10 +15,9 @@ import { FsDrawerComponent } from './components/drawer/drawer.component';
 import { FsDrawerSideComponent } from './components/drawer-side/drawer-side.component';
 import { FsDrawerMenuComponent } from './components/drawer-menu/drawer-menu.component';
 import { FsDrawerActionItemComponent } from './components/drawer-actions/drawer-action-item/drawer-action-item.component';
-
+import { FsDrawerRouteComponent } from './components/route/route.component';
 import { FsDrawerContentComponent } from './components/drawer-content/drawer-content.component';
 import { FsDrawerActionDirective } from './directives/drawer-action.directive';
-
 import { FsDrawerResizerDirective } from './directives/drawer-resizer.directive';
 
 
@@ -31,6 +31,7 @@ import { FsDrawerResizerDirective } from './directives/drawer-resizer.directive'
     PortalModule,
     FsMenuModule,
     MatMenuModule,
+    RouterModule,
   ],
   exports: [
     FsDrawerComponent,
@@ -48,6 +49,7 @@ import { FsDrawerResizerDirective } from './directives/drawer-resizer.directive'
     FsDrawerActionDirective,
     FsDrawerResizerDirective,
     FsDrawerMenuComponent,
+    FsDrawerRouteComponent,
   ],
 })
 export class FsDrawerModule {}

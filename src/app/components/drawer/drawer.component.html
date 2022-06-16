@@ -1,7 +1,5 @@
 <div class="mat-elevation-z2 drawer" #drawer
-     hidden
-     [ngClass]="config.position"
-     [hidden]="!initialized">
+     [ngClass]="config.position">
   <ng-container>
     <fs-drawer-actions class="drawer-actions"
                        #drawerActionsContainer
@@ -10,7 +8,7 @@
                        [resizable]="drawerRef.drawerConfig.resizable"
                        [sizeController]="drawerRef.resizeController"
                        [direction]="config.position"
-                       [actions]="config.actions"
+                       [actions]="config.actions$ | async"
                        [activeAction]="drawerRef.activeAction$ | async">
     </fs-drawer-actions>
     <div class="drawer-container" #drawerContainer>

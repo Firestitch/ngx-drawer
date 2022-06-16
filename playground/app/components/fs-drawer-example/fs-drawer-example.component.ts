@@ -187,7 +187,7 @@ export class FsDrawerExampleComponent implements OnInit {
   }
 
   public ngOnInit() {
-    this.openDrawer();
+    // this.openDrawer();
   }
 
   public notificationsIcon() {

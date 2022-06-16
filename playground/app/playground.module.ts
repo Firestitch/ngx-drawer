@@ -2,6 +2,7 @@ import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { FlexModule } from '@angular/flex-layout';
 
 import { FsExampleModule } from '@firestitch/example';
 import { DRAWER_DEFAULT_CONFIG, FsDrawerModule } from 'fs-package';
@@ -22,11 +23,8 @@ import {
 } from './components';
 import { CustomMenuComponent } from './components/fs-drawer-example/custom-menu';
 import { FsStoreModule } from '@firestitch/store';
+import { NavigationComponent } from './components/navigation';
 
-
-const routes: Routes = [
-  { path: '', component: ExamplesComponent },
-];
 
 @NgModule({
   bootstrap: [ AppComponent ],
@@ -35,13 +33,19 @@ const routes: Routes = [
     BrowserAnimationsModule,
     AppMaterialModule,
     FsExampleModule.forRoot(),
-    RouterModule.forRoot(routes, { relativeLinkResolution: 'legacy' }),
+    RouterModule.forRoot([
+      {
+        path: '',
+        loadChildren: () => import('./invoices-example/invoices.module').then(m => m.InvoicesModule),
+      },
+    ]),
     FsDrawerModule,
     ToastrModule.forRoot({ preventDuplicates: true }),
     FsMessageModule.forRoot(),
     FsStoreModule.forRoot(),
     FsCheckboxGroupModule,
     FsLabelModule,
+    FlexModule,
   ],
   entryComponents: [
     TaskDrawerComponent,
@@ -54,6 +58,7 @@ const routes: Routes = [
     FsDrawerExampleComponent,
     TaskDrawerComponent,
     CustomMenuComponent,
+    NavigationComponent,
   ],
   providers: [
     {

@@ -1,0 +1,25 @@
+<h1>Invoices</h1>
+
+<fs-list [config]="config">
+  <fs-list-column title="#">
+    <ng-template fs-list-cell let-data>
+      {{ data.id }}
+    </ng-template>
+  </fs-list-column>
+
+  <fs-list-column title="Name">
+    <ng-template fs-list-cell let-data>
+      <a [routerLink]="['invoices', data.id]">
+        {{ data.name }}
+      </a>
+    </ng-template>
+  </fs-list-column>
+
+  <fs-list-column title="Amount">
+    <ng-template fs-list-cell let-data>
+      {{ data.amount | currency }}
+    </ng-template>
+  </fs-list-column>
+</fs-list>
+
+<router-outlet></router-outlet>

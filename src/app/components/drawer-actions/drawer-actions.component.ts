@@ -21,8 +21,12 @@ import { FsDrawerMenuService } from '../../services/drawer-menu.service';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FsDrawerActionsComponent implements OnInit, OnDestroy {
-  @Input() public actions: Action[];
-  @Input() public activeAction: string;
+
+  @Input()
+  public actions: Action[];
+
+  @Input()
+  public activeAction: string;
 
   private _destroy$ = new Subject<void>();
 
@@ -32,7 +36,7 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
     private _cdRef: ChangeDetectorRef,
   ) {}
 
-  public ngOnInit() {
+  public ngOnInit(): void {
   }
 
   public ngOnDestroy(): void {
