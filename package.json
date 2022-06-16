@@ -1,7 +1,7 @@
 {
   "name": "@firestitch/drawer",
   "description": "@firestitch/drawer",
-  "version": "12.0.0",
+  "version": "12.1.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-drawer"
@@ -51,6 +51,7 @@
     "@firestitch/chip": "^12.0.0",
     "@firestitch/clear": "^12.0.0",
     "@firestitch/common": "^12.0.0",
+    "@firestitch/core": "^12.0.2",
     "@firestitch/date": "^12.0.1",
     "@firestitch/datepicker": "^12.4.0",
     "@firestitch/dialog": "^12.2.0",
@@ -99,10 +100,10 @@
   "peerDependencies": {
     "@firestitch/common": ">=8.0.5",
     "@firestitch/menu": ">=7.0.9",
-    "@firestitch/store": ">=8.1.0"
+    "@firestitch/store": ">=8.1.0",
+    "@firestitch/core": ">=12.0.2"
   },
   "dependencies": {
-    "@firestitch/core": "^12.0.2",
     "tslib": "^2.0.0"
   },
   "ngPackage": {
