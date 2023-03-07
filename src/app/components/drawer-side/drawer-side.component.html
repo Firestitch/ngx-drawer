@@ -6,7 +6,7 @@
       </div>
     </div>
     <div class="resize-side"
-         resizable="true"
+         [resizable]="true"
          direction="left"
          type="side"
          [fsDrawerResizer]="sideContainer"
@@ -20,7 +20,7 @@
   </ng-container>
   <ng-container *ngSwitchCase="'left'">
     <div class="resize-side"
-         resizable="true"
+         [resizable]="true"
          direction="right"
          [fsDrawerResizer]="sideContainer"
     >
