@@ -51,6 +51,7 @@
     "@firestitch/chip": "^12.0.0",
     "@firestitch/clear": "^12.0.0",
     "@firestitch/common": "^12.0.0",
+    "@firestitch/component-tools": "^12.0.8",
     "@firestitch/core": "^12.0.2",
     "@firestitch/date": "^12.0.1",
     "@firestitch/datepicker": "^12.4.0",
@@ -92,17 +93,16 @@
     "rxjs": "^6.4.0",
     "tslint": "~6.1.0",
     "typescript": "4.3.5",
-    "zone.js": "~0.11.4",
-    "@firestitch/component-tools": "^12.0.6"
+    "zone.js": "~0.11.4"
   },
   "engines": {
     "node": ">=6.0.0"
   },
   "peerDependencies": {
     "@firestitch/common": ">=8.0.5",
+    "@firestitch/core": ">=12.0.2",
     "@firestitch/menu": ">=7.0.9",
-    "@firestitch/store": ">=8.1.0",
-    "@firestitch/core": ">=12.0.2"
+    "@firestitch/store": ">=8.1.0"
   },
   "dependencies": {
     "tslib": "^2.0.0"
