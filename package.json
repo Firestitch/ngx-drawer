@@ -81,7 +81,7 @@
     "date-fns-tz": "^1.3.4",
     "fileapi": "^2.2.0",
     "hammerjs": "^2.0.8",
-    "highlight.js": "^9.18.5",
+    "highlight.js": "^10.4.1",
     "imask": "^6.4.2",
     "lodash-es": "^4.17.21",
     "ncp": "^2.0.0",
