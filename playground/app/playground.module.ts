@@ -1,19 +1,18 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { FlexModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { FlexModule } from '@angular/flex-layout';
+import { RouterModule } from '@angular/router';
 
-import { FsExampleModule } from '@firestitch/example';
-import { DRAWER_DEFAULT_CONFIG, FsDrawerModule } from 'fs-package';
 import { FsCheckboxGroupModule } from '@firestitch/checkboxgroup';
-import { FsMessageModule } from '@firestitch/message';
+import { FsExampleModule } from '@firestitch/example';
 import { FsLabelModule } from '@firestitch/label';
-
-import { ToastrModule } from 'ngx-toastr';
+import { FsMessageModule } from '@firestitch/message';
+import { DRAWER_DEFAULT_CONFIG, FsDrawerModule } from 'fs-package';
 
 import { AppMaterialModule } from './material.module';
 
+import { FsStoreModule } from '@firestitch/store';
 import {
   AppComponent,
   ExampleComponent,
@@ -22,12 +21,11 @@ import {
   TaskDrawerComponent,
 } from './components';
 import { CustomMenuComponent } from './components/fs-drawer-example/custom-menu';
-import { FsStoreModule } from '@firestitch/store';
 import { NavigationComponent } from './components/navigation';
 
 
 @NgModule({
-  bootstrap: [ AppComponent ],
+  bootstrap: [AppComponent],
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
@@ -40,7 +38,6 @@ import { NavigationComponent } from './components/navigation';
       },
     ]),
     FsDrawerModule,
-    ToastrModule.forRoot({ preventDuplicates: true }),
     FsMessageModule.forRoot(),
     FsStoreModule.forRoot(),
     FsCheckboxGroupModule,
