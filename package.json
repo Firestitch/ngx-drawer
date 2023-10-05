@@ -27,7 +27,7 @@
     "serve": "cd node_modules/@firestitch/component-tools && npm run cli:serve"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~12.2.16",
+    "@angular-devkit/build-angular": "~16.2.5",
     "@angular-devkit/core": "^12.2.16",
     "@angular/animations": "^12.2.16",
     "@angular/cdk": "^12.2.13",
@@ -51,7 +51,7 @@
     "@firestitch/chip": "^12.0.0",
     "@firestitch/clear": "^12.3.4",
     "@firestitch/common": "^12.6.0",
-    "@firestitch/component-tools": "^12.0.18",
+    "@firestitch/component-tools": "^13.0.0",
     "@firestitch/core": "^12.0.3",
     "@firestitch/date": "^12.4.4",
     "@firestitch/datepicker": "^12.11.6",
