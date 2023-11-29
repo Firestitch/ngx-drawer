@@ -1,3 +1,4 @@
+import { Location } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -10,7 +11,6 @@ import {
   ViewChild,
   ViewEncapsulation,
 } from '@angular/core';
-import { Location } from '@angular/common';
 
 import {
   BasePortalOutlet,
@@ -19,16 +19,17 @@ import {
   TemplatePortal,
 } from '@angular/cdk/portal';
 
+import { getNormalizedPath } from '@firestitch/common';
+
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { getNormalizedPath } from '@firestitch/common';
 
 import { DrawerRef } from '../../classes/drawer-ref';
-import { DrawerConfig } from '../../models/drawer-config.model';
-import { FsDrawerMenuService } from '../../services/drawer-menu.service';
 import { DrawerSizeController } from '../../classes/drawer-size-controller';
 import { FsDrawerPersistanceController } from '../../classes/persistance-controller';
+import { DrawerConfig } from '../../models/drawer-config.model';
+import { FsDrawerMenuService } from '../../services/drawer-menu.service';
 
 
 @Component({
@@ -40,7 +41,7 @@ import { FsDrawerPersistanceController } from '../../classes/persistance-control
     DrawerSizeController,
   ],
   host: {
-    'class': 'fs-drawer-container',
+    class: 'fs-drawer-container',
   },
   encapsulation: ViewEncapsulation.None,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -65,7 +66,6 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
   constructor(
     private _el: ElementRef<HTMLElement>,
-    private _drawerMenu: FsDrawerMenuService,
     private _drawerRef: DrawerRef<any>,
     private _cdRef: ChangeDetectorRef,
     private _resizeController: DrawerSizeController,
@@ -73,7 +73,6 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     private _location: Location,
   ) {
     super();
-
     this._drawerRef.resizeController = this._resizeController;
   }
 
@@ -132,6 +131,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
   /**
    * Attach a ComponentPortal as content to this drawer container.
+   *
    * @param portal Portal to be attached as the drawer content.
    */
   public attachComponentPortal<T>(portal: ComponentPortal<T>): ComponentRef<T> {
@@ -144,9 +144,10 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
 
   /**
    * Attach a TemplatePortal as content to this drawer container.
+   *
    * @param portal Portal to be attached as the drawer content.
    */
-  public attachTemplatePortal<C>(portal: TemplatePortal<C>): EmbeddedViewRef<C> {
+  public attachTemplatePortal<TC>(portal: TemplatePortal<TC>): EmbeddedViewRef<TC> {
     if (this._portalOutlet.hasAttached()) {
       throw Error('Drawer template already attached');
     }
@@ -157,7 +158,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   private _listenDataChanges(): void {
     this._drawerRef.dataChanged$
       .pipe(
-        takeUntil(this._destroy$)
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this._cdRef.detectChanges();

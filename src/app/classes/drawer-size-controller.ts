@@ -4,15 +4,16 @@ import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../classes/drawer-ref';
-import { FsDrawerResizerDirective } from '../directives/drawer-resizer.directive';
-import { IDrawerWidthDefinition } from '../interfaces/drawer-config.interface';
-import { FsDrawerPersistanceController } from './persistance-controller';
-import { DrawerStoreService } from '../services/drawer-store.service';
 import {
   MAIN_DRAWER_DEFAULT_WIDTH,
   MAIN_RESIZE_ACTION_BAR_WIDTH,
-  SIDE_DRAWER_DEFAULT_WIDTH, SIDE_RESIZE_BAR_WIDTH
+  SIDE_DRAWER_DEFAULT_WIDTH, SIDE_RESIZE_BAR_WIDTH,
 } from '../consts/sizes.cont';
+import { FsDrawerResizerDirective } from '../directives/drawer-resizer.directive';
+import { IDrawerWidthDefinition } from '../interfaces/drawer-config.interface';
+import { DrawerStoreService } from '../services/drawer-store.service';
+
+import { FsDrawerPersistanceController } from './persistance-controller';
 
 
 @Injectable()
@@ -36,7 +37,7 @@ export class DrawerSizeController implements OnDestroy {
     private _ngZone: NgZone,
     private _persistanceController: FsDrawerPersistanceController,
     private _drawerStore: DrawerStoreService,
-  ) {}
+  ) { }
 
   public get mainElRef() {
     return this._mainElRef;
@@ -58,13 +59,13 @@ export class DrawerSizeController implements OnDestroy {
     return this._screenWidth;
   }
 
-  private get persistedMainWidth(): number {
+  public get persistedMainWidth(): number {
     return this._persistanceController.enabled
       ? this._persistanceController.getDataFromScope('mainWidth')
       : null;
   }
 
-  private get persistedSideWidth(): number {
+  public get persistedSideWidth(): number {
     return this._persistanceController.enabled
       ? this._persistanceController.getDataFromScope('sideWidth')
       : null;
@@ -90,7 +91,7 @@ export class DrawerSizeController implements OnDestroy {
       this._registerSideRef(el);
       this._listenWidthChanges(el);
     } else {
-      throw Error('Unrecognized resize element type')
+      throw Error('Unrecognized resize element type');
     }
   }
 
@@ -107,9 +108,10 @@ export class DrawerSizeController implements OnDestroy {
       return this.mainConfig.initial;
     } else if (type === 'side') {
       return this.sideConfig.initial;
-    } else {
-      return void 0;
     }
+
+    return undefined;
+
   }
 
   public getMinWidth(type: 'main' | 'side'): number {
@@ -117,9 +119,10 @@ export class DrawerSizeController implements OnDestroy {
       return this.mainConfig.min ?? 0;
     } else if (type === 'side') {
       return this.sideConfig.min ?? 0;
-    } else {
-      return 0;
     }
+
+    return 0;
+
   }
 
   public getMaxWidth(type: 'main' | 'side'): number {
@@ -127,13 +130,15 @@ export class DrawerSizeController implements OnDestroy {
       return this.mainConfig.max ?? window.innerWidth;
     } else if (type === 'side') {
       return this.sideConfig.max ?? window.innerWidth;
-    } else {
-      return window.innerWidth;
     }
+
+    return window.innerWidth;
+
   }
 
   /**
    * Update width from outside with all calculations to be done
+   *
    * @param width
    */
   public updateMainWidth(width: number) {
@@ -143,6 +148,7 @@ export class DrawerSizeController implements OnDestroy {
 
   /**
    * Update width from outside with all calculations to be done
+   *
    * @param width
    */
   public updateSideWidth(width: number) {
@@ -155,6 +161,7 @@ export class DrawerSizeController implements OnDestroy {
 
   /**
    * Push current drawer to be visible under new one opened
+   *
    * @param inFrontDrawer
    */
   public pushMainWidth(inFrontDrawer: DrawerRef<any>) {
@@ -264,7 +271,7 @@ export class DrawerSizeController implements OnDestroy {
 
           this._mainElRef.updateWidth(mainWidth);
         }
-      })
+      });
   }
 
   private _listenWidthChanges(el: FsDrawerResizerDirective) {
@@ -293,10 +300,10 @@ export class DrawerSizeController implements OnDestroy {
           if (this._sideElRef) {
             this._persistanceController.saveDataToScope(
               'sideWidth',
-              sideWidth
+              sideWidth,
             );
           }
-        }
-      })
+        },
+      });
   }
 }

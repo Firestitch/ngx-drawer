@@ -1,5 +1,4 @@
-export * from './examples';
+export * from './app.component';
 export * from './example';
-export * from './fs-drawer-example'
+export * from './fs-drawer-example';
 
-export { AppComponent } from './app.component';

@@ -1,4 +1,5 @@
-import { Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ViewChild } from '@angular/core';
+
 import { FsListComponent, FsListConfig } from '@firestitch/list';
 
 import { Subject } from 'rxjs';
@@ -12,6 +13,7 @@ import { InvoiceDrawerComponent } from '../invoice-drawer';
 
 @Component({
   templateUrl: './invoices.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class InvoicesComponent implements OnDestroy {
 
@@ -28,7 +30,8 @@ export class InvoicesComponent implements OnDestroy {
   ) {
     this._initConfig();
 
-    this._drawer.drawerRef$(InvoiceDrawerComponent)
+    this._drawer
+      .drawerRef$(InvoiceDrawerComponent)
       .pipe(
         switchMap((drawerRef) => drawerRef.afterClosed$),
         takeUntil(this._destroy$),
@@ -54,10 +57,10 @@ export class InvoicesComponent implements OnDestroy {
           .pipe(
             map((data) => {
               return {
-                data
+                data,
               };
-            })
-          )
+            }),
+          );
       },
     };
   }

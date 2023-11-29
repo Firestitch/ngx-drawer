@@ -1,27 +1,26 @@
 import { NgModule } from '@angular/core';
 import { FlexModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
 import { FsCheckboxGroupModule } from '@firestitch/checkboxgroup';
 import { FsExampleModule } from '@firestitch/example';
 import { FsLabelModule } from '@firestitch/label';
 import { FsMessageModule } from '@firestitch/message';
+import { FsStoreModule } from '@firestitch/store';
+
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { DRAWER_DEFAULT_CONFIG, FsDrawerModule } from 'fs-package';
 
-import { AppMaterialModule } from './material.module';
-
-import { FsStoreModule } from '@firestitch/store';
 import {
   AppComponent,
   ExampleComponent,
-  ExamplesComponent,
   FsDrawerExampleComponent,
   TaskDrawerComponent,
 } from './components';
 import { CustomMenuComponent } from './components/fs-drawer-example/custom-menu';
 import { NavigationComponent } from './components/navigation';
+import { AppMaterialModule } from './material.module';
 
 
 @NgModule({
@@ -34,7 +33,7 @@ import { NavigationComponent } from './components/navigation';
     RouterModule.forRoot([
       {
         path: '',
-        loadChildren: () => import('./invoices-example/invoices.module').then(m => m.InvoicesModule),
+        loadChildren: () => import('./invoices-example/invoices.module').then((m) => m.InvoicesModule),
       },
     ]),
     FsDrawerModule,
@@ -50,7 +49,6 @@ import { NavigationComponent } from './components/navigation';
   ],
   declarations: [
     AppComponent,
-    ExamplesComponent,
     ExampleComponent,
     FsDrawerExampleComponent,
     TaskDrawerComponent,
@@ -67,7 +65,7 @@ import { NavigationComponent } from './components/navigation';
           },
         },
       },
-    }
+    },
   ],
 })
 export class PlaygroundModule {

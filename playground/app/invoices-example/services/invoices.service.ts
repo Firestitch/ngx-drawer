@@ -1,6 +1,6 @@
-import { Observable, of } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { delay, timeout } from 'rxjs/operators';
+
+import { Observable, of } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -46,7 +46,7 @@ export class InvoicesService {
 
   public gets(): Observable<any> {
     return of(this._invoices);
-  };
+  }
 
   public get(id: number): Observable<any> {
     const invoice = this._invoices.find((item) => item.id === id);

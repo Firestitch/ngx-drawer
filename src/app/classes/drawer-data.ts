@@ -22,9 +22,10 @@ export class DrawerData {
           || target[property] instanceof Observable
         ) {
           return target[property];
-        } else {
-          return target._data[property];
         }
+
+        return target._data[property];
+
       },
 
       set(target, property, value) {
@@ -47,11 +48,11 @@ export class DrawerData {
 
       getOwnPropertyDescriptor(target, property) {
         return Object.getOwnPropertyDescriptor(target._data, property);
-      }
+      },
     });
   }
 
-  get dataChange$(): Observable<void> {
+  public get dataChange$(): Observable<void> {
     return this._dataChange.pipe(takeUntil(this._destroy));
   }
 

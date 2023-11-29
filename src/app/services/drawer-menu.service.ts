@@ -1,11 +1,12 @@
-import {ElementRef, Injectable, Injector} from '@angular/core';
+import { ElementRef, Injectable, Injector } from '@angular/core';
+
+import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
-import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 
-import { FsDrawerMenuComponent } from '../components/drawer-menu/drawer-menu.component';
-import { DrawerMenuRef } from '../classes/drawer-menu-ref';
 import { DrawerData } from '../classes/drawer-data';
+import { DrawerMenuRef } from '../classes/drawer-menu-ref';
+import { FsDrawerMenuComponent } from '../components/drawer-menu/drawer-menu.component';
 import { DRAWER_MENU_DATA } from '../services/drawer-menu-data';
 
 
@@ -13,16 +14,16 @@ import { DRAWER_MENU_DATA } from '../services/drawer-menu-data';
 export class FsDrawerMenuService {
 
   constructor(private _overlay: Overlay,
-              private _injector: Injector,
-              private _breakpointObserver: BreakpointObserver) {
+    private _injector: Injector,
+    private _breakpointObserver: BreakpointObserver) {
   }
 
   public create(component: ComponentType<any>, container: Element, config?: any) {
-    const overlayRef = this.createOverlay(container);
+    const overlayRef = this._createOverlay(container);
     const dataFactory = DrawerData.createWithProxy(config.data);
     const menuRef = new DrawerMenuRef(overlayRef, dataFactory);
-    const containerRef = this.attachContainer(overlayRef, menuRef, dataFactory);
-    const componentRef = this.attachComponent(component, containerRef, menuRef, dataFactory);
+    const containerRef = this._attachContainer(overlayRef, menuRef, dataFactory);
+    const componentRef = this._attachComponent(component, containerRef, menuRef, dataFactory);
     menuRef.containerRef = containerRef;
     containerRef.setDrawerMenuRef(menuRef);
 
@@ -31,12 +32,13 @@ export class FsDrawerMenuService {
     return menuRef;
   }
 
-  private createOverlay(container: Element): OverlayRef {
-    const overlayConfig = this.getOverlayConfig(container);
+  private _createOverlay(container: Element): OverlayRef {
+    const overlayConfig = this._getOverlayConfig(container);
+
     return this._overlay.create(overlayConfig);
   }
 
-  private getOverlayConfig(container: Element): OverlayConfig {
+  private _getOverlayConfig(container: Element): OverlayConfig {
     const element = new ElementRef(container); // positionStrategy needs ElementRef;
 
     let strategy = null;
@@ -48,7 +50,7 @@ export class FsDrawerMenuService {
         .centerVertically();
     } else {
       const positions: ConnectedPosition[] = [
-        { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' }
+        { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top' },
       ];
       strategy = this._overlay
         .position()
@@ -58,13 +60,13 @@ export class FsDrawerMenuService {
 
     return new OverlayConfig({
       positionStrategy: strategy,
-      scrollStrategy:  this._overlay.scrollStrategies.reposition(),
+      scrollStrategy: this._overlay.scrollStrategies.reposition(),
       hasBackdrop: true,
-      backdropClass: 'cdk-overlay-transparent-backdrop'
+      backdropClass: 'cdk-overlay-transparent-backdrop',
     });
   }
 
-  private attachContainer<T, R>(overlayRef: OverlayRef, menuRef: DrawerMenuRef<T, R>, dataFactory: DrawerData) {
+  private _attachContainer<T, R>(overlayRef: OverlayRef, menuRef: DrawerMenuRef<T, R>, dataFactory: DrawerData) {
     const injector = this.createInjector(menuRef, dataFactory);
     const containerPortal = new ComponentPortal(FsDrawerMenuComponent, undefined, injector);
     const containerRef = overlayRef.attach<FsDrawerMenuComponent>(containerPortal);
@@ -72,17 +74,17 @@ export class FsDrawerMenuService {
     return containerRef.instance;
   }
 
-  private attachComponent<T, R>(
+  private _attachComponent<T, TR>(
     componentRef: ComponentType<T>,
     externalContainer: FsDrawerMenuComponent,
-    externalRef: DrawerMenuRef<T, R>,
+    externalRef: DrawerMenuRef<T, TR>,
     config: any,
   ) {
 
     const injector = this.createInjector(externalRef, config);
 
     return externalContainer.attachComponentPortal<T>(
-      new ComponentPortal<T>(componentRef, undefined, injector)
+      new ComponentPortal<T>(componentRef, undefined, injector),
     );
   }
 
@@ -90,7 +92,7 @@ export class FsDrawerMenuService {
   private createInjector(componentRef, dataFactory: DrawerData) {
     const injectionTokens = new WeakMap<any, any>([
       [DrawerMenuRef, componentRef],
-      [DRAWER_MENU_DATA, dataFactory]
+      [DRAWER_MENU_DATA, dataFactory],
     ]);
 
     return new PortalInjector(this._injector, injectionTokens);

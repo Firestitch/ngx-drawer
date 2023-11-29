@@ -1,21 +1,24 @@
 import { ComponentRef, ElementRef } from '@angular/core';
+import { UrlTree } from '@angular/router';
+
 import { ESCAPE } from '@angular/cdk/keycodes';
 import { OverlayRef } from '@angular/cdk/overlay';
 
 import { BehaviorSubject, Observable, Subject, Subscriber, zip } from 'rxjs';
-import { filter, take, takeUntil, switchMap, map } from 'rxjs/operators';
+import { filter, map, switchMap, take, takeUntil } from 'rxjs/operators';
+
+import { DrawerMenuRef } from '../classes/drawer-menu-ref';
+import type { FsDrawerComponent } from '../components/drawer/drawer.component';
+import { IFsDrawerActionConfig } from '../interfaces/action.iterface';
+import { IDrawerComponent } from '../interfaces/drawer-component.interface';
+import { IDrawerConfig } from '../interfaces/drawer-config.interface';
+import { DrawerConfig } from '../models/drawer-config.model';
 
 import { DrawerData } from './drawer-data';
-import type { FsDrawerComponent } from '../components/drawer/drawer.component';
-import { DrawerConfig } from '../models/drawer-config.model';
-import { DrawerMenuRef } from '../classes/drawer-menu-ref';
-import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DrawerSizeController } from './drawer-size-controller';
-import { IDrawerComponent } from '../interfaces/drawer-component.interface';
-import { IFsDrawerActionConfig } from '../interfaces/action.iterface';
 
 
-export class DrawerRef<T, R = any> {
+export class DrawerRef<T, TR = any> {
 
   public drawerConfig: DrawerConfig;
 
@@ -23,7 +26,7 @@ export class DrawerRef<T, R = any> {
   private readonly _afterOpened$ = new Subject<void>();
 
   /** Subject for notifying the user that the drawer has finished closing. */
-  private readonly _afterClosed$ = new Subject<R | undefined>();
+  private readonly _afterClosed$ = new Subject<TR | undefined>();
 
   /** Subject for notifying the user that the drawer has started closing. */
   private readonly _closeStart$ = new Subject<Subscriber<void>>();
@@ -41,7 +44,7 @@ export class DrawerRef<T, R = any> {
   private readonly _destroy$ = new Subject<void>();
 
   /** Result to be passed to afterClosed. */
-  private _result: R | undefined;
+  private _result: TR | undefined;
 
   /** Main drawer component and template */
   private _drawerContainerRef: FsDrawerComponent;
@@ -56,22 +59,27 @@ export class DrawerRef<T, R = any> {
   private _drawerActionsContainer: ElementRef;
 
   private _resizeController: DrawerSizeController;
-
-  private _activeAction = new BehaviorSubject<string>(void 0);
-
-  private _menuRefs = new Map<string, DrawerMenuRef<T, R>>();
-
+  private _activeAction = new BehaviorSubject<string>(undefined);
+  private _menuRefs = new Map<string, DrawerMenuRef<T, TR>>();
   private _isOpen = false;
   private _isSideOpen = false;
-
+  private _url: UrlTree;
 
   constructor(
     private _overlayRef: OverlayRef,
     private _dataFactory: DrawerData,
-    _config: IDrawerConfig
+    _config: IDrawerConfig,
   ) {
     this.drawerConfig = new DrawerConfig(_config);
     this._initActiveAction();
+  }
+
+  public get url(): UrlTree {
+    return this._url;
+  }
+
+  public set url(url: UrlTree) {
+    this._url = url;
   }
 
   public get overlayRef(): OverlayRef {
@@ -82,7 +90,7 @@ export class DrawerRef<T, R = any> {
    * Getter for DRAWER_DATA for current drawer
    */
   public get drawerData() {
-    return { ...this._dataFactory.getValue() } // Like immutable.... TODO switch to Immer
+    return { ...this._dataFactory.getValue() }; // Like immutable.... TODO switch to Immer
   }
 
   public get destroy$(): Observable<void> {
@@ -91,6 +99,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Set reference to drawer container
+   *
    * @param value
    */
   public set containerRef(value: FsDrawerComponent) {
@@ -99,6 +108,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Set reference to drawer component
+   *
    * @param value
    */
   public set componentRef(value: ComponentRef<T>) {
@@ -115,12 +125,12 @@ export class DrawerRef<T, R = any> {
     this._drawerContainer = value;
   }
 
-  public set drawerActionsContainer(value: ElementRef) {
-    this._drawerActionsContainer = value;
-  }
-
   public get drawerContainer(): ElementRef {
     return this._drawerContainer;
+  }
+
+  public set drawerActionsContainer(value: ElementRef) {
+    this._drawerActionsContainer = value;
   }
 
   public get drawerActionsContainer(): ElementRef {
@@ -167,7 +177,7 @@ export class DrawerRef<T, R = any> {
   /**
    * Gets an observable that is notified when the drawer is finished closing.
    */
-  public get afterClosed$(): Observable<R | undefined> {
+  public get afterClosed$(): Observable<TR | undefined> {
     return this._afterClosed$.pipe(takeUntil(this._destroy$));
   }
 
@@ -200,9 +210,9 @@ export class DrawerRef<T, R = any> {
             return source.pipe(
               map(() => {
                 return observer;
-              })
+              }),
             );
-          })
+          }),
         )
         .subscribe((observer) => {
           observer.next();
@@ -210,7 +220,7 @@ export class DrawerRef<T, R = any> {
         });
 
       return source;
-    }
+    };
   }
 
   /**
@@ -233,7 +243,7 @@ export class DrawerRef<T, R = any> {
   public events() {
     this._overlayRef.keydownEvents()
       .pipe(
-        filter(event => event.keyCode === ESCAPE && !this.drawerConfig.disableClose),
+        filter((event) => event.keyCode === ESCAPE && !this.drawerConfig.disableClose),
         takeUntil(this._destroy$),
       )
       .subscribe(() => this.close());
@@ -241,6 +251,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Set value for DRAWER_DATA
+   *
    * @param data
    */
   public dataChange(data) {
@@ -260,7 +271,10 @@ export class DrawerRef<T, R = any> {
           obs.complete();
         }
       });
-    }).pipe(takeUntil(this._destroy$))
+    })
+      .pipe(
+        takeUntil(this._destroy$),
+      )
       .subscribe({
         next: () => {
           if (this.activeAction) {
@@ -274,44 +288,46 @@ export class DrawerRef<T, R = any> {
         error: () => {
           this.destroy();
         },
-    });
+      });
   }
 
   /**
    * Close the drawer.
+   *
    * @param result Optional result to return to the drawer opener.
    */
-  public close(result?: R): void {
-    new Observable<void>(observer => {
+  public close(result?: TR): void {
+    new Observable<void>((observer) => {
       if (this._closeStart$.observers.length) {
-        zip(...this._closeStart$.observers.map(item => {
-          return Observable.create(closeObserver => {
+        zip(...this._closeStart$.observers.map((item) => {
+          return new Observable((closeObserver) => {
             item.next(closeObserver);
           });
         }))
-        .pipe(
-          takeUntil(this._destroy$)
-        )
-        .subscribe(() => {
-          observer.next();
-          observer.complete();
-        }, () => {
-          observer.error();
-        });
+          .pipe(
+            takeUntil(this._destroy$),
+          )
+          .subscribe(() => {
+            observer.next();
+            observer.complete();
+          }, () => {
+            observer.error();
+          });
       } else {
         observer.next();
         observer.complete();
       }
 
-    }).pipe(takeUntil(this._destroy$))
+    })
+      .pipe(takeUntil(this._destroy$))
       .subscribe({
-      next: () => {
-        this._drawerContainerRef.close();
-        this._result = result;
-        this._afterClosed$.next(result);
-        this.destroy();
-      }
-    });
+        next: () => {
+          this._drawerContainerRef.close();
+          this._result = result;
+          this._afterClosed$.next(result);
+          this.destroy();
+        },
+      });
   }
 
   /**
@@ -336,11 +352,16 @@ export class DrawerRef<T, R = any> {
    * Toggle the side of the drawer
    */
   public toggleSide() {
-    this.isSideOpen ? this.closeSide() : this.openSide();
+    if (this.isSideOpen) {
+      this.closeSide();
+    } else {
+      this.openSide();
+    }
   }
 
   /**
    * Change active action
+   *
    * @param name
    */
   public activateAction(name: string) {
@@ -378,24 +399,26 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Store opened menu reference and subscribe for auto remove
+   *
    * @param name
    * @param ref
    */
-  public addMenuRef(name: string, ref: DrawerMenuRef<T, R>) {
+  public addMenuRef(name: string, ref: DrawerMenuRef<T, TR>) {
     this._menuRefs.set(name, ref);
 
     ref.afterClosed()
       .pipe(
         take(1),
-        takeUntil(this._destroy$)
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this._menuRefs.delete(name);
-      })
+      });
   }
 
   /**
    * Get opened menu reference by name
+   *
    * @param name
    */
   public getMenuRef(name: string) {
@@ -408,6 +431,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Do update for icon for target action
+   *
    * @param name
    * @param icon
    */
@@ -423,6 +447,7 @@ export class DrawerRef<T, R = any> {
 
   /**
    * Do update
+   *
    * @param name
    * @param data
    */
@@ -430,7 +455,9 @@ export class DrawerRef<T, R = any> {
     const action = this.getAction(name);
 
     if (action) {
-      const allowedFields = ['icon', 'type', 'toggle', 'tooltip', 'close', 'closeSide', 'component', 'data'];
+      const allowedFields = [
+        'icon', 'type', 'toggle', 'tooltip', 'close', 'closeSide', 'component', 'data',
+      ];
 
       const forUpdate = Object.keys(data).filter((key) => allowedFields.indexOf(key) > -1);
 
@@ -477,7 +504,7 @@ export class DrawerRef<T, R = any> {
               `Drawer active action - "${this.drawerConfig.activeAction}" does not exists
         `);
           }
-        })
+        });
     }
   }
 

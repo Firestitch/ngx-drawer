@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Resolve, ActivatedRouteSnapshot } from '@angular/router';
+import { ActivatedRouteSnapshot, Resolve } from '@angular/router';
 
 import { RouteSubject } from '@firestitch/core';
 
@@ -15,7 +15,7 @@ export class InvoiceResolver implements Resolve<any> {
 
   constructor(private _invoicesService: InvoicesService) { }
 
-  resolve(route: ActivatedRouteSnapshot): Observable<any> {
+  public resolve(route: ActivatedRouteSnapshot): Observable<any> {
     const routeSubject = new RouteSubject();
 
     return routeSubject.observe(this._invoicesService.get(+route.params.id));

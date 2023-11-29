@@ -1,3 +1,5 @@
+import { UrlTree } from '@angular/router';
+
 import { FsPersistance } from '@firestitch/store';
 
 import { IFsDrawerActionConfig } from './action.iterface';
@@ -10,7 +12,8 @@ export interface IDrawerConfig<TData = any> {
   activeAction?: string;
   actions?: IFsDrawerActionConfig<TData>[];
   resizable?: boolean;
-  width?: IDrawerWidthConfig,
+  url?: UrlTree;
+  width?: IDrawerWidthConfig;
   persist?: IFsDrawerPersistance;
 }
 

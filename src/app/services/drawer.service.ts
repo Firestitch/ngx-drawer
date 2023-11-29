@@ -1,19 +1,24 @@
+import { Location } from '@angular/common';
 import { Inject, Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
+
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 
-import { Subject, merge, Observable } from 'rxjs';
+import { Observable, Subject, merge } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 
 import { merge as _merge } from 'lodash-es';
 
-import { FsDrawerComponent } from '../components/drawer/drawer.component';
-import { DrawerRef } from '../classes/drawer-ref';
 import { DrawerData } from '../classes/drawer-data';
+import { DrawerRef } from '../classes/drawer-ref';
+import { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { IDrawerConfig } from '../interfaces/drawer-config.interface';
+import { DrawerConfig } from '../models/drawer-config.model';
+
 import { DRAWER_DATA } from './drawer-data';
-import { DrawerStoreService } from './drawer-store.service';
 import { DRAWER_DEFAULT_CONFIG } from './drawer-default-config';
+import { DrawerStoreService } from './drawer-store.service';
+import { DrawerUrlService } from './drawer-url.service';
 
 
 @Injectable({
@@ -25,11 +30,14 @@ export class FsDrawerService implements OnDestroy {
 
   constructor(
     @Optional() @SkipSelf() private _parentDrawerService: FsDrawerService,
-    @Optional() @Inject(DRAWER_DEFAULT_CONFIG) private _defaultConfig,
+    @Optional() @Inject(DRAWER_DEFAULT_CONFIG) private _defaultConfig: DrawerConfig,
     private _overlay: Overlay,
     private _injector: Injector,
     private _drawerStore: DrawerStoreService,
-  ) {}
+    private _drawerUrl: DrawerUrlService,
+    private _location: Location,
+  ) {
+  }
 
   public ngOnDestroy(): void {
     this._destroy$.next();
@@ -39,12 +47,10 @@ export class FsDrawerService implements OnDestroy {
   public open<TData = any>(
     component: ComponentType<any>,
     config?: IDrawerConfig<TData>,
-    parentInjector?: Injector
+    parentInjector?: Injector,
   ): DrawerRef<TData> {
     const overlayRef = this._createOverlay();
-
     const dataFactory = DrawerData.createWithProxy(config.data);
-
     delete config.data;
     config = _merge({}, this._defaultConfig || {}, config);
 
@@ -56,6 +62,7 @@ export class FsDrawerService implements OnDestroy {
       dataFactory,
       parentInjector,
     );
+
     drawerRef.containerRef = containerRef;
     drawerRef.componentRef = this._attachComponent(
       component,
@@ -65,6 +72,10 @@ export class FsDrawerService implements OnDestroy {
       parentInjector,
     );
 
+    if (config.url) {
+      this._drawerUrl.openDrawer(drawerRef, config.url);
+    }
+
     drawerRef.events();
     drawerRef.open();
 
@@ -72,17 +83,27 @@ export class FsDrawerService implements OnDestroy {
 
     merge(
       drawerRef.afterOpened$,
-      drawerRef.afterClosed$
+      drawerRef.afterClosed$,
     )
-    .pipe(
-      takeUntil(this._destroy$)
-    )
-    .subscribe(() => {
-      setTimeout(() => {
-        this._applyBackdrop();
-        this._applyBodyOpenClass();
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => {
+        setTimeout(() => {
+          this._applyBackdrop();
+          this._applyBodyOpenClass();
+        });
       });
-    });
+
+    if (drawerRef.url) {
+      drawerRef.afterClosed$
+        .pipe(
+          takeUntil(this._destroy$),
+        )
+        .subscribe(() => {
+          this._drawerUrl.closeDrawer(drawerRef);
+        });
+    }
 
     return drawerRef;
   }
@@ -138,19 +159,20 @@ export class FsDrawerService implements OnDestroy {
 
   private _createOverlay(): OverlayRef {
     const overlayConfig = this._getOverlayConfig();
+
     return this._overlay.create(overlayConfig);
   }
 
   private _getOverlayConfig(): OverlayConfig {
     return new OverlayConfig({
-      hasBackdrop: true,
-      backdropClass: 'fs-drawer-backdrop'
+      hasBackdrop: false,
+      backdropClass: 'fs-drawer-backdrop',
     });
   }
 
-  private _attachDrawerContainer<T, R>(
+  private _attachDrawerContainer<T, TR>(
     overlayRef: OverlayRef,
-    drawerRef: DrawerRef<T, R>,
+    drawerRef: DrawerRef<T, TR>,
     dataFactory: DrawerData,
     parentInjector?: Injector,
   ) {
@@ -161,21 +183,19 @@ export class FsDrawerService implements OnDestroy {
     return containerRef.instance;
   }
 
-  private _attachComponent<T, R>(
+  private _attachComponent<T, TR>(
     componentRef: ComponentType<T>,
     drawerContainer: FsDrawerComponent,
-    drawerRef: DrawerRef<T, R>,
+    drawerRef: DrawerRef<T, TR>,
     dataFactory: DrawerData,
     parentInjector?: Injector,
   ) {
-
     const injector = this._createInjector(drawerRef, dataFactory, parentInjector);
 
     return drawerContainer.attachComponentPortal<T>(
-      new ComponentPortal<T>(componentRef, undefined, injector)
+      new ComponentPortal<T>(componentRef, undefined, injector),
     );
   }
-
 
   private _createInjector(componentRef, dataFactory, parentInjector?: Injector) {
     return Injector.create({
@@ -190,6 +210,6 @@ export class FsDrawerService implements OnDestroy {
         },
       ],
       parent: parentInjector || this._injector,
-    })
+    });
   }
 }

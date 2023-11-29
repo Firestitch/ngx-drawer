@@ -6,9 +6,10 @@ import { ComponentType } from '@angular/cdk/portal';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
-import { FsDrawerService } from './drawer.service';
-import { IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DrawerRef } from '../classes/drawer-ref';
+import { IDrawerConfig } from '../interfaces/drawer-config.interface';
+
+import { FsDrawerService } from './drawer.service';
 
 
 @Injectable({
@@ -42,11 +43,11 @@ export class DrawerRouter {
     return this._router.navigate(commands, extras);
   }
 
-  public openDrawer<T = any, R = any>(
+  public openDrawer<T = any, TR = any>(
     component: ComponentType<T>,
     config?: IDrawerConfig,
     injector?: Injector,
-  ): DrawerRef<T, R> {
+  ): DrawerRef<T, TR> {
     const drawer = this._drawer.open(component, config, injector);
 
     this._registerDrawer(component, drawer);
@@ -77,11 +78,11 @@ export class DrawerRouter {
   private _listenDrawerClose(component: Type<any>, ref: DrawerRef<unknown, unknown>): void {
     ref.afterClosed$
       .pipe(
-        take(1)
+        take(1),
       )
       .subscribe(() => {
         this._activeDrawer.delete(component);
-      })
+      });
 
   }
 }

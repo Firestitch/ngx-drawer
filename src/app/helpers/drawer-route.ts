@@ -20,8 +20,8 @@ export function fsDrawerRoute(route: Route, drawerConfig?: IDrawerConfig): Route
     ...(drawerData || {}),
   };
 
-  return  {
-    path: path,
+  return {
+    path,
     component: FsDrawerRouteComponent,
     ...restRoute,
     data: {
@@ -31,8 +31,8 @@ export function fsDrawerRoute(route: Route, drawerConfig?: IDrawerConfig): Route
           data,
           ...restDrawerConfig,
         },
-      }
-    }
+      },
+    },
   };
 
 }

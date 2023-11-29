@@ -1,10 +1,10 @@
+import { DrawerData } from '../classes/drawer-data';
 import {
   IDrawerActionLink,
   IDrawerActionLinkFn,
   IDrawerActionShowFn,
-  IMenuActionClick
+  IMenuActionClick,
 } from '../interfaces/action.iterface';
-import { DrawerData } from '../classes/drawer-data';
 
 export class BaseAction {
 
@@ -23,20 +23,20 @@ export class BaseAction {
     this._show = data.show || null;
   }
 
-  get icon() {
+  public get icon() {
     return this._icon;
   }
 
-  get click() {
+  public get click() {
     return this._click;
   }
 
-  get routerLink() {
+  public get routerLink() {
     return this._routerLink;
   }
 
-  get visible() {
-    return this._visible
+  public get visible() {
+    return this._visible;
   }
 
   public checkVisibility(data: DrawerData) {

@@ -3,8 +3,8 @@ import { Route, RouterModule } from '@angular/router';
 
 import { fsDrawerRoute } from 'fs-package';
 
-import { InvoicesComponent } from './components/invoices';
 import { InvoiceDrawerComponent } from './components/invoice-drawer';
+import { InvoicesComponent } from './components/invoices';
 import { InvoiceResolver } from './resolvers/invoice.resolver';
 
 const routes: Route[] = [
@@ -16,15 +16,17 @@ const routes: Route[] = [
         {
           path: 'invoices/:id',
           component: InvoiceDrawerComponent,
-          data: {},
           resolve: {
             invoice: InvoiceResolver,
           },
-        }
-      )
-    ]
-  }
-]
+        },
+        {
+
+        },
+      ),
+    ],
+  },
+];
 
 @NgModule({
   imports: [
@@ -34,4 +36,4 @@ const routes: Route[] = [
     RouterModule,
   ],
 })
-export class InvoicesRoutingModule {}
+export class InvoicesRoutingModule { }

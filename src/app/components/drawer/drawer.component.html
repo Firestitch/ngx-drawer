@@ -1,15 +1,18 @@
-<div class="mat-elevation-z2 drawer" #drawer
-     [ngClass]="config.position">
+<div 
+    #drawer
+    class="mat-elevation-z2 drawer" 
+    [ngClass]="config.position">
   <ng-container>
-    <fs-drawer-actions class="drawer-actions"
-                       #drawerActionsContainer
-                       type="main"
-                       [fsDrawerResizer]="drawer"
-                       [resizable]="drawerRef.drawerConfig.resizable"
-                       [sizeController]="drawerRef.resizeController"
-                       [direction]="config.position"
-                       [actions]="config.actions$ | async"
-                       [activeAction]="drawerRef.activeAction$ | async">
+    <fs-drawer-actions 
+      #drawerActionsContainer
+      class="drawer-actions"
+      type="main"
+      [fsDrawerResizer]="drawer"
+      [resizable]="drawerRef.drawerConfig.resizable"
+      [sizeController]="drawerRef.resizeController"
+      [direction]="config.position"
+      [actions]="config.actions$ | async"
+      [activeAction]="drawerRef.activeAction$ | async">
     </fs-drawer-actions>
     <div class="drawer-container" #drawerContainer>
       <ng-template cdkPortalOutlet></ng-template>

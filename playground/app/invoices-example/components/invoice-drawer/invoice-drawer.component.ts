@@ -1,26 +1,19 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { RouteObserver } from '@firestitch/core';
 
-import { DrawerRef, FsDrawerAction, IDrawerConfig, IDrawerComponent } from 'fs-package';
+import { DrawerRef, FsDrawerAction, IDrawerComponent, IDrawerConfig } from 'fs-package';
 
 
 @Component({
-  templateUrl: 'invoice-drawer.component.html',
+  templateUrl: './invoice-drawer.component.html',
   styleUrls: ['./invoice-drawer.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class InvoiceDrawerComponent implements OnInit, IDrawerComponent {
+export class InvoiceDrawerComponent implements IDrawerComponent {
 
   public invoice$ = new RouteObserver<any>(this._route, 'invoice');
-
-  constructor(
-    public drawerRef: DrawerRef<InvoiceDrawerComponent>,
-    private _route: ActivatedRoute,
-  ) {
-  }
-
-  public ngOnInit() {}
 
   public drawerConfig: IDrawerConfig = {
     disableClose: false,
@@ -30,8 +23,15 @@ export class InvoiceDrawerComponent implements OnInit, IDrawerComponent {
         icon: 'clear',
         name: 'close',
         type: FsDrawerAction.Button,
-        close: true
+        close: true,
       },
-    ]
+    ],
+  };
+
+  constructor(
+    public drawerRef: DrawerRef<InvoiceDrawerComponent>,
+    private _route: ActivatedRoute,
+  ) {
   }
+
 }

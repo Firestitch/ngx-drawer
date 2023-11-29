@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+
 import { ComponentType } from '@angular/cdk/portal';
 
 import { BehaviorSubject, Observable } from 'rxjs';
@@ -82,7 +83,7 @@ export class DrawerStoreService {
 
           prevRef.resizeController.pushMainWidth(currRef);
         }
-      })
+      });
     }
   }
 }
