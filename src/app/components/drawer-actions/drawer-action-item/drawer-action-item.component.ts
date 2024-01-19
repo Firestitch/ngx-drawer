@@ -5,7 +5,7 @@ import {
   Input,
   OnChanges, OnInit,
   Output,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 
 import { Subject } from 'rxjs';
@@ -35,6 +35,7 @@ export class FsDrawerActionItemComponent implements OnInit, OnChanges {
   public actionClicked = new EventEmitter();
 
   public isActive = false;
+  public tooltipShowDelay = 1000;
   public actionTypes = FsDrawerAction;
 
   private _destroy$ = new Subject<void>();
@@ -65,9 +66,9 @@ export class FsDrawerActionItemComponent implements OnInit, OnChanges {
     if (action.click) {
       action.click.call(null, {
         data: this.drawer.drawerData,
-        event: event,
+        event,
         drawerRef: this.drawer,
-        action: action
+        action,
       });
     }
   }
@@ -80,14 +81,14 @@ export class FsDrawerActionItemComponent implements OnInit, OnChanges {
       )
       .subscribe(() => {
         this._cdRef.detectChanges();
-      })
+      });
   }
 
   private _listenDataChanges() {
     this.drawer.dataChanged$
       .pipe(
-        takeUntil(this._destroy$),
         debounceTime(50),
+        takeUntil(this._destroy$),
       )
       .subscribe(() => {
         this._updateVisibilityAndLinks();
@@ -110,7 +111,7 @@ export class FsDrawerActionItemComponent implements OnInit, OnChanges {
     if (this.action.type === this.actionTypes.Menu) {
       this.action.updateRouterLink({
         data: this.drawer.drawerData,
-        drawerRef: this.drawer
+        drawerRef: this.drawer,
       });
     }
   }

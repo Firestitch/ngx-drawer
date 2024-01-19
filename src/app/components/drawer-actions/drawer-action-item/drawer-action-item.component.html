@@ -1,26 +1,30 @@
 <ng-container [ngSwitch]="action.type">
   <ng-container *ngSwitchCase="actionTypes.Button">
-    <button mat-icon-button
-            type="button"
-            *ngIf="action.visible"
-            [matTooltip]="action.tooltip"
-            [disabled]="action.disabled"
-            [class.active]="isActive"
-            (click)="actionClick($event)">
+    <button 
+        mat-icon-button
+        type="button"
+        *ngIf="action.visible"
+        [matTooltip]="action.tooltip"
+        [matTooltipShowDelay]="tooltipShowDelay"
+        [disabled]="action.disabled"
+        [class.active]="isActive"
+        (click)="actionClick($event)">
       <i class="material-icons">{{action.icon}}</i>
     </button>
   </ng-container>
 
   <ng-container *ngSwitchCase="actionTypes.Menu">
     <ng-container *ngIf="action.visible">
-      <button mat-icon-button
-              type="button"
-              class="sub-action"
-              [fsMenuTriggerFor]="menu"
-              [matTooltip]="action.tooltip"
-              [disabled]="action.disabled"
-              [class.active]="isActive"
-              (click)="actionClick($event)">
+      <button 
+          mat-icon-button
+          type="button"
+          class="sub-action"
+          [fsMenuTriggerFor]="menu"
+          [matTooltip]="action.tooltip"
+          [matTooltipShowDelay]="tooltipShowDelay"
+          [disabled]="action.disabled"
+          [class.active]="isActive"
+          (click)="actionClick($event)">
         <i class="material-icons">{{action.icon}}</i>
       </button>
 
@@ -56,13 +60,15 @@
   </ng-container>
 
   <ng-container *ngSwitchCase="actionTypes.Component">
-    <button mat-icon-button
-            type="button"
-            *ngIf="action.visible"
-            [matTooltip]="action.tooltip"
-            [disabled]="action.disabled"
-            [class.active]="isActive"
-            (click)="actionClick($event)">
+    <button 
+        mat-icon-button
+        type="button"
+        *ngIf="action.visible"
+        [matTooltip]="action.tooltip"
+        [matTooltipShowDelay]="tooltipShowDelay"
+        [disabled]="action.disabled"
+        [class.active]="isActive"
+        (click)="actionClick($event)">
       <i class="material-icons">{{action.icon}}</i>
     </button>
   </ng-container>
