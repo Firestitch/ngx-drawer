@@ -207,7 +207,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     const predictedWidth = this._calcWidth(this.direction, clientX);
 
     this._updatePosition(clientX, predictedWidth);
-    // this._emitResizeEvent();
+    this._emitResizeEvent();
   }
 
   /**
@@ -258,13 +258,15 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     return this.width + (this._x - clientX) * directionSign;
   }
 
-  // /**
-  //  * Resize event for Window
-  //  */
-  // private _emitResizeEvent() {
-  //   const resizeEvent = window.document.createEvent('UIEvents');
-  //   resizeEvent.initEvent('resize', true, false);
-  //
-  //   window.dispatchEvent(resizeEvent);
-  // }
+  /**
+   * Resize event for Window
+   *
+   * important for Froala editor actions
+   */
+  private _emitResizeEvent() {
+    const resizeEvent = window.document.createEvent('UIEvents');
+    resizeEvent.initEvent('resize', true, false);
+
+    window.dispatchEvent(resizeEvent);
+  }
 }
