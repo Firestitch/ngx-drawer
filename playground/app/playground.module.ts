@@ -1,5 +1,4 @@
 import { NgModule } from '@angular/core';
-import { FlexModule } from '@angular/flex-layout';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouterModule } from '@angular/router';
 
@@ -41,7 +40,6 @@ import { AppMaterialModule } from './material.module';
     FsStoreModule.forRoot(),
     FsCheckboxGroupModule,
     FsLabelModule,
-    FlexModule,
   ],
   entryComponents: [
     TaskDrawerComponent,
