@@ -23,48 +23,44 @@ import { AppMaterialModule } from './material.module';
 
 
 @NgModule({
-  bootstrap: [AppComponent],
-  imports: [
-    BrowserModule,
-    BrowserAnimationsModule,
-    AppMaterialModule,
-    FsExampleModule.forRoot(),
-    RouterModule.forRoot([
-      {
-        path: '',
-        loadChildren: () => import('./invoices-example/invoices.module').then((m) => m.InvoicesModule),
-      },
-    ]),
-    FsDrawerModule,
-    FsMessageModule.forRoot(),
-    FsStoreModule.forRoot(),
-    FsCheckboxGroupModule,
-    FsLabelModule,
-  ],
-  entryComponents: [
-    TaskDrawerComponent,
-    CustomMenuComponent,
-  ],
-  declarations: [
-    AppComponent,
-    ExampleComponent,
-    FsDrawerExampleComponent,
-    TaskDrawerComponent,
-    CustomMenuComponent,
-    NavigationComponent,
-  ],
-  providers: [
-    {
-      provide: DRAWER_DEFAULT_CONFIG,
-      useValue: {
-        width: {
-          side: {
-            min: 300,
-          },
+    bootstrap: [AppComponent],
+    imports: [
+        BrowserModule,
+        BrowserAnimationsModule,
+        AppMaterialModule,
+        FsExampleModule.forRoot(),
+        RouterModule.forRoot([
+            {
+                path: '',
+                loadChildren: () => import('./invoices-example/invoices.module').then((m) => m.InvoicesModule),
+            },
+        ]),
+        FsDrawerModule,
+        FsMessageModule.forRoot(),
+        FsStoreModule.forRoot(),
+        FsCheckboxGroupModule,
+        FsLabelModule,
+    ],
+    declarations: [
+        AppComponent,
+        ExampleComponent,
+        FsDrawerExampleComponent,
+        TaskDrawerComponent,
+        CustomMenuComponent,
+        NavigationComponent,
+    ],
+    providers: [
+        {
+            provide: DRAWER_DEFAULT_CONFIG,
+            useValue: {
+                width: {
+                    side: {
+                        min: 300,
+                    },
+                },
+            },
         },
-      },
-    },
-  ],
+    ]
 })
 export class PlaygroundModule {
 }
