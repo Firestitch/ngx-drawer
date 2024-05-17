@@ -67,464 +67,108 @@
   "fileMap": {
     "nonProjectFiles": [
       {
-        "file": "src/app/services/drawer.service.ts",
-        "hash": "7743862482920306388"
-      },
-      {
-        "file": "src/app/fs-drawer.module.ts",
-        "hash": "14090918667367276567"
-      },
-      {
-        "file": "playground/app/components/navigation/navigation.component.scss",
-        "hash": "17996026819982456645"
-      },
-      {
-        "file": "src/app/components/drawer-content/drawer-content.component.ts",
-        "hash": "8820530776999138621"
-      },
-      {
-        "file": "playground/app/components/navigation/navigation.component.ts",
-        "hash": "17534405008308643798"
-      },
-      {
-        "file": "playground/environments/environment.ts",
-        "hash": "9947772722750709652"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/fs-drawer-example.component.scss",
-        "hash": "4055606894390288348"
-      },
-      {
-        "file": "src/app/interfaces/action.iterface.ts",
-        "hash": "6653146161409704498"
-      },
-      {
-        "file": "src/app/components/drawer-actions/drawer-actions.component.ts",
-        "hash": "12375214250717541759"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/task-drawer/index.ts",
-        "hash": "15061530761987551510"
-      },
-      {
-        "file": "src/app/components/drawer-menu/drawer-menu.component.ts",
-        "hash": "13704529238069042423"
-      },
-      {
-        "file": "playground/app/components/example/example.component.ts",
-        "hash": "14155263421066036321"
-      },
-      {
-        "file": "playground/app/invoices-example/resolvers/invoice.resolver.ts",
-        "hash": "13210979427877557580"
-      },
-      {
-        "file": "playground/app/invoices-example/components/invoices/invoices.component.html",
-        "hash": "11749951807350811781"
-      },
-      {
-        "file": "playground/tsconfig.spec.json",
-        "hash": "185021982281572702"
-      },
-      {
-        "file": "src/app/interfaces/drawer-data.interface.ts",
-        "hash": "11202058726163570244"
-      },
-      {
-        "file": "playground/app/invoices-example/invoices-routing.module.ts",
-        "hash": "4869074535136963831"
-      },
-      {
-        "file": "src/styles.scss",
-        "hash": "9304796293386102334"
-      },
-      {
-        "file": "src/app/interfaces/drawer-config.interface.ts",
-        "hash": "1129104172754352505"
-      },
-      {
-        "file": "src/app/directives/drawer-action.directive.ts",
-        "hash": "5145920463186539404"
-      },
-      {
-        "file": "playground/app/components/app.component.ts",
-        "hash": "17482581825991002806"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/custom-menu/custom-menu.component.scss",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "playground/app/components/index.ts",
-        "hash": "17950516638274121514"
-      },
-      {
-        "file": ".editorconfig",
-        "hash": "10872272122097428313"
-      },
-      {
-        "file": "src/app/services/drawer-default-config.ts",
-        "hash": "645897384140540384"
-      },
-      {
-        "file": "src/app/services/drawer-data.ts",
-        "hash": "8586939787029868908"
-      },
-      {
-        "file": "playground/environments/environment.prod.ts",
-        "hash": "598846821413919614"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/index.ts",
-        "hash": "15108617981557433943"
-      },
-      {
-        "file": "src/app/interfaces/menu-action.interface.ts",
-        "hash": "2309081092231294144"
-      },
-      {
-        "file": "src/tslint.json",
-        "hash": "7869603084788115502"
-      },
-      {
-        "file": "src/app/components/drawer-side/drawer-side.component.html",
-        "hash": "13704620091275812857"
-      },
-      {
-        "file": "src/app/components/drawer-actions/drawer-action-item/drawer-action-item.component.html",
-        "hash": "2994237777404017744"
-      },
-      {
-        "file": "playground/app/components/example/index.ts",
-        "hash": "10360638279007585246"
-      },
-      {
-        "file": "playground/app/invoices-example/components/invoices/index.ts",
-        "hash": "9435477172295253875"
+        "file": "src/ng-package.json",
+        "hash": "1523734567597565045"
       },
       {
         "file": ".eslintrc.json",
         "hash": "5454888203186707183"
       },
       {
-        "file": "playground/app/invoices-example/components/invoice-drawer/index.ts",
-        "hash": "7084742488122287809"
-      },
-      {
-        "file": "src/app/consts/sizes.cont.ts",
-        "hash": "16636169286377564103"
-      },
-      {
-        "file": "src/app/classes/drawer-size-controller.ts",
-        "hash": "2892554305229917020"
-      },
-      {
-        "file": "src/app/components/drawer-side/drawer-side.component.scss",
-        "hash": "2496004046338708454"
-      },
-      {
-        "file": "playground/styles.scss",
-        "hash": "4398678650791880741"
-      },
-      {
-        "file": "playground/index.html",
-        "hash": "15150710230109717836"
-      },
-      {
-        "file": "src/app/classes/drawer-data.ts",
-        "hash": "8626439177050863986"
-      },
-      {
-        "file": "src/public_api.ts",
-        "hash": "2711694179794261544"
-      },
-      {
-        "file": "src/app/classes/persistance-controller.ts",
-        "hash": "1878358039791863037"
-      },
-      {
-        "file": "src/app/components/drawer-menu/drawer-menu.component.html",
-        "hash": "15710143114610962748"
-      },
-      {
-        "file": "src/app/interfaces/drawer-component.interface.ts",
-        "hash": "14452003649416283626"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/task-drawer/task-drawer.component.ts",
-        "hash": "9254564242091607385"
-      },
-      {
-        "file": "src/tsconfig.spec.json",
-        "hash": "2182873517351816983"
+        "file": "README.md",
+        "hash": "3244421341483603138"
       },
       {
         "file": "playground/app/components/fs-drawer-example/task-drawer/task-drawer.component.html",
         "hash": "16687484093469684033"
       },
       {
-        "file": "playground/environments/base-environment.ts",
-        "hash": "16952335834439804816"
-      },
-      {
-        "file": "src/app/styles/_variables.scss",
-        "hash": "4949215536249300652"
-      },
-      {
-        "file": "playground/app/invoices-example/components/invoice-drawer/invoice-drawer.component.scss",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "src/app/components/drawer-menu/drawer-menu.component.scss",
-        "hash": "13179404592624590285"
-      },
-      {
-        "file": "playground/app/invoices-example/components/invoice-drawer/invoice-drawer.component.html",
-        "hash": "17012969032675208837"
-      },
-      {
-        "file": "src/test.ts",
-        "hash": "10526265774368637285"
-      },
-      {
-        "file": "src/app/components/drawer-actions/drawer-actions.component.html",
-        "hash": "1014952475270940420"
-      },
-      {
-        "file": "playground/app/invoices-example/components/invoice-drawer/invoice-drawer.component.ts",
-        "hash": "11092916038668668119"
-      },
-      {
-        "file": "src/app/services/drawer-menu-data.ts",
-        "hash": "15253088276718777578"
-      },
-      {
-        "file": "package-lock.json",
-        "hash": "3767700595288652267"
-      },
-      {
-        "file": "tslint.json",
-        "hash": "8144978895070420265"
-      },
-      {
-        "file": "playground/app/components/example/example.component.html",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "src/app/components/drawer/drawer.component.ts",
-        "hash": "10324139391420362360"
-      },
-      {
-        "file": "src/app/models/base-action.ts",
-        "hash": "3023651491563044417"
+        "file": "playground/.browserslistrc",
+        "hash": "568824818244017255"
       },
       {
         "file": "src/app/models/menu-action.model.ts",
         "hash": "1559456734749821097"
       },
       {
-        "file": "playground/app/components/fs-drawer-example/custom-menu/index.ts",
-        "hash": "1989038929491192135"
-      },
-      {
-        "file": "src/tsconfig.lib.json",
-        "hash": "9259961738588923609"
-      },
-      {
-        "file": "src/app/components/drawer-side/drawer-side.component.ts",
-        "hash": "9163518338468933672"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/fs-drawer-example.component.ts",
-        "hash": "3632372119617268177"
-      },
-      {
-        "file": "playground/app/components/app.component.html",
-        "hash": "3423850062567331626"
-      },
-      {
-        "file": "src/app/components/drawer-actions/drawer-action-item/drawer-action-item.component.ts",
-        "hash": "9138022481882163181"
-      },
-      {
-        "file": "playground/favicon.ico",
-        "hash": "14356862334585494759"
+        "file": "src/app/components/drawer-actions/drawer-actions.component.scss",
+        "hash": "17325183736754910720"
       },
       {
         "file": ".gitmodules",
         "hash": "13498615226796240956"
       },
       {
-        "file": "playground/tslint.json",
-        "hash": "5600436277826064117"
+        "file": "src/test.ts",
+        "hash": "10526265774368637285"
       },
       {
-        "file": "src/app/services/index.ts",
-        "hash": "2407269825873098971"
-      },
-      {
-        "file": "playground/tsconfig.app.json",
-        "hash": "15319650956148288143"
-      },
-      {
-        "file": "package.json",
-        "hash": "17106146814877763904"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/fs-drawer-example.component.html",
-        "hash": "16092681628363854359"
-      },
-      {
-        "file": "playground/polyfills.ts",
-        "hash": "5940083178426020938"
-      },
-      {
-        "file": "playground/app/components/fs-drawer-example/custom-menu/custom-menu.component.html",
-        "hash": "12584090939435471920"
-      },
-      {
-        "file": "src/app/services/drawer-store.service.ts",
-        "hash": "14434500841634694143"
-      },
-      {
-        "file": "src/app/components/drawer-actions/drawer-action-item/drawer-action-item.component.scss",
-        "hash": "9723853870027559609"
-      },
-      {
-        "file": "src/app/models/drawer-config.model.ts",
-        "hash": "2125727929034537285"
-      },
-      {
-        "file": "src/app/helpers/action-type.enum.ts",
-        "hash": "7132027720436579987"
-      },
-      {
-        "file": "src/app/components/route/route.component.ts",
-        "hash": "14173192420458723042"
-      },
-      {
-        "file": ".gitignore",
-        "hash": "8500993147220223878"
-      },
-      {
-        "file": "src/app/directives/drawer-resizer.directive.ts",
-        "hash": "457713914550866876"
-      },
-      {
-        "file": "src/app/services/drawer-router.ts",
-        "hash": "1340821711090784661"
-      },
-      {
-        "file": "playground/app/components/navigation/navigation.component.html",
-        "hash": "14603303566955340594"
-      },
-      {
-        "file": "playground/app/invoices-example/services/invoices.service.ts",
-        "hash": "7827394052264252866"
-      },
-      {
-        "file": "src/app/components/drawer/drawer.component.html",
-        "hash": "2145452033082518171"
-      },
-      {
-        "file": "src/app/helpers/drawer-route.ts",
-        "hash": "9801169330812999938"
-      },
-      {
-        "file": "src/app/interfaces/route-data.interface.ts",
-        "hash": "7751304849749106379"
+        "file": ".editorconfig",
+        "hash": "10872272122097428313"
       },
       {
         "file": "playground/app/components/fs-drawer-example/task-drawer/task-drawer.component.scss",
         "hash": "3244421341483603138"
       },
       {
-        "file": "src/app/services/drawer-menu.service.ts",
-        "hash": "9644170888339768832"
-      },
-      {
-        "file": "tsconfig.json",
-        "hash": "13671222623837683261"
-      },
-      {
-        "file": "README.md",
-        "hash": "3244421341483603138"
-      },
-      {
-        "file": "src/package.json",
-        "hash": "7824419784938386854"
-      },
-      {
-        "file": "playground/karma.conf.js",
-        "hash": "8703336951671206128"
-      },
-      {
-        "file": "src/app/models/action.model.ts",
-        "hash": "1142516312079910819"
-      },
-      {
-        "file": "src/app/components/drawer-actions/drawer-actions.component.scss",
-        "hash": "17325183736754910720"
-      },
-      {
-        "file": "playground/main.ts",
-        "hash": "1926520109387349039"
+        "file": "playground/app/invoices-example/components/invoices/invoices.component.ts",
+        "hash": "12524637095765345109"
       },
       {
         "file": "playground/app/playground.module.ts",
         "hash": "6306344996380111554"
       },
       {
-        "file": "angular.json",
-        "hash": "13356985876001326904"
+        "file": "src/app/interfaces/menu-action.interface.ts",
+        "hash": "2309081092231294144"
       },
       {
-        "file": "src/ng-package.json",
-        "hash": "1523734567597565045"
+        "file": "playground/app/components/fs-drawer-example/index.ts",
+        "hash": "15108617981557433943"
+      },
+      {
+        "file": "playground/app/components/example/example.component.ts",
+        "hash": "14155263421066036321"
+      },
+      {
+        "file": "tsconfig.json",
+        "hash": "13671222623837683261"
       },
       {
         "file": "playground/app/material.module.ts",
         "hash": "10368710783654269065"
       },
       {
-        "file": "playground/app/components/fs-drawer-example/custom-menu/custom-menu.component.ts",
-        "hash": "14420836585333247005"
+        "file": "playground/app/invoices-example/services/invoices.service.ts",
+        "hash": "7827394052264252866"
       },
       {
-        "file": ".npmignore",
-        "hash": "155013090485156459"
+        "file": "src/app/components/drawer-actions/drawer-action-item/drawer-action-item.component.html",
+        "hash": "2994237777404017744"
       },
       {
-        "file": "tsconfig.compodoc.json",
-        "hash": "5043304512758194067"
+        "file": "src/app/components/drawer-menu/drawer-menu.component.ts",
+        "hash": "13704529238069042423"
       },
       {
-        "file": "src/app/classes/drawer-ref.ts",
-        "hash": "14801716672583624522"
+        "file": "src/app/components/drawer-actions/drawer-action-item/drawer-action-item.component.ts",
+        "hash": "9138022481882163181"
       },
       {
-        "file": "src/tsconfig.lib.prod.json",
-        "hash": "8908966231860768472"
+        "file": "src/app/components/drawer-actions/drawer-actions.component.ts",
+        "hash": "12375214250717541759"
       },
       {
-        "file": "src/app/assets/.gitkeep",
+        "file": "playground/app/components/app.component.html",
+        "hash": "3423850062567331626"
+      },
+      {
+        "file": "playground/styles.scss",
+        "hash": "4398678650791880741"
+      },
+      {
+        "file": "playground/app/components/example/example.component.html",
         "hash": "3244421341483603138"
-      },
-      {
-        "file": "playground/test.ts",
-        "hash": "9275611357413729654"
-      },
-      {
-        "file": "playground/app/invoices-example/components/invoices/invoices.component.ts",
-        "hash": "12524637095765345109"
-      },
-      {
-        "file": "playground/.browserslistrc",
-        "hash": "568824818244017255"
-      },
-      {
-        "file": "src/app/services/drawer-url.service.ts",
-        "hash": "17867711835757530949"
       },
       {
         "file": "playground/app/invoices-example/invoices.module.ts",
@@ -535,8 +179,364 @@
         "hash": "1277720140323194515"
       },
       {
+        "file": "src/app/interfaces/drawer-config.interface.ts",
+        "hash": "1129104172754352505"
+      },
+      {
+        "file": "src/app/classes/persistance-controller.ts",
+        "hash": "1878358039791863037"
+      },
+      {
+        "file": "src/app/components/route/route.component.ts",
+        "hash": "14173192420458723042"
+      },
+      {
+        "file": "playground/test.ts",
+        "hash": "9275611357413729654"
+      },
+      {
+        "file": "src/app/components/drawer-menu/drawer-menu.component.scss",
+        "hash": "13179404592624590285"
+      },
+      {
+        "file": "playground/app/invoices-example/components/invoice-drawer/index.ts",
+        "hash": "7084742488122287809"
+      },
+      {
+        "file": "playground/app/components/navigation/navigation.component.html",
+        "hash": "14603303566955340594"
+      },
+      {
+        "file": "src/app/components/drawer-actions/drawer-action-item/drawer-action-item.component.scss",
+        "hash": "9723853870027559609"
+      },
+      {
+        "file": "src/public_api.ts",
+        "hash": "2711694179794261544"
+      },
+      {
+        "file": "playground/tsconfig.spec.json",
+        "hash": "185021982281572702"
+      },
+      {
+        "file": "src/app/services/drawer-url.service.ts",
+        "hash": "8745587145176948290"
+      },
+      {
+        "file": "src/app/classes/drawer-data.ts",
+        "hash": "8626439177050863986"
+      },
+      {
+        "file": "tslint.json",
+        "hash": "8144978895070420265"
+      },
+      {
+        "file": "src/app/components/drawer-content/drawer-content.component.ts",
+        "hash": "8820530776999138621"
+      },
+      {
+        "file": "src/app/interfaces/route-data.interface.ts",
+        "hash": "7751304849749106379"
+      },
+      {
+        "file": "src/app/components/drawer-side/drawer-side.component.scss",
+        "hash": "2496004046338708454"
+      },
+      {
+        "file": "src/app/services/index.ts",
+        "hash": "2407269825873098971"
+      },
+      {
+        "file": "playground/favicon.ico",
+        "hash": "14356862334585494759"
+      },
+      {
+        "file": "src/app/models/action.model.ts",
+        "hash": "1142516312079910819"
+      },
+      {
+        "file": "playground/app/invoices-example/components/invoices/index.ts",
+        "hash": "9435477172295253875"
+      },
+      {
+        "file": "src/app/classes/drawer-ref.ts",
+        "hash": "14801716672583624522"
+      },
+      {
+        "file": "src/app/components/drawer-side/drawer-side.component.html",
+        "hash": "13704620091275812857"
+      },
+      {
+        "file": "src/app/components/drawer/drawer.component.html",
+        "hash": "2145452033082518171"
+      },
+      {
+        "file": "src/app/helpers/action-type.enum.ts",
+        "hash": "7132027720436579987"
+      },
+      {
+        "file": "playground/app/components/example/index.ts",
+        "hash": "10360638279007585246"
+      },
+      {
+        "file": "src/app/classes/drawer-size-controller.ts",
+        "hash": "2892554305229917020"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/custom-menu/index.ts",
+        "hash": "1989038929491192135"
+      },
+      {
+        "file": "playground/app/components/navigation/navigation.component.ts",
+        "hash": "17534405008308643798"
+      },
+      {
+        "file": "playground/app/invoices-example/components/invoice-drawer/invoice-drawer.component.html",
+        "hash": "17012969032675208837"
+      },
+      {
+        "file": "playground/environments/environment.ts",
+        "hash": "9947772722750709652"
+      },
+      {
+        "file": ".gitignore",
+        "hash": "8500993147220223878"
+      },
+      {
+        "file": "src/app/interfaces/drawer-data.interface.ts",
+        "hash": "11202058726163570244"
+      },
+      {
+        "file": "src/app/helpers/drawer-route.ts",
+        "hash": "9801169330812999938"
+      },
+      {
+        "file": "playground/main.ts",
+        "hash": "1926520109387349039"
+      },
+      {
+        "file": ".npmignore",
+        "hash": "155013090485156459"
+      },
+      {
+        "file": "playground/app/invoices-example/components/invoices/invoices.component.html",
+        "hash": "11749951807350811781"
+      },
+      {
+        "file": "src/app/services/drawer-router.ts",
+        "hash": "1340821711090784661"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/task-drawer/index.ts",
+        "hash": "15061530761987551510"
+      },
+      {
+        "file": "src/app/services/drawer-store.service.ts",
+        "hash": "14434500841634694143"
+      },
+      {
+        "file": "src/app/components/drawer-actions/drawer-actions.component.html",
+        "hash": "1014952475270940420"
+      },
+      {
+        "file": "src/app/services/drawer.service.ts",
+        "hash": "7743862482920306388"
+      },
+      {
+        "file": "playground/app/components/app.component.ts",
+        "hash": "17482581825991002806"
+      },
+      {
+        "file": "src/app/components/drawer-menu/drawer-menu.component.html",
+        "hash": "15710143114610962748"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/fs-drawer-example.component.ts",
+        "hash": "3632372119617268177"
+      },
+      {
+        "file": "src/app/services/drawer-menu-data.ts",
+        "hash": "15253088276718777578"
+      },
+      {
+        "file": "src/app/services/drawer-menu.service.ts",
+        "hash": "9644170888339768832"
+      },
+      {
+        "file": "playground/karma.conf.js",
+        "hash": "8703336951671206128"
+      },
+      {
+        "file": "package-lock.json",
+        "hash": "3767700595288652267"
+      },
+      {
+        "file": "src/tsconfig.spec.json",
+        "hash": "2182873517351816983"
+      },
+      {
+        "file": "src/app/fs-drawer.module.ts",
+        "hash": "14090918667367276567"
+      },
+      {
+        "file": "src/app/components/drawer/drawer.component.ts",
+        "hash": "10324139391420362360"
+      },
+      {
+        "file": "playground/app/invoices-example/resolvers/invoice.resolver.ts",
+        "hash": "13210979427877557580"
+      },
+      {
+        "file": "src/app/services/drawer-default-config.ts",
+        "hash": "645897384140540384"
+      },
+      {
+        "file": "src/app/models/base-action.ts",
+        "hash": "3023651491563044417"
+      },
+      {
+        "file": "src/app/assets/.gitkeep",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "playground/environments/base-environment.ts",
+        "hash": "16952335834439804816"
+      },
+      {
+        "file": "src/tsconfig.lib.prod.json",
+        "hash": "8908966231860768472"
+      },
+      {
+        "file": "src/app/consts/sizes.cont.ts",
+        "hash": "16636169286377564103"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/custom-menu/custom-menu.component.ts",
+        "hash": "14420836585333247005"
+      },
+      {
+        "file": "playground/index.html",
+        "hash": "15150710230109717836"
+      },
+      {
+        "file": "src/tslint.json",
+        "hash": "7869603084788115502"
+      },
+      {
+        "file": "tsconfig.compodoc.json",
+        "hash": "5043304512758194067"
+      },
+      {
+        "file": "angular.json",
+        "hash": "13356985876001326904"
+      },
+      {
+        "file": "src/app/directives/drawer-action.directive.ts",
+        "hash": "5145920463186539404"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/fs-drawer-example.component.scss",
+        "hash": "4055606894390288348"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/custom-menu/custom-menu.component.html",
+        "hash": "12584090939435471920"
+      },
+      {
+        "file": "playground/app/invoices-example/components/invoice-drawer/invoice-drawer.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/custom-menu/custom-menu.component.scss",
+        "hash": "3244421341483603138"
+      },
+      {
         "file": "src/app/classes/drawer-menu-ref.ts",
         "hash": "2024959145060148280"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/fs-drawer-example.component.html",
+        "hash": "16092681628363854359"
+      },
+      {
+        "file": "playground/app/components/index.ts",
+        "hash": "17950516638274121514"
+      },
+      {
+        "file": "src/app/directives/drawer-resizer.directive.ts",
+        "hash": "457713914550866876"
+      },
+      {
+        "file": "src/app/models/drawer-config.model.ts",
+        "hash": "2125727929034537285"
+      },
+      {
+        "file": "src/app/interfaces/action.iterface.ts",
+        "hash": "6653146161409704498"
+      },
+      {
+        "file": "playground/tsconfig.app.json",
+        "hash": "15319650956148288143"
+      },
+      {
+        "file": "playground/app/invoices-example/invoices-routing.module.ts",
+        "hash": "4869074535136963831"
+      },
+      {
+        "file": "src/app/styles/_variables.scss",
+        "hash": "4949215536249300652"
+      },
+      {
+        "file": "playground/app/components/fs-drawer-example/task-drawer/task-drawer.component.ts",
+        "hash": "9254564242091607385"
+      },
+      {
+        "file": "src/app/components/drawer-side/drawer-side.component.ts",
+        "hash": "9163518338468933672"
+      },
+      {
+        "file": "package.json",
+        "hash": "755722828832299987"
+      },
+      {
+        "file": "src/styles.scss",
+        "hash": "9304796293386102334"
+      },
+      {
+        "file": "playground/environments/environment.prod.ts",
+        "hash": "598846821413919614"
+      },
+      {
+        "file": "src/tsconfig.lib.json",
+        "hash": "9259961738588923609"
+      },
+      {
+        "file": "playground/tslint.json",
+        "hash": "5600436277826064117"
+      },
+      {
+        "file": "src/app/services/drawer-data.ts",
+        "hash": "8586939787029868908"
+      },
+      {
+        "file": "playground/app/components/navigation/navigation.component.scss",
+        "hash": "17996026819982456645"
+      },
+      {
+        "file": "src/app/interfaces/drawer-component.interface.ts",
+        "hash": "14452003649416283626"
+      },
+      {
+        "file": "playground/polyfills.ts",
+        "hash": "5940083178426020938"
+      },
+      {
+        "file": "src/package.json",
+        "hash": "6323008205707756734"
+      },
+      {
+        "file": "playground/app/invoices-example/components/invoice-drawer/invoice-drawer.component.ts",
+        "hash": "11092916038668668119"
       }
     ],
     "projectFileMap": {}

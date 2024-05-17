@@ -59,3 +59,84 @@
 [NX Daemon Server] - 2024-05-17T20:36:12.452Z - Done responding to the client File watch changed
 [NX Daemon Server] - 2024-05-17T20:36:12.452Z - Handled FILE-WATCH-CHANGED. Handling time: 0. Response time: 0.
 [NX Daemon Server] - 2024-05-17T20:36:12.452Z - Time taken for 'changed-projects' 0.04891681671142578ms
+[NX Daemon Server] - 2024-05-17T20:41:13.099Z - Started listening on: /var/folders/0h/t9v3sgx13b5ddphb7fz4jd740000gn/T/d4b6b783add5fae98a92/d.sock
+[NX Daemon Server] - 2024-05-17T20:41:13.101Z - [WATCHER]: Subscribed to changes within: /Users/basters/dev/frontend/firestitch/drawer (native)
+[NX Daemon Server] - 2024-05-17T20:41:13.109Z - Established a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-05-17T20:41:13.110Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-05-17T20:41:13.111Z - [REQUEST]: Client Request for Project Graph Received
+[NX Daemon Server] - 2024-05-17T20:41:13.118Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-05-17T20:41:13.118Z - [REQUEST]: 
+[NX Daemon Server] - 2024-05-17T20:41:13.118Z - [REQUEST]: 
+[NX Daemon Server] - 2024-05-17T20:41:13.155Z - [REQUEST]: Responding to the client. project-graph
+[NX Daemon Server] - 2024-05-17T20:41:13.157Z - Time taken for 'total for creating and serializing project graph' 44.12408256530762ms
+[NX Daemon Server] - 2024-05-17T20:41:13.157Z - Closed a connection. Number of open connections: 1
+[NX Daemon Server] - 2024-05-17T20:41:13.158Z - Done responding to the client project-graph
+[NX Daemon Server] - 2024-05-17T20:41:13.158Z - Handled REQUEST_PROJECT_GRAPH. Handling time: 44. Response time: 3.
+[NX Daemon Server] - 2024-05-17T20:41:13.162Z - [REQUEST]: Client Request for Project Graph Received
+[NX Daemon Server] - 2024-05-17T20:41:13.163Z - [REQUEST]: Responding to the client. project-graph
+[NX Daemon Server] - 2024-05-17T20:41:13.163Z - Time taken for 'total for creating and serializing project graph' 0.7664155960083008ms
+[NX Daemon Server] - 2024-05-17T20:41:13.166Z - Done responding to the client project-graph
+[NX Daemon Server] - 2024-05-17T20:41:13.167Z - Handled REQUEST_PROJECT_GRAPH. Handling time: 1. Response time: 4.
+[NX Daemon Server] - 2024-05-17T20:41:13.170Z - Established a connection. Number of open connections: 2
+[NX Daemon Server] - 2024-05-17T20:41:17.660Z - [WATCHER]: src/app/services/drawer-url.service.ts was modified
+[NX Daemon Server] - 2024-05-17T20:41:17.661Z - [REQUEST]: Responding to the client. File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:17.661Z - Done responding to the client File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:17.661Z - Handled FILE-WATCH-CHANGED. Handling time: 0. Response time: 0.
+[NX Daemon Server] - 2024-05-17T20:41:17.661Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:17.661Z - Time taken for 'changed-projects' 0.02795886993408203ms
+[NX Daemon Server] - 2024-05-17T20:41:17.765Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-05-17T20:41:17.765Z - [REQUEST]: src/app/services/drawer-url.service.ts
+[NX Daemon Server] - 2024-05-17T20:41:17.765Z - [REQUEST]: 
+[NX Daemon Server] - 2024-05-17T20:41:17.805Z - Time taken for 'Load Nx Plugin: /Users/basters/dev/frontend/firestitch/drawer/node_modules/nx/src/plugins/project-json/build-nodes/package-json-next-to-project-json' 1.1260414123535156ms
+[NX Daemon Server] - 2024-05-17T20:41:17.921Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:39.490Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:39.719Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:39.721Z - [WATCHER]: src/package.json was created or restored
+[NX Daemon Server] - 2024-05-17T20:41:39.824Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-05-17T20:41:39.824Z - [REQUEST]: src/package.json
+[NX Daemon Server] - 2024-05-17T20:41:39.824Z - [REQUEST]: 
+[NX Daemon Server] - 2024-05-17T20:41:39.852Z - [REQUEST]: Responding to the client. File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:39.852Z - Done responding to the client File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:39.852Z - Handled FILE-WATCH-CHANGED. Handling time: 0. Response time: 1.
+[NX Daemon Server] - 2024-05-17T20:41:39.852Z - Time taken for 'Load Nx Plugin: /Users/basters/dev/frontend/firestitch/drawer/node_modules/nx/src/plugins/project-json/build-nodes/package-json-next-to-project-json' 0.2939167022705078ms
+[NX Daemon Server] - 2024-05-17T20:41:42.882Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:42.944Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:42.999Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:43.051Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:43.198Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:43.306Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:44.228Z - [WATCHER]: src/package.json was deleted
+[NX Daemon Server] - 2024-05-17T20:41:44.228Z - [REQUEST]: Responding to the client. File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:44.228Z - Done responding to the client File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:44.228Z - Handled FILE-WATCH-CHANGED. Handling time: 0. Response time: 0.
+[NX Daemon Server] - 2024-05-17T20:41:44.228Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:44.228Z - Time taken for 'changed-projects' 0.07391643524169922ms
+[NX Daemon Server] - 2024-05-17T20:41:44.430Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-05-17T20:41:44.430Z - [REQUEST]: 
+[NX Daemon Server] - 2024-05-17T20:41:44.430Z - [REQUEST]: src/package.json
+[NX Daemon Server] - 2024-05-17T20:41:44.448Z - Time taken for 'Load Nx Plugin: /Users/basters/dev/frontend/firestitch/drawer/node_modules/nx/src/plugins/project-json/build-nodes/package-json-next-to-project-json' 0.22070789337158203ms
+[NX Daemon Server] - 2024-05-17T20:41:45.008Z - [WATCHER]: src/package.json was created or restored
+[NX Daemon Server] - 2024-05-17T20:41:45.008Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:45.110Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-05-17T20:41:45.110Z - [REQUEST]: src/package.json
+[NX Daemon Server] - 2024-05-17T20:41:45.110Z - [REQUEST]: 
+[NX Daemon Server] - 2024-05-17T20:41:45.145Z - [REQUEST]: Responding to the client. File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:45.145Z - Done responding to the client File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:45.145Z - Handled FILE-WATCH-CHANGED. Handling time: 0. Response time: 0.
+[NX Daemon Server] - 2024-05-17T20:41:45.146Z - Time taken for 'Load Nx Plugin: /Users/basters/dev/frontend/firestitch/drawer/node_modules/nx/src/plugins/project-json/build-nodes/package-json-next-to-project-json' 0.22441673278808594ms
+[NX Daemon Server] - 2024-05-17T20:41:45.871Z - [WATCHER]: package.json was modified
+[NX Daemon Server] - 2024-05-17T20:41:45.871Z - [REQUEST]: Responding to the client. File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:45.871Z - Done responding to the client File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:45.871Z - Handled FILE-WATCH-CHANGED. Handling time: 0. Response time: 0.
+[NX Daemon Server] - 2024-05-17T20:41:45.871Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:45.871Z - Time taken for 'changed-projects' 0.049750328063964844ms
+[NX Daemon Server] - 2024-05-17T20:41:46.074Z - [REQUEST]: Updated workspace context based on watched changes, recomputing project graph...
+[NX Daemon Server] - 2024-05-17T20:41:46.074Z - [REQUEST]: package.json
+[NX Daemon Server] - 2024-05-17T20:41:46.074Z - [REQUEST]: 
+[NX Daemon Server] - 2024-05-17T20:41:46.091Z - Time taken for 'Load Nx Plugin: /Users/basters/dev/frontend/firestitch/drawer/node_modules/nx/src/plugins/project-json/build-nodes/package-json-next-to-project-json' 0.6384592056274414ms
+[NX Daemon Server] - 2024-05-17T20:41:53.347Z - [WATCHER]: Processing file changes in outputs
+[NX Daemon Server] - 2024-05-17T20:41:53.349Z - [WATCHER]: src/package.json was deleted
+[NX Daemon Server] - 2024-05-17T20:41:53.349Z - [REQUEST]: Responding to the client. File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:53.349Z - Done responding to the client File watch changed
+[NX Daemon Server] - 2024-05-17T20:41:53.349Z - Handled FILE-WATCH-CHANGED. Handling time: 0. Response time: 0.
+[NX Daemon Server] - 2024-05-17T20:41:53.349Z - Time taken for 'changed-projects' 0.01570892333984375ms
