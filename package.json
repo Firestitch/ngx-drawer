@@ -2,7 +2,7 @@
   "name": "@firestitch/drawer",
   "title": "Drawer",
   "description": "@firestitch/drawer",
-  "version": "13.0.1",
+  "version": "13.0.2",
   "repository": {
     "type": "git",
     "url": "https://github.com/Firestitch/ngx-drawer"
