@@ -17,9 +17,9 @@ export class FsDrawerUrlService {
   private _url: UrlTree;
 
   constructor(
-    private _router: Router,
-    private _location: Location,
-    private _drawerStoreService: DrawerStoreService,
+    protected _router: Router,
+    protected _location: Location,
+    protected _drawerStoreService: DrawerStoreService,
   ) {
     this._initRouterEvents();
   }
