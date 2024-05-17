@@ -12,7 +12,7 @@ import { DrawerStoreService } from './drawer-store.service';
 @Injectable({
   providedIn: 'root',
 })
-export class DrawerUrlService {
+export class FsDrawerUrlService {
 
   private _url: UrlTree;
 

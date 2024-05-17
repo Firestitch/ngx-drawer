@@ -27,3 +27,4 @@ export { IDrawerComponent } from './app/interfaces/drawer-component.interface';
 
 export { FsDrawerAction } from './app/helpers/action-type.enum';
 export { fsDrawerRoute } from './app/helpers/drawer-route';
+export { FsDrawerUrlService } from './app/services/drawer-url.service';

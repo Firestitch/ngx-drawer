@@ -18,7 +18,7 @@ import { DrawerConfig } from '../models/drawer-config.model';
 import { DRAWER_DATA } from './drawer-data';
 import { DRAWER_DEFAULT_CONFIG } from './drawer-default-config';
 import { DrawerStoreService } from './drawer-store.service';
-import { DrawerUrlService } from './drawer-url.service';
+import { FsDrawerUrlService } from './drawer-url.service';
 
 
 @Injectable({
@@ -34,7 +34,7 @@ export class FsDrawerService implements OnDestroy {
     private _overlay: Overlay,
     private _injector: Injector,
     private _drawerStore: DrawerStoreService,
-    private _drawerUrl: DrawerUrlService,
+    private _drawerUrl: FsDrawerUrlService,
     private _location: Location,
   ) {
   }
