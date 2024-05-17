@@ -14,7 +14,7 @@ import { DrawerStoreService } from './drawer-store.service';
 })
 export class FsDrawerUrlService {
 
-  private _url: UrlTree;
+  protected _url: UrlTree;
 
   constructor(
     protected _router: Router,
@@ -47,7 +47,7 @@ export class FsDrawerUrlService {
     }
   }
 
-  private _initRouterEvents(): void {
+  protected _initRouterEvents(): void {
     this._router.events
       .pipe(
         filter((event) => event instanceof NavigationStart),
