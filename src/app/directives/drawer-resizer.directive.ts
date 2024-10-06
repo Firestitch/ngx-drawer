@@ -7,11 +7,12 @@ import {
   OnInit,
   Renderer2,
 } from '@angular/core';
+
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
-import { DrawerSizeController } from '../classes/drawer-size-controller';
 import { DrawerRef } from '../classes/drawer-ref';
+import { DrawerSizeController } from '../classes/drawer-size-controller';
 import { MAIN_RESIZE_ACTION_BAR_WIDTH, SIDE_RESIZE_BAR_WIDTH } from '../consts/sizes.cont';
 
 
@@ -19,11 +20,11 @@ import { MAIN_RESIZE_ACTION_BAR_WIDTH, SIDE_RESIZE_BAR_WIDTH } from '../consts/s
   selector: '[fsDrawerResizer]',
   host: {
     '[style.cursor]': '"col-resize"',
-  }
+  },
 })
 export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
-  @Input() public fsDrawerResizer = this._el.nativeElement;
+  @Input() public fsDrawerResizer;
   @Input() public type: 'main' | 'side';
   @Input() public direction = 'left';
   @Input() public resizable = true;
@@ -46,7 +47,9 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     private _renderer: Renderer2,
     private _ngZone: NgZone,
     private _drawerRef: DrawerRef<any>,
-  ) {}
+  ) {
+    this.fsDrawerResizer = this._el.nativeElement;
+  }
 
   public get drawerRef(): DrawerRef<any> {
     return this._drawerRef;
@@ -77,9 +80,10 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
       if (screenWidth - minWidth < barWidth) {
         return this.sizeController.screenWidth - barWidth;
-      } else {
-        return minWidth;
       }
+
+      return minWidth;
+
     }
   }
 
@@ -95,11 +99,12 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
       return !maxWidth || maxWidth >= parentContainerWidth
         ? parentContainerWidth - this._actionsWidth * 2
         : maxWidth;
-    } else {
-      return !maxWidth || maxWidth >= this.sizeController.screenWidth
-        ? this.sizeController.screenWidth
-        : maxWidth;
     }
+
+    return !maxWidth || maxWidth >= this.sizeController.screenWidth
+      ? this.sizeController.screenWidth
+      : maxWidth;
+
   }
 
   public get barWidth(): number {
@@ -119,7 +124,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
       });
 
       if (this.actionsContainer) {
-        this._actionsWidth = this._getElementWidth(this.actionsContainer.nativeElement)
+        this._actionsWidth = this._getElementWidth(this.actionsContainer.nativeElement);
       }
 
       this.setMinMaxStyles();
@@ -175,18 +180,19 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   public setMinMaxStyles() {
     requestAnimationFrame(() => {
       this._renderer.setStyle(this.fsDrawerResizer, 'min-width', `${this.minWidth}px`);
-      this._renderer.setStyle(this.fsDrawerResizer, 'max-width', `${this.maxWidth}px`)
+      this._renderer.setStyle(this.fsDrawerResizer, 'max-width', `${this.maxWidth}px`);
     });
   }
 
   /**
    * Subscribe to move events and init base dimensions/restrictions
+   *
    * @param event { MouseEvent }
    */
   private _dragStart(event: MouseEvent) {
 
     this._x = this._getClientX(event);
-    this.updateWidth(this._getElementWidth(this.fsDrawerResizer))
+    this.updateWidth(this._getElementWidth(this.fsDrawerResizer));
 
     this.setMinMaxStyles();
 
@@ -199,6 +205,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   /**
    * Update coordinates during drag
+   *
    * @param event
    */
   private _drag(event: MouseEvent) {
@@ -212,6 +219,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   /**
    * Remove listeners when drag finished
+   *
    * @param event
    */
   private _dragEnd(event: MouseEvent) {
@@ -231,6 +239,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   /**
    * Will return width of element
+   *
    * @param el
    */
   private _getElementWidth(el) {
@@ -239,16 +248,18 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   /**
    * Update width and position of target element
+   *
    * @param clientX
    * @param width
    */
   private _updatePosition(clientX: number, width: number) {
     this._x = clientX;
-    this.updateWidth(width < 0 ? 0 : width)
+    this.updateWidth(width < 0 ? 0 : width);
   }
 
   /**
    * Calc new width based on offset from previous position
+   *
    * @param direction
    * @param clientX
    */
