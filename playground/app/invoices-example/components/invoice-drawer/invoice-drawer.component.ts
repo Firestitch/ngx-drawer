@@ -13,7 +13,7 @@ import { DrawerRef, FsDrawerAction, IDrawerComponent, IDrawerConfig } from 'fs-p
 })
 export class InvoiceDrawerComponent implements IDrawerComponent {
 
-  public invoice$ = new RouteObserver<any>(this._route, 'invoice');
+  public invoice$: RouteObserver<any>;
 
   public drawerConfig: IDrawerConfig = {
     disableClose: false,
@@ -32,6 +32,7 @@ export class InvoiceDrawerComponent implements IDrawerComponent {
     public drawerRef: DrawerRef<InvoiceDrawerComponent>,
     private _route: ActivatedRoute,
   ) {
+    this.invoice$ = new RouteObserver<any>(this._route, 'invoice');
   }
 
 }
