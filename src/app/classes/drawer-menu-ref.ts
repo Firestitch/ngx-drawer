@@ -106,13 +106,13 @@ export class DrawerMenuRef<TCmp, R = any> {
           takeUntil(this._destroy$)
         )
         .subscribe(() => {
-          observer.next();
+          observer.next(null);
           observer.complete();
         }, () => {
           observer.error();
         });
       } else {
-        observer.next();
+        observer.next(null);
         observer.complete();
       }
 
@@ -134,7 +134,7 @@ export class DrawerMenuRef<TCmp, R = any> {
 
     this._dataFactory.destroy();
 
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 

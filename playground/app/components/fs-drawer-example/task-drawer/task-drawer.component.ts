@@ -36,7 +36,7 @@ export class TaskDrawerComponent implements OnInit {
 
     new Observable((observer) => {
       setTimeout(() => {
-        observer.next();
+        observer.next(null);
         observer.complete();
       }, 3000)
     }).pipe(

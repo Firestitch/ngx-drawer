@@ -33,7 +33,7 @@ export class DrawerStoreService {
     if (this._openedDrawers.indexOf(value) === -1) {
       this._openedDrawers.push(value);
       this._openedDrawersMap.set(componentRef, value);
-      this._drawerOpened$.next();
+      this._drawerOpened$.next(null);
 
       this._pushDrawersCascade();
     }

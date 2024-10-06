@@ -187,12 +187,12 @@ export class FsDrawerExampleComponent {
 
     drawerRef.closeStart$.subscribe((result) => {
       console.log('close starts');
-      result.next();
+      result.next(null);
     });
 
     drawerRef.openStart$.subscribe((result) => {
       console.log('open starts');
-      result.next();
+      result.next(null);
     });
 
     drawerRef.dataChanged$

@@ -71,7 +71,7 @@ export class DrawerRouter {
 
       this._listenDrawerClose(component, ref);
 
-      this._drawerOpened$.next();
+      this._drawerOpened$.next(null);
     }
   }
 

@@ -215,7 +215,7 @@ export class DrawerRef<T, TR = any> {
           }),
         )
         .subscribe((observer) => {
-          observer.next();
+          observer.next(null);
           observer.complete();
         });
 
@@ -267,7 +267,7 @@ export class DrawerRef<T, TR = any> {
         if (this._openStart$.observers.length) {
           this._openStart$.next(obs);
         } else {
-          obs.next();
+          obs.next(null);
           obs.complete();
         }
       });
@@ -282,7 +282,7 @@ export class DrawerRef<T, TR = any> {
           }
 
           this._drawerContainerRef.open();
-          this._afterOpened$.next();
+          this._afterOpened$.next(null);
           this._afterOpened$.complete();
         },
         error: () => {
@@ -308,13 +308,13 @@ export class DrawerRef<T, TR = any> {
             takeUntil(this._destroy$),
           )
           .subscribe(() => {
-            observer.next();
+            observer.next(null);
             observer.complete();
           }, () => {
             observer.error();
           });
       } else {
-        observer.next();
+        observer.next(null);
         observer.complete();
       }
 
@@ -483,7 +483,7 @@ export class DrawerRef<T, TR = any> {
     this._drawerComponentRef.destroy();
     this._dataFactory.destroy();
 
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 

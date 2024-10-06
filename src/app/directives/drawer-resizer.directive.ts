@@ -165,7 +165,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
     this.sizeController.removeElRef(this);
 
-    this._destroy$.next();
+    this._destroy$.next(null);
     this._destroy$.complete();
   }
 
