@@ -3,4 +3,4 @@
 @import '@firestitch/component-tools/assets/playground.scss';
 @import '../src/styles.scss';
 @include mat.core();
-@include fs-drawer(mat.$blue-palette);
+@include fs-drawer(mat.$m2-blue-palette);
