@@ -20,6 +20,7 @@ export interface IDrawerConfig<TData = any> {
 export interface IDrawerWidthConfig {
   main?: IDrawerWidthDefinition;
   side?: IDrawerWidthDefinition;
+  content?: Omit<IDrawerWidthDefinition, 'initial' | 'max'>;
 }
 
 export interface IDrawerWidthDefinition {

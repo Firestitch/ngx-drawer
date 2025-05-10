@@ -5,6 +5,7 @@ import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../classes/drawer-ref';
 import {
+  CONTENT_DRAWER_DEFAULT_WIDTH,
   MAIN_DRAWER_DEFAULT_WIDTH,
   MAIN_RESIZE_ACTION_BAR_WIDTH,
   SIDE_DRAWER_DEFAULT_WIDTH, SIDE_RESIZE_BAR_WIDTH,
@@ -24,6 +25,7 @@ export class DrawerSizeController implements OnDestroy {
 
   private _mainConfig: IDrawerWidthDefinition;
   private _sideConfig: IDrawerWidthDefinition;
+  private _contentConfig: Omit<IDrawerWidthDefinition, 'initial' | 'max'>;
 
   private _sideOpened = false;
   private _screenWidth: number;
@@ -55,6 +57,10 @@ export class DrawerSizeController implements OnDestroy {
     return this._sideConfig;
   }
 
+  public get contentConfig(): IDrawerWidthDefinition {
+    return this._contentConfig;
+  }
+
   public get screenWidth(): number {
     return this._screenWidth;
   }
@@ -68,6 +74,12 @@ export class DrawerSizeController implements OnDestroy {
   public get persistedSideWidth(): number {
     return this._persistanceController.enabled
       ? this._persistanceController.getDataFromScope('sideWidth')
+      : null;
+  }
+
+  public get persistedContentWidth(): number {
+    return this._persistanceController.enabled
+      ? this._persistanceController.getDataFromScope('contentWidth')
       : null;
   }
 
@@ -129,7 +141,14 @@ export class DrawerSizeController implements OnDestroy {
     if (type === 'main') {
       return this.mainConfig.max ?? window.innerWidth;
     } else if (type === 'side') {
-      return this.sideConfig.max ?? window.innerWidth;
+      const availableSideWidth = this.mainElRef.width - MAIN_RESIZE_ACTION_BAR_WIDTH - SIDE_RESIZE_BAR_WIDTH;
+
+      const sideMax = this.sideConfig.max ?? availableSideWidth;
+
+      const minContentWidth
+        = availableSideWidth - (this.contentConfig.min ?? 0);
+
+      return Math.min(sideMax, minContentWidth);
     }
 
     return window.innerWidth;
@@ -196,7 +215,7 @@ export class DrawerSizeController implements OnDestroy {
   private _initDefaultConfigs() {
     // Main initialization
     this._mainConfig =
-      (this._drawerRef.drawerConfig.width && this._drawerRef.drawerConfig.width.main)
+      (this._drawerRef.drawerConfig.width?.main)
       || {};
 
     this._mainConfig.initial = this.persistedMainWidth
@@ -206,12 +225,17 @@ export class DrawerSizeController implements OnDestroy {
 
     // Side initialization
     this._sideConfig =
-      (this._drawerRef.drawerConfig.width && this._drawerRef.drawerConfig.width.side)
+      (this._drawerRef.drawerConfig.width?.side)
       || {};
 
     this._sideConfig.initial = this.persistedSideWidth
       || this._sideConfig.initial
       || SIDE_DRAWER_DEFAULT_WIDTH;
+
+    // Content initialization
+    this._contentConfig =
+      (this._drawerRef.drawerConfig.width?.content)
+      || {};
   }
 
   private _registerMainRef(el: FsDrawerResizerDirective) {
@@ -301,6 +325,13 @@ export class DrawerSizeController implements OnDestroy {
             this._persistanceController.saveDataToScope(
               'sideWidth',
               sideWidth,
+            );
+
+            const availableSideWidth = this.mainElRef.width - MAIN_RESIZE_ACTION_BAR_WIDTH - SIDE_RESIZE_BAR_WIDTH;
+
+            this._persistanceController.saveDataToScope(
+              'contentWidth',
+              availableSideWidth - (this.contentConfig.min ?? 0),
             );
           }
         },

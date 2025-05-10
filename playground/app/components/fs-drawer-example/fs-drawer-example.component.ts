@@ -60,6 +60,9 @@ export class FsDrawerExampleComponent {
             min: 200,
             // max: 500,
           },
+          content: {
+            min: 500,
+          }
         },
         actions: [
           {
