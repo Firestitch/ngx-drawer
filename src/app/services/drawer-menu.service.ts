@@ -1,8 +1,8 @@
-import { ElementRef, Injectable, Injector } from '@angular/core';
+import { ElementRef, Injectable, Injector, StaticProvider } from '@angular/core';
 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
-import { ComponentPortal, ComponentType, PortalInjector } from '@angular/cdk/portal';
+import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
 
 import { DrawerData } from '../classes/drawer-data';
 import { DrawerMenuRef } from '../classes/drawer-menu-ref';
@@ -67,7 +67,7 @@ export class FsDrawerMenuService {
   }
 
   private _attachContainer<T, R>(overlayRef: OverlayRef, menuRef: DrawerMenuRef<T, R>, dataFactory: DrawerData) {
-    const injector = this.createInjector(menuRef, dataFactory);
+    const injector = this._createInjector(menuRef, dataFactory);
     const containerPortal = new ComponentPortal(FsDrawerMenuComponent, undefined, injector);
     const containerRef = overlayRef.attach<FsDrawerMenuComponent>(containerPortal);
 
@@ -81,7 +81,7 @@ export class FsDrawerMenuService {
     config: any,
   ) {
 
-    const injector = this.createInjector(externalRef, config);
+    const injector = this._createInjector(externalRef, config);
 
     return externalContainer.attachComponentPortal<T>(
       new ComponentPortal<T>(componentRef, undefined, injector),
@@ -89,12 +89,15 @@ export class FsDrawerMenuService {
   }
 
 
-  private createInjector(componentRef, dataFactory: DrawerData) {
-    const injectionTokens = new WeakMap<any, any>([
-      [DrawerMenuRef, componentRef],
-      [DRAWER_MENU_DATA, dataFactory],
-    ]);
-
-    return new PortalInjector(this._injector, injectionTokens);
+  private _createInjector(componentRef: any, dataFactory: DrawerData): Injector {
+    const providers: StaticProvider[] = [
+      { provide: DrawerMenuRef, useValue: componentRef },
+      { provide: DRAWER_MENU_DATA, useValue: dataFactory },
+    ];
+  
+    return Injector.create({
+      providers,
+      parent: this._injector,
+    });
   }
 }
