@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { NavigationStart, Router, UrlTree } from '@angular/router';
 
 import { filter } from 'rxjs/operators';
@@ -13,14 +13,14 @@ import { DrawerStoreService } from './drawer-store.service';
   providedIn: 'root',
 })
 export class FsDrawerUrlService {
+  protected _router = inject(Router);
+  protected _location = inject(Location);
+  protected _drawerStoreService = inject(DrawerStoreService);
+
 
   protected _url: UrlTree;
 
-  constructor(
-    protected _router: Router,
-    protected _location: Location,
-    protected _drawerStoreService: DrawerStoreService,
-  ) {
+  constructor() {
     this._initRouterEvents();
   }
 

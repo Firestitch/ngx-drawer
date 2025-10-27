@@ -1,4 +1,4 @@
-import { ElementRef, Injectable, Injector, StaticProvider } from '@angular/core';
+import { ElementRef, Injectable, Injector, StaticProvider, inject } from '@angular/core';
 
 import { BreakpointObserver, Breakpoints } from '@angular/cdk/layout';
 import { ConnectedPosition, Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
@@ -12,11 +12,10 @@ import { DRAWER_MENU_DATA } from '../services/drawer-menu-data';
 
 @Injectable()
 export class FsDrawerMenuService {
+  private _overlay = inject(Overlay);
+  private _injector = inject(Injector);
+  private _breakpointObserver = inject(BreakpointObserver);
 
-  constructor(private _overlay: Overlay,
-    private _injector: Injector,
-    private _breakpointObserver: BreakpointObserver) {
-  }
 
   public create(component: ComponentType<any>, container: Element, config?: any) {
     const overlayRef = this._createOverlay(container);

@@ -1,12 +1,4 @@
-import {
-  Directive,
-  ElementRef,
-  Input,
-  NgZone,
-  OnDestroy,
-  OnInit,
-  Renderer2,
-} from '@angular/core';
+import { Directive, ElementRef, Input, NgZone, OnDestroy, OnInit, Renderer2, inject } from '@angular/core';
 
 import { BehaviorSubject, Observable, Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
@@ -24,6 +16,11 @@ import { MAIN_RESIZE_ACTION_BAR_WIDTH, SIDE_RESIZE_BAR_WIDTH } from '../consts/s
     standalone: true,
 })
 export class FsDrawerResizerDirective implements OnInit, OnDestroy {
+  private _el = inject(ElementRef);
+  private _renderer = inject(Renderer2);
+  private _ngZone = inject(NgZone);
+  private _drawerRef = inject<DrawerRef<any>>(DrawerRef);
+
 
   @Input() public fsDrawerResizer;
   @Input() public type: 'main' | 'side';
@@ -43,12 +40,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   private _destroy$ = new Subject();
 
-  constructor(
-    private _el: ElementRef,
-    private _renderer: Renderer2,
-    private _ngZone: NgZone,
-    private _drawerRef: DrawerRef<any>,
-  ) {
+  constructor() {
     this.fsDrawerResizer = this._el.nativeElement;
   }
 

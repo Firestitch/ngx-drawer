@@ -1,4 +1,4 @@
-import { Injectable, Injector, Type } from '@angular/core';
+import { Injectable, Injector, Type, inject } from '@angular/core';
 import { NavigationExtras, Router } from '@angular/router';
 
 import { ComponentType } from '@angular/cdk/portal';
@@ -16,16 +16,13 @@ import { FsDrawerService } from './drawer.service';
   providedIn: 'root',
 })
 export class DrawerRouter {
+  private _router = inject(Router);
+  private _drawer = inject(FsDrawerService);
+
 
   private _activeDrawer: WeakMap<Type<any>, DrawerRef<unknown>> = new WeakMap();
 
   private _drawerOpened$ = new BehaviorSubject<void>(null);
-
-  constructor(
-    private _router: Router,
-    private _drawer: FsDrawerService,
-  ) {
-  }
 
   public openDrawerForRoute(
     component: ComponentType<unknown>,

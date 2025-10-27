@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, OnDestroy, ViewChild } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, ViewChild, inject } from '@angular/core';
 
 import { FsListComponent, FsListConfig, FsListModule } from '@firestitch/list';
 
@@ -25,6 +25,9 @@ import { CurrencyPipe } from '@angular/common';
     ],
 })
 export class InvoicesComponent implements OnDestroy {
+  private _invoicesService = inject(InvoicesService);
+  private _drawer = inject(FsDrawerService);
+
 
   public config: FsListConfig;
 
@@ -33,10 +36,7 @@ export class InvoicesComponent implements OnDestroy {
 
   private _destroy$ = new Subject<void>();
 
-  constructor(
-    private _invoicesService: InvoicesService,
-    private _drawer: FsDrawerService,
-  ) {
+  constructor() {
     this._initConfig();
 
     this._drawer

@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component, EventEmitter,
-  Input,
-  OnChanges, OnInit,
-  Output,
-  SimpleChanges,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, inject } from '@angular/core';
 
 import { Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
@@ -36,6 +28,9 @@ import { FsMenuModule } from '@firestitch/menu';
     ],
 })
 export class FsDrawerActionItemComponent implements OnInit, OnChanges {
+  drawer = inject<DrawerRef<any>>(DrawerRef);
+  private _cdRef = inject(ChangeDetectorRef);
+
   @Input()
   public action: Action;
 
@@ -51,10 +46,7 @@ export class FsDrawerActionItemComponent implements OnInit, OnChanges {
 
   private _destroy$ = new Subject<void>();
 
-  constructor(
-    public drawer: DrawerRef<any>,
-    private _cdRef: ChangeDetectorRef,
-  ) {
+  constructor() {
     this._listenActionChanges();
     this._listenDataChanges();
   }

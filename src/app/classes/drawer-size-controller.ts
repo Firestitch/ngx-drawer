@@ -1,4 +1,4 @@
-import { Injectable, NgZone, OnDestroy } from '@angular/core';
+import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
 
 import { fromEvent, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
@@ -19,6 +19,11 @@ import { FsDrawerPersistanceController } from './persistance-controller';
 
 @Injectable()
 export class DrawerSizeController implements OnDestroy {
+  private _drawerRef = inject<DrawerRef<any>>(DrawerRef);
+  private _ngZone = inject(NgZone);
+  private _persistanceController = inject(FsDrawerPersistanceController);
+  private _drawerStore = inject(DrawerStoreService);
+
 
   private _mainElRef: FsDrawerResizerDirective;
   private _sideElRef: FsDrawerResizerDirective;
@@ -33,13 +38,6 @@ export class DrawerSizeController implements OnDestroy {
   private readonly _borderPadding = 0;
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    private _drawerRef: DrawerRef<any>,
-    private _ngZone: NgZone,
-    private _persistanceController: FsDrawerPersistanceController,
-    private _drawerStore: DrawerStoreService,
-  ) { }
 
   public get mainElRef() {
     return this._mainElRef;

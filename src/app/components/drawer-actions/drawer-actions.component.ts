@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  Input,
-  OnDestroy,
-  OnInit,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
 
 import { Subject } from 'rxjs';
 
@@ -30,6 +24,10 @@ import { MatIcon } from '@angular/material/icon';
     ],
 })
 export class FsDrawerActionsComponent implements OnInit, OnDestroy {
+  private _drawerRef = inject<DrawerRef<any>>(DrawerRef);
+  private _drawerMenu = inject(FsDrawerMenuService);
+  private _cdRef = inject(ChangeDetectorRef);
+
 
   @Input()
   public actions: Action[];
@@ -38,12 +36,6 @@ export class FsDrawerActionsComponent implements OnInit, OnDestroy {
   public activeAction: string;
 
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    private _drawerRef: DrawerRef<any>,
-    private _drawerMenu: FsDrawerMenuService,
-    private _cdRef: ChangeDetectorRef,
-  ) {}
 
   public ngOnInit(): void {
   }

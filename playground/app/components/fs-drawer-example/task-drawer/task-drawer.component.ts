@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit, inject } from '@angular/core';
 import { DRAWER_DATA, DrawerDataProxy, DrawerRef } from 'fs-package';
 import { Observable } from 'rxjs';
 import { FsDrawerSideComponent } from '../../../../../src/app/components/drawer-side/drawer-side.component';
@@ -23,11 +23,11 @@ import { JsonPipe } from '@angular/common';
     ],
 })
 export class TaskDrawerComponent implements OnInit {
+  drawerRef = inject<DrawerRef<TaskDrawerComponent>>(DrawerRef);
+  private _data = inject<DrawerDataProxy<any>>(DRAWER_DATA);
+
 
   public account: any = {};
-
-  constructor(public drawerRef: DrawerRef<TaskDrawerComponent>,
-              @Inject(DRAWER_DATA) private _data: DrawerDataProxy<any>) {}
 
   public ngOnInit() {
     this.account = this._data.account;

@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { RouteObserver } from '@firestitch/core';
@@ -22,6 +22,9 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
     ],
 })
 export class InvoiceDrawerComponent implements IDrawerComponent {
+  drawerRef = inject<DrawerRef<InvoiceDrawerComponent>>(DrawerRef);
+  private _route = inject(ActivatedRoute);
+
 
   public invoice$: RouteObserver<any>;
 
@@ -38,10 +41,7 @@ export class InvoiceDrawerComponent implements IDrawerComponent {
     ],
   };
 
-  constructor(
-    public drawerRef: DrawerRef<InvoiceDrawerComponent>,
-    private _route: ActivatedRoute,
-  ) {
+  constructor() {
     this.invoice$ = new RouteObserver<any>(this._route, 'invoice');
   }
 

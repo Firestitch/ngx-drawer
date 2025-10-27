@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { guid } from '@firestitch/common';
@@ -28,13 +28,11 @@ interface IExampleDrawerData {
     imports: [MatButton],
 })
 export class FsDrawerExampleComponent {
+  private _drawer = inject(FsDrawerService);
+  private _router = inject(Router);
+
 
   public notificationsEnabled = false;
-
-  constructor(
-    private _drawer: FsDrawerService,
-    private _router: Router,
-  ) { }
 
   public open() {
     this.openDrawer(guid());

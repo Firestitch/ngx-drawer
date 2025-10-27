@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
 
 import { DRAWER_MENU_DATA, DrawerDataProxy, DrawerMenuRef } from 'fs-package';
 
@@ -11,10 +11,11 @@ import { DRAWER_MENU_DATA, DrawerDataProxy, DrawerMenuRef } from 'fs-package';
     standalone: true,
 })
 export class CustomMenuComponent implements OnInit {
+  drawer = inject<DrawerMenuRef<CustomMenuComponent>>(DrawerMenuRef);
+  data = inject<DrawerDataProxy<{
+    task_id: number;
+}>>(DRAWER_MENU_DATA);
 
-  constructor(public drawer: DrawerMenuRef<CustomMenuComponent>,
-    @Inject(DRAWER_MENU_DATA) public data: DrawerDataProxy<{ task_id: number }>) {
-  }
 
   public ngOnInit() {
     console.log(this.data.getValue(), this.drawer);

@@ -1,16 +1,5 @@
 import { Location, NgClass, AsyncPipe } from '@angular/common';
-import {
-  ChangeDetectionStrategy,
-  ChangeDetectorRef,
-  Component,
-  ComponentRef,
-  ElementRef,
-  EmbeddedViewRef,
-  OnDestroy,
-  OnInit,
-  ViewChild,
-  ViewEncapsulation,
-} from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EmbeddedViewRef, OnDestroy, OnInit, ViewChild, ViewEncapsulation, inject } from '@angular/core';
 
 import {
   BasePortalOutlet,
@@ -56,6 +45,13 @@ import { FsDrawerResizerDirective } from '../../directives/drawer-resizer.direct
     ],
 })
 export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDestroy {
+  private _el = inject<ElementRef<HTMLElement>>(ElementRef);
+  private _drawerRef = inject<DrawerRef<any>>(DrawerRef);
+  private _cdRef = inject(ChangeDetectorRef);
+  private _resizeController = inject(DrawerSizeController);
+  private _persistanceController = inject(FsDrawerPersistanceController);
+  private _location = inject(Location);
+
 
   public config: DrawerConfig;
   public isOpen = false;
@@ -73,14 +69,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   private _sideOpen = false;
   private _destroy$ = new Subject();
 
-  constructor(
-    private _el: ElementRef<HTMLElement>,
-    private _drawerRef: DrawerRef<any>,
-    private _cdRef: ChangeDetectorRef,
-    private _resizeController: DrawerSizeController,
-    private _persistanceController: FsDrawerPersistanceController,
-    private _location: Location,
-  ) {
+  constructor() {
     super();
     this._drawerRef.resizeController = this._resizeController;
   }

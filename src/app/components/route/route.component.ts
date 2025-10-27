@@ -1,6 +1,4 @@
-import {
-  Component, ComponentFactoryResolver, Injector, OnDestroy, OnInit, ViewContainerRef,
-} from '@angular/core';
+import { Component, ComponentFactoryResolver, Injector, OnDestroy, OnInit, ViewContainerRef, inject } from '@angular/core';
 import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 
 import { ComponentType } from '@angular/cdk/portal';
@@ -21,19 +19,17 @@ import { DrawerRouter } from '../../services/drawer-router';
     imports: [RouterOutlet],
 })
 export class FsDrawerRouteComponent implements OnInit, OnDestroy {
+  private _route = inject(ActivatedRoute);
+  private _router = inject(Router);
+  private _drawerRouter = inject(DrawerRouter);
+  private _componentFactory = inject(ComponentFactoryResolver);
+  private _injector = inject(Injector);
+  private _viewContainerRef = inject(ViewContainerRef);
+
 
   private _drawer: DrawerRef<unknown, unknown>;
   private _hasActiveNavigation = false;
   private _destroy$ = new Subject<void>();
-
-  constructor(
-    private _route: ActivatedRoute,
-    private _router: Router,
-    private _drawerRouter: DrawerRouter,
-    private _componentFactory: ComponentFactoryResolver,
-    private _injector: Injector,
-    private _viewContainerRef?: ViewContainerRef,
-  ) { }
 
   public ngOnInit(): void {
     this._listenNavigationEvents();

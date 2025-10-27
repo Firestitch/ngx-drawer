@@ -1,18 +1,4 @@
-import {
-  AfterViewInit,
-  ChangeDetectionStrategy, ChangeDetectorRef,
-  Component,
-  ContentChildren,
-  ElementRef,
-  EventEmitter,
-  HostBinding,
-  Input,
-  OnDestroy,
-  OnInit,
-  QueryList,
-  Renderer2,
-  TemplateRef,
-} from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, HostBinding, Input, OnDestroy, OnInit, QueryList, Renderer2, TemplateRef, inject } from '@angular/core';
 import { takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../../classes/drawer-ref';
@@ -39,6 +25,10 @@ import { MatIcon } from '@angular/material/icon';
     ],
 })
 export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
+  private _cdRef = inject(ChangeDetectorRef);
+  private _renderer = inject(Renderer2);
+  private _elRef = inject(ElementRef);
+
 
   @Input('fsDrawerSide') public drawer: DrawerRef<any>;
 
@@ -53,12 +43,6 @@ export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private _hidden = false;
   private _destroy$ = new EventEmitter();
-
-  constructor(
-    private _cdRef: ChangeDetectorRef,
-    private _renderer: Renderer2,
-    private _elRef: ElementRef,
-  ) {}
 
   public set hidden(value: boolean) {
     this._hidden = value;

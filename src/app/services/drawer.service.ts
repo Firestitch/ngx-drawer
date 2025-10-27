@@ -1,5 +1,5 @@
 import { Location } from '@angular/common';
-import { Inject, Injectable, Injector, OnDestroy, Optional, SkipSelf } from '@angular/core';
+import { Injectable, Injector, OnDestroy, inject } from '@angular/core';
 
 import { Overlay, OverlayConfig, OverlayRef } from '@angular/cdk/overlay';
 import { ComponentPortal, ComponentType } from '@angular/cdk/portal';
@@ -25,19 +25,16 @@ import { FsDrawerUrlService } from './drawer-url.service';
   providedIn: 'root',
 })
 export class FsDrawerService implements OnDestroy {
+  private _parentDrawerService = inject(FsDrawerService, { optional: true, skipSelf: true });
+  private _defaultConfig = inject<DrawerConfig>(DRAWER_DEFAULT_CONFIG, { optional: true });
+  private _overlay = inject(Overlay);
+  private _injector = inject(Injector);
+  private _drawerStore = inject(DrawerStoreService);
+  private _drawerUrl = inject(FsDrawerUrlService);
+  private _location = inject(Location);
+
 
   private _destroy$ = new Subject();
-
-  constructor(
-    @Optional() @SkipSelf() private _parentDrawerService: FsDrawerService,
-    @Optional() @Inject(DRAWER_DEFAULT_CONFIG) private _defaultConfig: DrawerConfig,
-    private _overlay: Overlay,
-    private _injector: Injector,
-    private _drawerStore: DrawerStoreService,
-    private _drawerUrl: FsDrawerUrlService,
-    private _location: Location,
-  ) {
-  }
 
   public ngOnDestroy(): void {
     this._destroy$.next(null);
