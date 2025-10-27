@@ -17,15 +17,26 @@ import { takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../../classes/drawer-ref';
 import { FsDrawerActionDirective } from '../../directives/drawer-action.directive';
+import { NgTemplateOutlet } from '@angular/common';
+import { FsDrawerResizerDirective } from '../../directives/drawer-resizer.directive';
+import { MatIconAnchor } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
-  selector: '[fsDrawerSide]',
-  templateUrl: './drawer-side.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrls: [
-    './drawer-side.component.scss',
-  ],
+    selector: '[fsDrawerSide]',
+    templateUrl: './drawer-side.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    styleUrls: [
+        './drawer-side.component.scss',
+    ],
+    standalone: true,
+    imports: [
+        NgTemplateOutlet,
+        FsDrawerResizerDirective,
+        MatIconAnchor,
+        MatIcon,
+    ],
 })
 export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
 

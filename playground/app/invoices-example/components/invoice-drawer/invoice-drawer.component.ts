@@ -4,12 +4,22 @@ import { ActivatedRoute } from '@angular/router';
 import { RouteObserver } from '@firestitch/core';
 
 import { DrawerRef, FsDrawerAction, IDrawerComponent, IDrawerConfig } from 'fs-package';
+import { FsDrawerContentComponent } from '../../../../../src/app/components/drawer-content/drawer-content.component';
+import { FsLabelModule } from '@firestitch/label';
+import { AsyncPipe, JsonPipe } from '@angular/common';
 
 
 @Component({
-  templateUrl: './invoice-drawer.component.html',
-  styleUrls: ['./invoice-drawer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './invoice-drawer.component.html',
+    styleUrls: ['./invoice-drawer.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsDrawerContentComponent,
+        FsLabelModule,
+        AsyncPipe,
+        JsonPipe,
+    ],
 })
 export class InvoiceDrawerComponent implements IDrawerComponent {
 

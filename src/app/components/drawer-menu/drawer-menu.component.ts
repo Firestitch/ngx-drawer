@@ -14,13 +14,15 @@ import {
 import { DrawerMenuRef } from '../../classes/drawer-menu-ref';
 
 @Component({
-  selector: 'fs-drawer-menu',
-  templateUrl: 'drawer-menu.component.html',
-  styleUrls: [ 'drawer-menu.component.scss' ],
-  host: {
-    'class': 'mat-elevation-z2'
-  },
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-drawer-menu',
+    templateUrl: 'drawer-menu.component.html',
+    styleUrls: ['drawer-menu.component.scss'],
+    host: {
+        'class': 'mat-elevation-z2'
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [CdkPortalOutlet],
 })
 export class FsDrawerMenuComponent extends BasePortalOutlet {
 

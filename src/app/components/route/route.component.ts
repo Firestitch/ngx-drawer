@@ -1,7 +1,7 @@
 import {
   Component, ComponentFactoryResolver, Injector, OnDestroy, OnInit, ViewContainerRef,
 } from '@angular/core';
-import { ActivatedRoute, NavigationEnd, NavigationStart, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, NavigationStart, Router, RouterOutlet } from '@angular/router';
 
 import { ComponentType } from '@angular/cdk/portal';
 
@@ -16,7 +16,9 @@ import { DrawerRouter } from '../../services/drawer-router';
 
 
 @Component({
-  template: '<router-outlet></router-outlet>',
+    template: '<router-outlet></router-outlet>',
+    standalone: true,
+    imports: [RouterOutlet],
 })
 export class FsDrawerRouteComponent implements OnInit, OnDestroy {
 

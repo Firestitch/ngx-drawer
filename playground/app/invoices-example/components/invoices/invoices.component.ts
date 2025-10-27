@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy, ViewChild } from '@angular/core';
 
-import { FsListComponent, FsListConfig } from '@firestitch/list';
+import { FsListComponent, FsListConfig, FsListModule } from '@firestitch/list';
 
 import { Subject } from 'rxjs';
 import { map, switchMap, takeUntil } from 'rxjs/operators';
@@ -9,11 +9,20 @@ import { FsDrawerService } from 'fs-package';
 
 import { InvoicesService } from '../../services/invoices.service';
 import { InvoiceDrawerComponent } from '../invoice-drawer';
+import { RouterLink, RouterOutlet } from '@angular/router';
+import { CurrencyPipe } from '@angular/common';
 
 
 @Component({
-  templateUrl: './invoices.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    templateUrl: './invoices.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsListModule,
+        RouterLink,
+        RouterOutlet,
+        CurrencyPipe,
+    ],
 })
 export class InvoicesComponent implements OnDestroy {
 

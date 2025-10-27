@@ -8,6 +8,7 @@ import { FsDrawerAction, FsDrawerService } from 'fs-package';
 
 import { CustomMenuComponent } from './custom-menu';
 import { TaskDrawerComponent } from './task-drawer';
+import { MatButton } from '@angular/material/button';
 
 interface IExampleDrawerData {
   account: {
@@ -19,10 +20,12 @@ interface IExampleDrawerData {
 }
 
 @Component({
-  selector: 'fs-drawer-example',
-  templateUrl: './fs-drawer-example.component.html',
-  styleUrls: ['./fs-drawer-example.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-drawer-example',
+    templateUrl: './fs-drawer-example.component.html',
+    styleUrls: ['./fs-drawer-example.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [MatButton],
 })
 export class FsDrawerExampleComponent {
 

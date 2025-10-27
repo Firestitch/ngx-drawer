@@ -2,7 +2,7 @@
  * Public API Surface of fs-menu
  */
 
-export { FsDrawerModule } from './app/fs-drawer.module';
+
 
 export { FsDrawerComponent } from './app/components/drawer/drawer.component';
 export { FsDrawerSideComponent } from './app/components/drawer-side/drawer-side.component';

@@ -12,13 +12,22 @@ import { FsDrawerAction } from '../../helpers/action-type.enum';
 import { DrawerRef } from '../../classes/drawer-ref';
 import { Action } from '../../models/action.model';
 import { FsDrawerMenuService } from '../../services/drawer-menu.service';
+import { FsDrawerActionItemComponent } from './drawer-action-item/drawer-action-item.component';
+import { MatIconAnchor } from '@angular/material/button';
+import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
-  selector: 'fs-drawer-actions',
-  templateUrl: './drawer-actions.component.html',
-  styleUrls: [ './drawer-actions.component.scss' ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-drawer-actions',
+    templateUrl: './drawer-actions.component.html',
+    styleUrls: ['./drawer-actions.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        FsDrawerActionItemComponent,
+        MatIconAnchor,
+        MatIcon,
+    ],
 })
 export class FsDrawerActionsComponent implements OnInit, OnDestroy {
 

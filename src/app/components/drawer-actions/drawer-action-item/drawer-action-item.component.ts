@@ -14,15 +14,26 @@ import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 import { DrawerRef } from '../../../classes/drawer-ref';
 import { FsDrawerAction } from '../../../helpers/action-type.enum';
 import { Action } from '../../../models/action.model';
+import { MatIconButton } from '@angular/material/button';
+import { MatTooltip } from '@angular/material/tooltip';
+import { MatIcon } from '@angular/material/icon';
+import { FsMenuModule } from '@firestitch/menu';
 
 
 @Component({
-  selector: 'fs-drawer-action-item',
-  templateUrl: './drawer-action-item.component.html',
-  styleUrls: [
-    './drawer-action-item.component.scss',
-  ],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-drawer-action-item',
+    templateUrl: './drawer-action-item.component.html',
+    styleUrls: [
+        './drawer-action-item.component.scss',
+    ],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        MatIconButton,
+        MatTooltip,
+        MatIcon,
+        FsMenuModule,
+    ],
 })
 export class FsDrawerActionItemComponent implements OnInit, OnChanges {
   @Input()

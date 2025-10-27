@@ -17,10 +17,11 @@ import { MAIN_RESIZE_ACTION_BAR_WIDTH, SIDE_RESIZE_BAR_WIDTH } from '../consts/s
 
 
 @Directive({
-  selector: '[fsDrawerResizer]',
-  host: {
-    '[style.cursor]': '"col-resize"',
-  },
+    selector: '[fsDrawerResizer]',
+    host: {
+        '[style.cursor]': '"col-resize"',
+    },
+    standalone: true,
 })
 export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 

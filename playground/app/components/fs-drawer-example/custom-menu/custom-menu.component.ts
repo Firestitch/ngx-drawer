@@ -4,10 +4,11 @@ import { DRAWER_MENU_DATA, DrawerDataProxy, DrawerMenuRef } from 'fs-package';
 
 
 @Component({
-  selector: 'fs-custom-menu',
-  templateUrl: './custom-menu.component.html',
-  styleUrls: ['./custom-menu.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-custom-menu',
+    templateUrl: './custom-menu.component.html',
+    styleUrls: ['./custom-menu.component.scss'],
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
 })
 export class CustomMenuComponent implements OnInit {
 

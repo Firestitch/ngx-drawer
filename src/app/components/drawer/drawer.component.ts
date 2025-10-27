@@ -1,4 +1,4 @@
-import { Location } from '@angular/common';
+import { Location, NgClass, AsyncPipe } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
@@ -29,21 +29,31 @@ import { DrawerSizeController } from '../../classes/drawer-size-controller';
 import { FsDrawerPersistanceController } from '../../classes/persistance-controller';
 import { DrawerConfig } from '../../models/drawer-config.model';
 import { FsDrawerMenuService } from '../../services/drawer-menu.service';
+import { FsDrawerActionsComponent } from '../drawer-actions/drawer-actions.component';
+import { FsDrawerResizerDirective } from '../../directives/drawer-resizer.directive';
 
 
 @Component({
-  selector: 'fs-drawer',
-  templateUrl: './drawer.component.html',
-  providers: [
-    FsDrawerMenuService,
-    FsDrawerPersistanceController,
-    DrawerSizeController,
-  ],
-  host: {
-    class: 'fs-drawer-container',
-  },
-  encapsulation: ViewEncapsulation.None,
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'fs-drawer',
+    templateUrl: './drawer.component.html',
+    providers: [
+        FsDrawerMenuService,
+        FsDrawerPersistanceController,
+        DrawerSizeController,
+    ],
+    host: {
+        class: 'fs-drawer-container',
+    },
+    encapsulation: ViewEncapsulation.None,
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
+    imports: [
+        NgClass,
+        FsDrawerActionsComponent,
+        FsDrawerResizerDirective,
+        CdkPortalOutlet,
+        AsyncPipe,
+    ],
 })
 export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDestroy {
 

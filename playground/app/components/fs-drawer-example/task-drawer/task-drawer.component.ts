@@ -1,11 +1,26 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { DRAWER_DATA, DrawerDataProxy, DrawerRef } from 'fs-package';
 import { Observable } from 'rxjs';
+import { FsDrawerSideComponent } from '../../../../../src/app/components/drawer-side/drawer-side.component';
+import { FsDrawerActionDirective } from '../../../../../src/app/directives/drawer-action.directive';
+import { MatButton } from '@angular/material/button';
+import { FsDrawerContentComponent } from '../../../../../src/app/components/drawer-content/drawer-content.component';
+import { FsLabelModule } from '@firestitch/label';
+import { JsonPipe } from '@angular/common';
 
 @Component({
-  selector: 'fs-task-drawer',
-  templateUrl: 'task-drawer.component.html',
-  styleUrls: ['./task-drawer.component.scss'],
+    selector: 'fs-task-drawer',
+    templateUrl: 'task-drawer.component.html',
+    styleUrls: ['./task-drawer.component.scss'],
+    standalone: true,
+    imports: [
+        FsDrawerSideComponent,
+        FsDrawerActionDirective,
+        MatButton,
+        FsDrawerContentComponent,
+        FsLabelModule,
+        JsonPipe,
+    ],
 })
 export class TaskDrawerComponent implements OnInit {
 

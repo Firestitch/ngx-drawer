@@ -11,7 +11,7 @@ import { FsFormModule } from '@firestitch/form';
 import { FsLabelModule } from '@firestitch/label';
 import { FsListModule } from '@firestitch/list';
 
-import { FsDrawerModule } from 'fs-package';
+
 
 import { InvoiceDrawerComponent } from './components/invoice-drawer';
 import { InvoicesComponent } from './components/invoices';
@@ -19,12 +19,10 @@ import { InvoicesRoutingModule } from './invoices-routing.module';
 
 
 @NgModule({
-  imports: [
+    imports: [
     CommonModule,
     FsListModule,
-    FsDrawerModule,
     FsFormModule,
-
     InvoicesRoutingModule,
     MatDialogModule,
     MatButtonModule,
@@ -32,10 +30,8 @@ import { InvoicesRoutingModule } from './invoices-routing.module';
     MatInputModule,
     FormsModule,
     FsLabelModule,
-  ],
-  declarations: [
     InvoicesComponent,
     InvoiceDrawerComponent,
-  ],
+],
 })
 export class InvoicesModule {}

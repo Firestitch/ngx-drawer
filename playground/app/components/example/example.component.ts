@@ -2,9 +2,10 @@ import { ChangeDetectionStrategy, Component, OnInit, ViewChild } from '@angular/
 
 
 @Component({
-  selector: 'example',
-  templateUrl: './example.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: 'example',
+    templateUrl: './example.component.html',
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: true,
 })
 export class ExampleComponent implements OnInit {
 
