@@ -1,10 +1,12 @@
 <div class="actions-container" (mousedown)="muteEvent($event)" (dragstart)="muteEvent($event)">
-  <div *ngFor="let action of actions" class="action-btn">
-    <fs-drawer-action-item [action]="action"
-                           [activeAction]="activeAction"
-                           (actionClicked)="actionClick(action, $event)">
-    </fs-drawer-action-item>
-  </div>
+  @for (action of actions; track action) {
+    <div class="action-btn">
+      <fs-drawer-action-item [action]="action"
+        [activeAction]="activeAction"
+        (actionClicked)="actionClick(action, $event)">
+      </fs-drawer-action-item>
+    </div>
+  }
 </div>
 <div class="drag-icon">
   <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>

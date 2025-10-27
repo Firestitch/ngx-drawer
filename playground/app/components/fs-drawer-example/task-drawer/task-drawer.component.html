@@ -33,11 +33,12 @@
     <fs-label>Change Drawer Width</fs-label>
     <button mat-raised-button color="primary" (click)="updateWidth()">Update Main Width</button>
     <br><br>
-    <button mat-raised-button color="primary"
-            *ngIf="drawerRef.isSideOpen"
-            (click)="updateSideWidth()">
-      Update Side Width
-    </button>
+    @if (drawerRef.isSideOpen) {
+      <button mat-raised-button color="primary"
+        (click)="updateSideWidth()">
+        Update Side Width
+      </button>
+    }
   </fs-label-field>
 
   <fs-label-field>

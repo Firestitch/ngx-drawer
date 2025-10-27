@@ -1,34 +1,36 @@
-<ng-container [ngSwitch]="drawer.drawerConfig.position" *ngIf="activeTemplate">
-  <ng-container *ngSwitchCase="'right'">
-    <div class="side-container" #sideContainer>
-      <div class="side-content">
-        <ng-template [ngTemplateOutlet]="activeTemplate"></ng-template>
+@if (activeTemplate) {
+  @switch (drawer.drawerConfig.position) {
+    @case ('right') {
+      <div class="side-container" #sideContainer>
+        <div class="side-content">
+          <ng-template [ngTemplateOutlet]="activeTemplate"></ng-template>
+        </div>
       </div>
-    </div>
-    <div class="resize-side"
-         direction="left"
-         type="side"
-         [fsDrawerResizer]="sideContainer"
-         [resizable]="drawer.drawerConfig.resizable"
-         [sizeController]="drawer.resizeController"
-         [parentContainer]="drawer.drawerContainer"
-         [actionsContainer]="drawer.drawerActionsContainer"
-    >
-      <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
-    </div>
-  </ng-container>
-  <ng-container *ngSwitchCase="'left'">
-    <div class="resize-side"
-         [resizable]="true"
-         direction="right"
-         [fsDrawerResizer]="sideContainer"
-    >
-    <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
-    </div>
-    <div class="side-container" #sideContainer>
-      <div class="side-content">
-        <ng-template [ngTemplateOutlet]="activeTemplate"></ng-template>
+      <div class="resize-side"
+        direction="left"
+        type="side"
+        [fsDrawerResizer]="sideContainer"
+        [resizable]="drawer.drawerConfig.resizable"
+        [sizeController]="drawer.resizeController"
+        [parentContainer]="drawer.drawerContainer"
+        [actionsContainer]="drawer.drawerActionsContainer"
+        >
+        <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
       </div>
-    </div>
-  </ng-container>
-</ng-container>
+    }
+    @case ('left') {
+      <div class="resize-side"
+        [resizable]="true"
+        direction="right"
+        [fsDrawerResizer]="sideContainer"
+        >
+        <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
+      </div>
+      <div class="side-container" #sideContainer>
+        <div class="side-content">
+          <ng-template [ngTemplateOutlet]="activeTemplate"></ng-template>
+        </div>
+      </div>
+    }
+  }
+}
