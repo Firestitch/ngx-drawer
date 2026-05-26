@@ -69,6 +69,10 @@ export class TaskDrawerComponent implements OnInit {
     this.drawerRef.updateSideDrawerWidth(1000);
   }
 
+  public togglePushMode() {
+    this.drawerRef.togglePushMode();
+  }
+
   public enableClose() {
     this.drawerRef.enableAction('close');
   }

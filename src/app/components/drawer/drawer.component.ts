@@ -13,6 +13,7 @@ import { getNormalizedPath } from '@firestitch/common';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
 
+import { DrawerPushController } from '../../classes/drawer-push-controller';
 import { DrawerRef } from '../../classes/drawer-ref';
 import { DrawerSizeController } from '../../classes/drawer-size-controller';
 import { FsDrawerPersistanceController } from '../../classes/persistance-controller';
@@ -67,6 +68,7 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
   private _drawerActionsContainer: ElementRef;
 
   private _sideOpen = false;
+  private _pushController: DrawerPushController;
   private _destroy$ = new Subject();
 
   constructor() {
@@ -104,9 +106,15 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     }
 
     this._resizeController.init();
+
+    // Owns `mode: 'push'` — toggles the push body class + width variable in step
+    // with the drawer's mode and live width.
+    this._pushController = new DrawerPushController(this._drawerRef);
   }
 
   public ngOnDestroy(): void {
+    this._pushController?.destroy();
+
     this._destroy$.next(null);
     this._destroy$.complete();
   }

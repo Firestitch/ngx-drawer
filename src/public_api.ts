@@ -20,7 +20,7 @@ export { DrawerMenuRef } from './app/classes/drawer-menu-ref';
 
 export { DrawerData } from './app/classes/drawer-data';
 
-export { IDrawerConfig } from './app/interfaces/drawer-config.interface';
+export { FsDrawerMode, IDrawerConfig } from './app/interfaces/drawer-config.interface';
 export { DrawerDataProxy } from './app/interfaces/drawer-data.interface';
 export { IFsDrawerActionConfig } from './app/interfaces/action.iterface';
 export { IDrawerComponent } from './app/interfaces/drawer-component.interface';

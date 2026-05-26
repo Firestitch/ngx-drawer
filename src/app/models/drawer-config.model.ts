@@ -2,6 +2,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import { Action } from './action.model';
 import {
+  FsDrawerMode,
   IDrawerConfig,
   IDrawerWidthConfig,
   IFsDrawerPersistance,
@@ -16,6 +17,7 @@ export class DrawerConfig {
   public resizable: boolean;
   public width: IDrawerWidthConfig;
   public persist: IFsDrawerPersistance;
+  public mode: FsDrawerMode;
   public actions$: Observable<Action[]>;
 
   private _actions$ = new BehaviorSubject<Action[]>([]);
@@ -25,6 +27,7 @@ export class DrawerConfig {
     this.position = data.position || 'right';
     this.activeAction = data.activeAction || '';
     this.persist = data.persist;
+    this.mode = data.mode || 'over';
 
     this.resizable = data.resizable === void 0 ? true : data.resizable;
 

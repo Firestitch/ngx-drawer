@@ -11,7 +11,7 @@ import { DrawerMenuRef } from '../classes/drawer-menu-ref';
 import type { FsDrawerComponent } from '../components/drawer/drawer.component';
 import { IFsDrawerActionConfig } from '../interfaces/action.iterface';
 import { IDrawerComponent } from '../interfaces/drawer-component.interface';
-import { IDrawerConfig } from '../interfaces/drawer-config.interface';
+import { FsDrawerMode, IDrawerConfig } from '../interfaces/drawer-config.interface';
 import { DrawerConfig } from '../models/drawer-config.model';
 
 import { DrawerData } from './drawer-data';
@@ -64,6 +64,7 @@ export class DrawerRef<T, TR = any> {
   private _isOpen = false;
   private _isSideOpen = false;
   private _url: UrlTree;
+  private _mode$: BehaviorSubject<FsDrawerMode>;
 
   constructor(
     private _overlayRef: OverlayRef,
@@ -71,6 +72,7 @@ export class DrawerRef<T, TR = any> {
     _config: IDrawerConfig,
   ) {
     this.drawerConfig = new DrawerConfig(_config);
+    this._mode$ = new BehaviorSubject<FsDrawerMode>(this.drawerConfig.mode);
     this._initActiveAction();
   }
 
@@ -165,6 +167,58 @@ export class DrawerRef<T, TR = any> {
 
   public get resizeController(): DrawerSizeController {
     return this._resizeController;
+  }
+
+  /**
+   * Current width of the main drawer in pixels (0 until the drawer has rendered).
+   */
+  public get width(): number {
+    return this._resizeController?.mainWidth ?? 0;
+  }
+
+  /**
+   * Emits the main drawer width whenever it changes (initial size, drag, window resize).
+   */
+  public get width$(): Observable<number> {
+    return this._resizeController
+      ? this._resizeController.mainWidth$
+      : new BehaviorSubject<number>(0).asObservable();
+  }
+
+  /**
+   * Current drawer mode: `over` (overlay) or `push`.
+   */
+  public get mode(): FsDrawerMode {
+    return this._mode$.getValue();
+  }
+
+  /**
+   * Emits the drawer mode whenever it changes.
+   */
+  public get mode$(): Observable<FsDrawerMode> {
+    return this._mode$.pipe(takeUntil(this._destroy$));
+  }
+
+  /**
+   * Switch the drawer between `over` and `push` at runtime.
+   */
+  public setMode(mode: FsDrawerMode): void {
+    if (mode === this.mode) {
+      return;
+    }
+
+    this.drawerConfig.mode = mode;
+    this._mode$.next(mode);
+  }
+
+  /**
+   * Toggle between `push` and `over`. Returns the resulting mode.
+   */
+  public togglePushMode(): FsDrawerMode {
+    const mode: FsDrawerMode = this.mode === 'push' ? 'over' : 'push';
+    this.setMode(mode);
+
+    return mode;
   }
 
   /**
@@ -485,6 +539,7 @@ export class DrawerRef<T, TR = any> {
 
     this._destroy$.next(null);
     this._destroy$.complete();
+    this._mode$.complete();
   }
 
   private _initActiveAction() {
@@ -513,6 +568,7 @@ export class DrawerRef<T, TR = any> {
 
     if (inComponentConfig) {
       this.drawerConfig = new DrawerConfig(inComponentConfig);
+      this._mode$.next(this.drawerConfig.mode);
     }
   }
 }

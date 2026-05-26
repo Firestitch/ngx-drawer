@@ -186,3 +186,19 @@ body.fs-drawer-open::-webkit-scrollbar{
   background: transparent;
   visibility: hidden;
 }
+
+// Push mode (`mode: 'push'`). The drawer is a CDK overlay with nothing of its own to
+// push, so it publishes a hook instead: while in push mode the body carries
+// `fs-drawer-push` + `fs-drawer-push-{position}`, and `--fs-drawer-push-width` tracks
+// the live drawer width. Mark whatever should reflow beside the drawer with
+// `fs-drawer-pushable` and it gets padded by that width (mat-sidenav `mode="side"`
+// equivalent). No transition here so the element tracks the drawer 1:1 while dragging.
+body.fs-drawer-push-right .fs-drawer-pushable {
+  box-sizing: border-box;
+  padding-right: var(--fs-drawer-push-width, 0);
+}
+
+body.fs-drawer-push-left .fs-drawer-pushable {
+  box-sizing: border-box;
+  padding-left: var(--fs-drawer-push-width, 0);
+}

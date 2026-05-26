@@ -1,6 +1,6 @@
 import { Injectable, NgZone, OnDestroy, inject } from '@angular/core';
 
-import { fromEvent, Subject } from 'rxjs';
+import { BehaviorSubject, fromEvent, Observable, Subject } from 'rxjs';
 import { debounceTime, filter, takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../classes/drawer-ref';
@@ -37,6 +37,9 @@ export class DrawerSizeController implements OnDestroy {
 
   private readonly _borderPadding = 0;
 
+  /** Live width of the main drawer, mirrored from the main resizer. */
+  private _mainWidth$ = new BehaviorSubject<number>(0);
+
   private _destroy$ = new Subject<void>();
 
   public get mainElRef() {
@@ -61,6 +64,16 @@ export class DrawerSizeController implements OnDestroy {
 
   public get screenWidth(): number {
     return this._screenWidth;
+  }
+
+  /** Current width of the main drawer in pixels. */
+  public get mainWidth(): number {
+    return this._mainWidth$.getValue();
+  }
+
+  /** Emits the main drawer width whenever it changes (initial size, drag, resize). */
+  public get mainWidth$(): Observable<number> {
+    return this._mainWidth$.pipe(takeUntil(this._destroy$));
   }
 
   public get persistedMainWidth(): number {
@@ -91,11 +104,13 @@ export class DrawerSizeController implements OnDestroy {
   public ngOnDestroy(): void {
     this._destroy$.next(null);
     this._destroy$.complete();
+    this._mainWidth$.complete();
   }
 
   public registerElRef(el: FsDrawerResizerDirective) {
     if (el.isMainDrawer) {
       this._registerMainRef(el);
+      this._mirrorMainWidth(el);
       this._listenWidthChanges(el);
     } else if (el.isSideDrawer) {
       this._registerSideRef(el);
@@ -238,6 +253,12 @@ export class DrawerSizeController implements OnDestroy {
 
   private _registerMainRef(el: FsDrawerResizerDirective) {
     this._mainElRef = el;
+  }
+
+  private _mirrorMainWidth(el: FsDrawerResizerDirective): void {
+    el.width$
+      .pipe(takeUntil(this._destroy$))
+      .subscribe((width) => this._mainWidth$.next(width));
   }
 
   private _registerSideRef(el: FsDrawerResizerDirective) {
