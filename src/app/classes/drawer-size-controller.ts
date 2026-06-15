@@ -309,7 +309,14 @@ export class DrawerSizeController implements OnDestroy {
 
           this._mainElRef.updateWidth(currentWidth + sideWidth + SIDE_RESIZE_BAR_WIDTH);
         } else {
-          const actualSideWidth = this.sideElRef.fsDrawerResizer.getBoundingClientRect().width;
+          // The side resizer directive may not be registered yet (or may have
+          // already been torn down) when the side closes — depending on the
+          // order the side panel renders relative to this controller. Guard
+          // against it and fall back to the configured side width so the main
+          // width math stays symmetric with the open branch above.
+          const actualSideWidth = this.sideElRef?.fsDrawerResizer
+            ? this.sideElRef.fsDrawerResizer.getBoundingClientRect().width
+            : this.getInitialWidth('side');
           const mainWidth = this.mainElRef.width - actualSideWidth - SIDE_RESIZE_BAR_WIDTH;
 
           this._mainElRef.updateWidth(mainWidth);
