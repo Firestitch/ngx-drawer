@@ -1,21 +1,35 @@
 <div
-    #drawer
-    class="mat-elevation-z2 drawer"
+    #drawerContainer
+    class="mat-elevation-z2 drawer-container"
     [ngClass]="config.position">
-  <ng-container>
-    <fs-drawer-actions
-      #drawerActionsContainer
-      class="drawer-actions"
-      type="main"
-      [fsDrawerResizer]="drawer"
-      [resizable]="drawerRef.drawerConfig.resizable"
-      [sizeController]="drawerRef.resizeController"
-      [direction]="config.position"
-      [actions]="config.actions$ | async"
-      [activeAction]="drawerRef.activeAction$ | async">
-    </fs-drawer-actions>
-    <div class="drawer-container" #drawerContainer>
-      <ng-template cdkPortalOutlet></ng-template>
+
+  <fs-drawer-action-bar
+    class="drawer-action-bar"
+    type="main"
+    [fsDrawerResizer]="drawerContainer"
+    [resizable]="drawerRef.drawerConfig.resizable"
+    [sizeController]="drawerRef.resizeController"
+    [direction]="config.position"
+    [actions]="config.actions$ | async"
+    [activeAction]="drawerRef.activeAction$ | async">
+  </fs-drawer-action-bar>
+
+  @if (sideTemplate) {
+    <div class="drawer-side" #drawerSide>
+      <ng-container [ngTemplateOutlet]="sideTemplate"></ng-container>
     </div>
-  </ng-container>
+    <div
+      class="drawer-side-resizer"
+      type="side"
+      [direction]="sideResizeDirection"
+      [fsDrawerResizer]="drawerSide"
+      [resizable]="drawerRef.drawerConfig.resizable"
+      [sizeController]="drawerRef.resizeController">
+      <a mat-icon-button class="resize-icon"><mat-icon>drag_indicator</mat-icon></a>
+    </div>
+  }
+
+  <div class="drawer-content" #drawerContent>
+    <ng-template cdkPortalOutlet></ng-template>
+  </div>
 </div>

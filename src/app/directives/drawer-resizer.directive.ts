@@ -26,8 +26,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   @Input() public type: 'main' | 'side';
   @Input() public direction = 'left';
   @Input() public resizable = true;
-  @Input() public parentContainer: ElementRef;
-  @Input() public actionsContainer: ElementRef;
   @Input() public sizeController: DrawerSizeController;
 
   private _dragStartHandler = this._dragStart.bind(this);
@@ -36,7 +34,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
 
   private _x = 0;
   private _width$ = new BehaviorSubject<number>(0);
-  private _actionsWidth = 0;
 
   private _destroy$ = new Subject();
 
@@ -67,37 +64,26 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   private get minWidth(): number {
     const minWidth = this.sizeController.getMinWidth(this.type);
 
-    if (minWidth && minWidth >= 0) {
-      const screenWidth = this.sizeController.screenWidth;
-      const barWidth = this.barWidth;
-
-      if (screenWidth - minWidth < barWidth) {
-        return this.sizeController.screenWidth - barWidth;
-      }
-
-      return minWidth;
-
+    if (!minWidth || minWidth < 0) {
+      return 0;
     }
+
+    const screenWidth = this.sizeController.screenWidth;
+    const barWidth = this.barWidth;
+
+    if (screenWidth - minWidth < barWidth) {
+      return screenWidth - barWidth;
+    }
+
+    return minWidth;
   }
 
   private get maxWidth(): number {
     const maxWidth = this.sizeController.getMaxWidth(this.type);
-    let parentContainerWidth = null;
-
-    if (this.parentContainer) {
-      parentContainerWidth = this._getElementWidth(this.parentContainer.nativeElement);
-    }
-
-    if (parentContainerWidth !== null) {
-      return !maxWidth || maxWidth >= parentContainerWidth
-        ? parentContainerWidth - this._actionsWidth * 2
-        : maxWidth;
-    }
 
     return !maxWidth || maxWidth >= this.sizeController.screenWidth
       ? this.sizeController.screenWidth
       : maxWidth;
-
   }
 
   public get barWidth(): number {
@@ -115,10 +101,6 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
         this._el.nativeElement.addEventListener('mousedown', this._dragStartHandler, false);
         this._el.nativeElement.addEventListener('touchstart', this._dragStartHandler, false);
       });
-
-      if (this.actionsContainer) {
-        this._actionsWidth = this._getElementWidth(this.actionsContainer.nativeElement);
-      }
 
       this.setMinMaxStyles();
 

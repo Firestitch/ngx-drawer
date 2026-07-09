@@ -1,115 +1,98 @@
-import { AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef, Component, ContentChildren, ElementRef, EventEmitter, HostBinding, Input, OnDestroy, OnInit, QueryList, Renderer2, TemplateRef, inject } from '@angular/core';
+import { AfterViewInit, ChangeDetectionStrategy, Component, ContentChildren, EventEmitter, Input, OnDestroy, OnInit, QueryList, TemplateRef, isDevMode } from '@angular/core';
+
 import { takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../../classes/drawer-ref';
 import { FsDrawerActionDirective } from '../../directives/drawer-action.directive';
-import { NgTemplateOutlet } from '@angular/common';
-import { FsDrawerResizerDirective } from '../../directives/drawer-resizer.directive';
-import { MatIconAnchor } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
 
 
+/**
+ * Declares the drawer's side panel. It renders nothing where it sits — it collects the
+ * `<ng-template fsDrawerAction>` templates from its content and publishes the active one
+ * to the `DrawerRef`, which renders it in the drawer's own `.drawer-side` region.
+ *
+ * Keeping the side out of the content portal is what lets `.drawer-content` be a plain
+ * scroll container instead of a flex row the consumer has to lay out around.
+ */
 @Component({
     selector: '[fsDrawerSide]',
-    templateUrl: './drawer-side.component.html',
+    template: '',
+    styles: [':host { display: none; }'],
     changeDetection: ChangeDetectionStrategy.OnPush,
-    styleUrls: [
-        './drawer-side.component.scss',
-    ],
     standalone: true,
-    imports: [
-        NgTemplateOutlet,
-        FsDrawerResizerDirective,
-        MatIconAnchor,
-        MatIcon,
-    ],
 })
 export class FsDrawerSideComponent implements OnInit, AfterViewInit, OnDestroy {
-  private _cdRef = inject(ChangeDetectorRef);
-  private _renderer = inject(Renderer2);
-  private _elRef = inject(ElementRef);
-
 
   @Input('fsDrawerSide') public drawer: DrawerRef<any>;
 
-  @HostBinding('class.side') public classSide = true;
-
-  @ContentChildren(FsDrawerActionDirective) actions: QueryList<FsDrawerActionDirective>;
+  @ContentChildren(FsDrawerActionDirective)
+  public actions: QueryList<FsDrawerActionDirective>;
 
   @ContentChildren(FsDrawerActionDirective, { read: TemplateRef })
-  actionsTemplates: QueryList<TemplateRef<any>>;
+  public actionsTemplates: QueryList<TemplateRef<unknown>>;
 
-  public activeTemplate: TemplateRef<any> = null;
-
-  private _hidden = false;
   private _destroy$ = new EventEmitter();
 
-  public set hidden(value: boolean) {
-    this._hidden = value;
-
-    if (this._hidden) {
-      this._renderer.setAttribute(this._elRef.nativeElement, 'hidden', 'true');
-    } else {
-      this._renderer.removeAttribute(this._elRef.nativeElement, 'hidden');
-    }
-  }
-  public ngOnInit() {
-
-    this.hidden = true;
-
+  public ngOnInit(): void {
     if (!this.drawer) {
       console.error('Drawer reference is null for @Input("fsDrawerSide")');
+
+      return;
     }
 
-    this._subscribeToActionChanges();
+    this.drawer.sideToggle$
+      .pipe(
+        takeUntil(this._destroy$),
+      )
+      .subscribe(() => this._publishActiveTemplate());
   }
 
-  public ngAfterViewInit() {
-    setTimeout(() => {
-      // Check current side status
-      if (this.drawer) {
-        this.hidden = !this.drawer.isSideOpen;
-      }
-
-      this._updateActiveActionTemplate();
-
-      this._cdRef.detectChanges();
-    });
+  public ngAfterViewInit(): void {
+    // The drawer may already have a side open by now (`config.activeAction`), but this
+    // component was only just created by the portal. Defer a tick so the content query is
+    // populated, then publish the initial state.
+    setTimeout(() => this._publishActiveTemplate());
   }
 
-  public ngOnDestroy() {
+  public ngOnDestroy(): void {
+    this.drawer?.setSideTemplate(null);
+
     this._destroy$.emit();
     this._destroy$.complete();
   }
 
-  private _subscribeToActionChanges() {
-    if (this.drawer) {
-      this.drawer.sideToggle$
-        .pipe(
-          takeUntil(this._destroy$),
-        )
-        .subscribe(() => {
-          this.hidden = !this.drawer.isSideOpen;
-          this._updateActiveActionTemplate();
-
-          this._cdRef.detectChanges();
-        });
-    }
+  private _publishActiveTemplate(): void {
+    this.drawer?.setSideTemplate(this._resolveActiveTemplate());
   }
 
-  private _updateActiveActionTemplate() {
-    if (this.drawer) {
-      const activatedAction = this.drawer.activeAction;
+  private _resolveActiveTemplate(): TemplateRef<unknown> {
+    const activeAction = this.drawer.activeAction;
 
-      if (this.drawer.isSideOpen && activatedAction) {
-        const selectedActionIndex = this.actions
-          .toArray()
-          .findIndex((action) => action.name === activatedAction);
-
-        this.activeTemplate = this.actionsTemplates.toArray()[selectedActionIndex];
-      } else {
-        this.activeTemplate = null;
-      }
+    if (!this.drawer.isSideOpen || !activeAction || !this.actions) {
+      return null;
     }
+
+    const index = this.actions
+      .toArray()
+      .findIndex((action) => action.name === activeAction);
+
+    // A side opened with no matching action template almost always means the
+    // host component forgot to import FsDrawerActionDirective — without it
+    // `fsDrawerAction` is an inert attribute, so the ContentChildren query
+    // finds nothing and the side renders blank. Surface that instead of
+    // failing silently.
+    if (index === -1) {
+      if (isDevMode()) {
+        console.warn(
+          `[fsDrawerSide] No template found for action "${activeAction}". ` +
+          'Ensure the host component imports FsDrawerActionDirective so that ' +
+          '<ng-template fsDrawerAction="..."> is recognised.',
+        );
+      }
+
+      return null;
+    }
+
+    return this.actionsTemplates.toArray()[index];
   }
 }

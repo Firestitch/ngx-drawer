@@ -1,1 +1,6 @@
-$drawer-side-delimiter-width: 45px;
+// Keep in sync with src/app/consts/sizes.cont.ts
+// MAIN_RESIZE_ACTION_BAR_WIDTH = 45
+$drawer-action-bar-width: 45px;
+
+// SIDE_RESIZE_BAR_WIDTH = 30 — the rail is border-box, so its 1px divider is included.
+$drawer-side-resizer-width: 30px;

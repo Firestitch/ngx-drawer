@@ -1,4 +1,4 @@
-import { ComponentRef, ElementRef } from '@angular/core';
+import { ComponentRef, ElementRef, TemplateRef } from '@angular/core';
 import { UrlTree } from '@angular/router';
 
 import { ESCAPE } from '@angular/cdk/keycodes';
@@ -52,11 +52,17 @@ export class DrawerRef<T, TR = any> {
   /** Main drawer component and template */
   private _drawerComponentRef: ComponentRef<T>;
 
-  /** Drawer Content Template */
+  /** The `.drawer-container` element — the drawer's outermost, resizable box. */
   private _drawerContainer: ElementRef;
 
-  /** Drawer Actions Template */
-  private _drawerActionsContainer: ElementRef;
+  /** The `.drawer-content` element — the scrollable region the consumer's portal renders into. */
+  private _drawerContent: ElementRef;
+
+  /**
+   * Template of the side panel's active action, published by `fsDrawerSide`.
+   * The drawer renders it in its own region so `.drawer-content` stays pure content.
+   */
+  private readonly _sideTemplate$ = new BehaviorSubject<TemplateRef<unknown>>(null);
 
   private _resizeController: DrawerSizeController;
   private _activeAction = new BehaviorSubject<string>(undefined);
@@ -131,12 +137,30 @@ export class DrawerRef<T, TR = any> {
     return this._drawerContainer;
   }
 
-  public set drawerActionsContainer(value: ElementRef) {
-    this._drawerActionsContainer = value;
+  public set drawerContent(value: ElementRef) {
+    this._drawerContent = value;
   }
 
-  public get drawerActionsContainer(): ElementRef {
-    return this._drawerActionsContainer;
+  public get drawerContent(): ElementRef {
+    return this._drawerContent;
+  }
+
+  public get sideTemplate(): TemplateRef<unknown> {
+    return this._sideTemplate$.getValue();
+  }
+
+  public get sideTemplate$(): Observable<TemplateRef<unknown>> {
+    return this._sideTemplate$.pipe(takeUntil(this._destroy$));
+  }
+
+  /**
+   * Publish the template the side panel should render, or `null` to collapse it.
+   * Called by `fsDrawerSide` as the active action changes.
+   */
+  public setSideTemplate(template: TemplateRef<unknown>): void {
+    if (this.sideTemplate !== template) {
+      this._sideTemplate$.next(template);
+    }
   }
 
   public get activeAction() {
@@ -540,6 +564,7 @@ export class DrawerRef<T, TR = any> {
     this._destroy$.next(null);
     this._destroy$.complete();
     this._mode$.complete();
+    this._sideTemplate$.complete();
   }
 
   private _initActiveAction() {

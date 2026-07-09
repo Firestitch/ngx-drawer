@@ -1,5 +1,12 @@
 :host {
   display: flex;
+  flex-direction: column;
+  box-sizing: border-box;
+  user-select: none;
+  white-space: nowrap;
+  // Containing block for .drag-ripple. The bar used to be `position: absolute`,
+  // which gave it this for free.
+  position: relative;
 }
 
 .actions-container {

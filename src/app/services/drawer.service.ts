@@ -134,10 +134,28 @@ export class FsDrawerService implements OnDestroy {
   }
 
   private _applyBodyOpenClass() {
-    if (this._drawerStore.numberOfOpenedDrawers) {
-      document.body.classList.add('fs-drawer-open');
-    } else {
-      document.body.classList.remove('fs-drawer-open');
+    const root = document.documentElement;
+    const open = this._drawerStore.numberOfOpenedDrawers > 0;
+
+    // Runs after every open and close, including while other drawers are still up. Bail
+    // unless the open/closed state actually flipped, or opening a second drawer would
+    // re-measure the scrollbar after the first one already hid it, and read 0.
+    if (open === root.classList.contains('fs-drawer-open')) {
+      return;
+    }
+
+    if (open) {
+      // Measure while the scrollbar is still laid out. `html.fs-drawer-open` collapses it.
+      const scrollbarWidth = window.innerWidth - root.clientWidth;
+
+      root.style.setProperty('--fs-drawer-scrollbar-width', `${scrollbarWidth}px`);
+    }
+
+    root.classList.toggle('fs-drawer-open', open);
+    document.body.classList.toggle('fs-drawer-open', open);
+
+    if (!open) {
+      root.style.removeProperty('--fs-drawer-scrollbar-width');
     }
   }
 

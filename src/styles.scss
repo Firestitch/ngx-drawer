@@ -12,85 +12,121 @@
 
   fs-drawer {
 
-    .drawer {
+    // The drawer lays its regions out in one flex row:
+    //
+    //   .drawer-action-bar | .drawer-side | .drawer-side-resizer | .drawer-content
+    //
+    // A left-positioned drawer reverses the row, so the action bar always ends up on the
+    // edge facing the page. Every region is in flow, which is what lets the 45px margin
+    // that used to shove content out from under an absolutely-positioned bar go away.
+    .drawer-container {
       position: fixed;
       top: 0;
       bottom: 0;
       z-index: 75;
       background-color: #fff;
       min-width: 350px;
+      display: flex;
+      flex-direction: row;
+      overflow: hidden;
     }
 
     .left {
       left: 0;
+      flex-direction: row-reverse;
 
-      .drawer-container {
-
-        > *:first-child {
-          margin-left: 0 !important;
-          flex-direction: row-reverse;
-        }
-      }
-
-      .drawer-actions {
-        right: 0;
+      // The row is reversed, so the divider has to move to the rail's other edge to stay
+      // between the side panel and the content.
+      .drawer-side-resizer {
+        box-shadow: inset -1px 0 0 #dcdcdc;
       }
     }
 
     .right {
       right: 0;
-
-      .drawer-actions {
-        left: 0;
-      }
     }
 
-    .drawer-container {
-      height: 100%;
-
-      > *:first-child {
-        margin-left: 45px;
-        display: flex;
-        align-content: space-between;
-        height: 100%;
-      }
-
-      .side {
-        display: flex;
-      }
-
-      .side-container {
-        overflow-y: auto;
-
-        .side-content {
-          padding: 15px;
-          min-width: 200px;
-          box-sizing: border-box;
-        }
-      }
-      .content-container {
-        width: 100%;
-        overflow-y: auto;
-
-        .content {
-          width: 100%;
-          padding: 15px;
-          box-sizing: border-box;
-          min-width: 200px;
-        }
-      }
+    .drawer-side {
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      overflow-x: hidden;
+      overflow-y: auto;
+      padding: 15px;
     }
 
-
-    .drawer-actions {
-      position: absolute;
-      width: 45px;
-      height: 100%;
+    .drawer-side-resizer {
+      flex: 0 0 auto;
+      box-sizing: border-box;
+      width: $drawer-side-resizer-width;
       display: flex;
-      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      // The divider is painted, not bordered, so it costs no layout width. A border would
+      // leave the handle centred in 29px of a 30px rail — half a pixel off.
+      box-shadow: inset 1px 0 0 #dcdcdc;
+      background: transparent;
+      transition: 200ms;
       user-select: none;
-      white-space: nowrap;
-      user-select: none;
+
+      // mat-icon-button is a 48px box with 12px padding. Left alone it overflows this
+      // narrow rail and pins the 24px glyph to one side, so strip both and centre the
+      // glyph with flexbox instead.
+      .resize-icon {
+        opacity: 0;
+        transition: opacity 200ms;
+        width: 100%;
+        height: $drawer-side-resizer-width;
+        min-width: 0;
+        padding: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        line-height: 1;
+      }
+
+      // Material's 48x48 touch target is centred on the button and would overhang a
+      // 30px rail by 9px each side — clicks landing on the side panel or the content
+      // would bubble back here and start a drag.
+      .mat-mdc-button-touch-target {
+        display: none;
+      }
+
+      &:hover {
+        background: #F9F9F9;
+
+        .resize-icon {
+          opacity: 1;
+        }
+      }
+    }
+
+    // `min-width: 0` overrides the flex default of `min-width: auto`, which otherwise lets
+    // a wide child (a <pre>, an iframe) push this region past the drawer and break every
+    // `width: 100%` inside it.
+    .drawer-content {
+      flex: 1 1 auto;
+      min-width: 0;
+      overflow: auto;
+    }
+
+    // The drawer's CSS stops here. This class sits on the host element Angular generates
+    // for the consumer's component — a node they never wrote. It has no UA display, so
+    // without this it is an inline box. `:where()` scores zero specificity, so anything
+    // the consumer puts in their own `:host` (padding, display, height) overrides all of it.
+    :where(.drawer-content-host) {
+      display: block;
+      min-height: 100%;
+      box-sizing: border-box;
+      padding: 20px;
+    }
+
+    // Material's icon buttons are 48px, so this flex item's default `min-width: auto`
+    // (= min-content) would hold the bar open at 48 and desync it from
+    // MAIN_RESIZE_ACTION_BAR_WIDTH. Pin it to the basis and let the buttons overhang, as
+    // they did when the bar was absolutely positioned at this same width.
+    .drawer-action-bar {
+      flex: 0 0 $drawer-action-bar-width;
+      min-width: 0;
 
       .action-btn {
         position: relative;
@@ -148,28 +184,6 @@
       }
     }
 
-    .resize-side {
-      display: flex;
-      align-items: center;
-      width: $drawer-side-delimiter-width;
-      border-left: 1px solid #dcdcdc;
-      background: transparent;
-      transition: 200ms;
-      user-select: none;
-
-      .resize-icon {
-        opacity: 0;
-        transition: 200ms;
-      }
-
-      &:hover {
-        background: #F9F9F9;
-        .resize-icon {
-          opacity: 1;
-        }
-      }
-    }
-
   }
 }
 
@@ -181,10 +195,26 @@
   }
 }
 
-body.fs-drawer-open::-webkit-scrollbar-thumb,
-body.fs-drawer-open::-webkit-scrollbar{
+// While a drawer is open, hide the page's scrollbar and reclaim the width it reserved.
+// `visibility: hidden` used to be enough to stop it painting, but a hidden scrollbar still
+// occupies its gutter — and since `position: fixed; right: 0` resolves against the initial
+// containing block (which excludes that gutter), the drawer stopped a scrollbar's width
+// short of the window edge, showing a strip of page background beside it.
+//
+// Collapsing the scrollbar to zero closes that strip, but it would also widen the page and
+// jerk its content sideways on every open. So we give the width straight back as padding.
+// `--fs-drawer-scrollbar-width` is measured at open time by FsDrawerService, because the
+// gutter is 17px on Windows, ~15px on Linux, and 0 wherever overlay scrollbars are used.
+html.fs-drawer-open {
+  scrollbar-width: none;
+  padding-right: var(--fs-drawer-scrollbar-width, 0);
+}
+
+html.fs-drawer-open::-webkit-scrollbar-thumb,
+html.fs-drawer-open::-webkit-scrollbar {
+  width: 0;
+  height: 0;
   background: transparent;
-  visibility: hidden;
 }
 
 // Push mode (`mode: 'push'`). The drawer is a CDK overlay with nothing of its own to

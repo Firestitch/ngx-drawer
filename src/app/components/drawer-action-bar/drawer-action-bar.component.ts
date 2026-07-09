@@ -12,9 +12,9 @@ import { MatIcon } from '@angular/material/icon';
 
 
 @Component({
-    selector: 'fs-drawer-actions',
-    templateUrl: './drawer-actions.component.html',
-    styleUrls: ['./drawer-actions.component.scss'],
+    selector: 'fs-drawer-action-bar',
+    templateUrl: './drawer-action-bar.component.html',
+    styleUrls: ['./drawer-action-bar.component.scss'],
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
@@ -23,7 +23,7 @@ import { MatIcon } from '@angular/material/icon';
         MatIcon,
     ],
 })
-export class FsDrawerActionsComponent implements OnInit, OnDestroy {
+export class FsDrawerActionBarComponent implements OnInit, OnDestroy {
   private _drawerRef = inject<DrawerRef<any>>(DrawerRef);
   private _drawerMenu = inject(FsDrawerMenuService);
   private _cdRef = inject(ChangeDetectorRef);

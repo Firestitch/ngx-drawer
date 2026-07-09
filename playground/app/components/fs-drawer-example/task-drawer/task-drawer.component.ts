@@ -4,7 +4,6 @@ import { Observable } from 'rxjs';
 import { FsDrawerSideComponent } from '../../../../../src/app/components/drawer-side/drawer-side.component';
 import { FsDrawerActionDirective } from '../../../../../src/app/directives/drawer-action.directive';
 import { MatButton } from '@angular/material/button';
-import { FsDrawerContentComponent } from '../../../../../src/app/components/drawer-content/drawer-content.component';
 import { FsLabelModule } from '@firestitch/label';
 import { JsonPipe } from '@angular/common';
 
@@ -17,7 +16,6 @@ import { JsonPipe } from '@angular/common';
         FsDrawerSideComponent,
         FsDrawerActionDirective,
         MatButton,
-        FsDrawerContentComponent,
         FsLabelModule,
         JsonPipe,
     ],
