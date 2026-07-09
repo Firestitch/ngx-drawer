@@ -239,6 +239,7 @@ body.fs-drawer-resizing,
 body.fs-drawer-resizing * {
   cursor: col-resize !important;
   user-select: none !important;
+  pointer-events: none !important;
 }
 
 // Push mode (`mode: 'push'`). The drawer is a CDK overlay with nothing of its own to
