@@ -34,12 +34,6 @@
     .left {
       left: 0;
       flex-direction: row-reverse;
-
-      // The row is reversed, so the divider has to move to the rail's other edge to stay
-      // between the side panel and the content.
-      .drawer-side-resizer {
-        box-shadow: inset -1px 0 0 #dcdcdc;
-      }
     }
 
     .right {
@@ -54,49 +48,62 @@
       padding: 15px;
     }
 
+    // A splitter, not a rail. The element is the divider line — 1px, and that is the whole
+    // layout cost. The two things that make a 1px line usable, a grab zone wide enough to
+    // hit and a highlight thick enough to see, are absolutely positioned, so they borrow
+    // their pixels from the neighbours instead of taking them out of the row.
     .drawer-side-resizer {
       flex: 0 0 auto;
       box-sizing: border-box;
       width: $drawer-side-resizer-width;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      // The divider is painted, not bordered, so it costs no layout width. A border would
-      // leave the handle centred in 29px of a 30px rail — half a pixel off.
-      box-shadow: inset 1px 0 0 #dcdcdc;
-      background: transparent;
-      transition: 200ms;
+      background: #dcdcdc;
       user-select: none;
 
-      // mat-icon-button is a 48px box with 12px padding. Left alone it overflows this
-      // narrow rail and pins the 24px glyph to one side, so strip both and centre the
-      // glyph with flexbox instead.
-      .resize-icon {
+      // Paints, and so hit-tests, above both neighbours. Without this the pseudos below
+      // reach into the side panel and the content but sit *under* them: the highlight is
+      // hidden and the grab zone is dead. The container is the stacking context.
+      position: relative;
+      z-index: 2;
+
+      // The grab zone. Events on a pseudo-element target its originating element, so the
+      // directive's mousedown listener already receives these — no JS hit-testing needed.
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -$drawer-side-resizer-hit-slop;
+        right: -$drawer-side-resizer-hit-slop;
+      }
+
+      // The highlight: 1px divider + 1px bleed either side = a 3px bar, centred on the
+      // line it replaces. Bleeding symmetrically is what keeps it from looking like it
+      // grew off toward one panel.
+      &::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: -1px;
+        right: -1px;
+        background: mat.m2-get-color-from-palette($primary);
         opacity: 0;
-        transition: opacity 200ms;
-        width: 100%;
-        height: $drawer-side-resizer-width;
-        min-width: 0;
-        padding: 0;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        line-height: 1;
+        // No delay here, so leaving is immediate. The delay is added back on hover below;
+        // declared once here it would also make the line linger after the pointer left.
+        transition: opacity $drawer-side-resizer-fade ease;
       }
 
-      // Material's 48x48 touch target is centred on the button and would overhang a
-      // 30px rail by 9px each side — clicks landing on the side panel or the content
-      // would bubble back here and start a drag.
-      .mat-mdc-button-touch-target {
-        display: none;
+      &:hover::after {
+        opacity: 1;
+        transition-delay: $drawer-side-resizer-hover-delay;
       }
 
-      &:hover {
-        background: #F9F9F9;
-
-        .resize-icon {
-          opacity: 1;
-        }
+      // A drag outruns the 7px grab zone, `:hover` drops, and the line would blink out
+      // from under the cursor mid-drag. This must stay below the `:hover` rule: the two
+      // score the same specificity, and this one has to win the delay.
+      &.fs-drawer-resizing::after {
+        opacity: 1;
+        transition-delay: 0ms;
       }
     }
 
@@ -109,13 +116,20 @@
       overflow: auto;
     }
 
-    // The drawer's CSS stops here. This class sits on the host element Angular generates
-    // for the consumer's component — a node they never wrote. It has no UA display, so
-    // without this it is an inline box. `:where()` scores zero specificity, so anything
-    // the consumer puts in their own `:host` (padding, display, height) overrides all of it.
+    // Structure only. This class sits on the host element Angular generates for the
+    // consumer's component — a node they never wrote. It has no UA display, so without
+    // this it is an inline box. `:where()` scores zero specificity, so anything the
+    // consumer puts in their own `:host` (display, height) overrides all of it.
     :where(.drawer-content-host) {
       display: block;
       min-height: 100%;
+    }
+
+    // The drawer's CSS stops here. This class rides on `[fsDrawerContent]`, the element
+    // the consumer marked as their content region — so the padding lands on a node they
+    // wrote and can see, not on the generated host above. Zero specificity again.
+    :where(.drawer-content-body) {
+      display: block;
       box-sizing: border-box;
       padding: 20px;
     }
@@ -215,6 +229,16 @@ html.fs-drawer-open::-webkit-scrollbar {
   width: 0;
   height: 0;
   background: transparent;
+}
+
+// A resize drag is tracked on `document`, so the pointer spends most of it well off the
+// divider and over the page — where it picks up whatever cursor lives there and selects
+// text as it sweeps across. Pin both for the duration of the drag. The `*` is deliberate:
+// buttons, links and inputs set their own cursor and would otherwise win.
+body.fs-drawer-resizing,
+body.fs-drawer-resizing * {
+  cursor: col-resize !important;
+  user-select: none !important;
 }
 
 // Push mode (`mode: 'push'`). The drawer is a CDK overlay with nothing of its own to

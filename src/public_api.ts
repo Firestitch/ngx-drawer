@@ -7,6 +7,7 @@
 export { FsDrawerComponent } from './app/components/drawer/drawer.component';
 export { FsDrawerSideComponent } from './app/components/drawer-side/drawer-side.component';
 export { FsDrawerActionDirective } from './app/directives/drawer-action.directive';
+export { FsDrawerContentDirective } from './app/directives/drawer-content.directive';
 export { FsDrawerResizerDirective } from './app/directives/drawer-resizer.directive';
 
 export { FsDrawerService } from './app/services/drawer.service';

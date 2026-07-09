@@ -1,5 +1,5 @@
 import { AsyncPipe, Location, NgClass, NgTemplateOutlet } from '@angular/common';
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EmbeddedViewRef, OnDestroy, OnInit, TemplateRef, ViewChild, ViewEncapsulation, inject } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, ComponentRef, ElementRef, EmbeddedViewRef, OnDestroy, OnInit, TemplateRef, ViewChild, ViewEncapsulation, inject, isDevMode } from '@angular/core';
 
 import {
   BasePortalOutlet,
@@ -7,9 +7,6 @@ import {
   ComponentPortal,
   TemplatePortal,
 } from '@angular/cdk/portal';
-import { MatIconAnchor } from '@angular/material/button';
-import { MatIcon } from '@angular/material/icon';
-
 import { getNormalizedPath } from '@firestitch/common';
 
 import { Subject } from 'rxjs';
@@ -45,8 +42,6 @@ import { FsDrawerActionBarComponent } from '../drawer-action-bar/drawer-action-b
     FsDrawerActionBarComponent,
     FsDrawerResizerDirective,
     CdkPortalOutlet,
-    MatIconAnchor,
-    MatIcon,
     AsyncPipe,
   ],
 })
@@ -168,8 +163,11 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     // Angular builds this host element from the consumer's component selector, so it is an
     // unknown element with no UA display — an inline box unless something says otherwise.
     // The stylesheet gives it a block default at zero specificity, so the consumer's own
-    // `:host` rule still wins.
+    // `:host` rule still wins. Structure only: the content region itself is whatever the
+    // consumer marked with `fsDrawerContent`, not this generated node.
     componentRef.location.nativeElement.classList.add('drawer-content-host');
+
+    this._warnOnUnmarkedContent();
 
     return componentRef;
   }
@@ -185,6 +183,30 @@ export class FsDrawerComponent extends BasePortalOutlet implements OnInit, OnDes
     }
 
     return this._portalOutlet.attachTemplatePortal(portal);
+  }
+
+  /**
+   * A drawer component with no `fsDrawerContent` renders unpadded and leaves
+   * `drawerRef.contentElement` null. The usual cause is a missing
+   * `FsDrawerContentDirective` import, which makes the attribute inert rather than an
+   * error — so nothing else would say a word.
+   */
+  private _warnOnUnmarkedContent(): void {
+    if (!isDevMode()) {
+      return;
+    }
+
+    // `fsDrawerContent` registers during the projected component's first change detection,
+    // which has not run yet. Defer past it before calling the region missing.
+    setTimeout(() => {
+      if (!this._drawerRef.contentElement) {
+        console.warn(
+          '[fs-drawer] No [fsDrawerContent] found in the drawer component. Wrap the ' +
+          'content in <div fsDrawerContent> and import FsDrawerContentDirective, ' +
+          'otherwise the content renders without the drawer\'s padding.',
+        );
+      }
+    });
   }
 
   private _listenDataChanges(): void {

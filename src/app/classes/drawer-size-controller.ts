@@ -8,7 +8,7 @@ import {
   CONTENT_DRAWER_DEFAULT_WIDTH,
   MAIN_DRAWER_DEFAULT_WIDTH,
   MAIN_RESIZE_ACTION_BAR_WIDTH,
-  SIDE_DRAWER_DEFAULT_WIDTH, SIDE_RESIZE_BAR_WIDTH,
+  SIDE_DRAWER_DEFAULT_WIDTH, SIDE_RESIZE_DIVIDER_WIDTH,
 } from '../consts/sizes.cont';
 import { FsDrawerResizerDirective } from '../directives/drawer-resizer.directive';
 import { IDrawerWidthDefinition } from '../interfaces/drawer-config.interface';
@@ -154,7 +154,7 @@ export class DrawerSizeController implements OnDestroy {
     if (type === 'main') {
       return this.mainConfig.max ?? window.innerWidth;
     } else if (type === 'side') {
-      const availableSideWidth = this.mainElRef.width - MAIN_RESIZE_ACTION_BAR_WIDTH - SIDE_RESIZE_BAR_WIDTH;
+      const availableSideWidth = this.mainElRef.width - MAIN_RESIZE_ACTION_BAR_WIDTH - SIDE_RESIZE_DIVIDER_WIDTH;
 
       const sideMax = this.sideConfig.max ?? availableSideWidth;
 
@@ -307,7 +307,7 @@ export class DrawerSizeController implements OnDestroy {
           const currentWidth = this.mainElRef.width;
           const sideWidth = this.getInitialWidth('side');
 
-          this._mainElRef.updateWidth(currentWidth + sideWidth + SIDE_RESIZE_BAR_WIDTH);
+          this._mainElRef.updateWidth(currentWidth + sideWidth + SIDE_RESIZE_DIVIDER_WIDTH);
         } else {
           // The side resizer directive may not be registered yet (or may have
           // already been torn down) when the side closes — depending on the
@@ -317,7 +317,7 @@ export class DrawerSizeController implements OnDestroy {
           const actualSideWidth = this.sideElRef?.fsDrawerResizer
             ? this.sideElRef.fsDrawerResizer.getBoundingClientRect().width
             : this.getInitialWidth('side');
-          const mainWidth = this.mainElRef.width - actualSideWidth - SIDE_RESIZE_BAR_WIDTH;
+          const mainWidth = this.mainElRef.width - actualSideWidth - SIDE_RESIZE_DIVIDER_WIDTH;
 
           this._mainElRef.updateWidth(mainWidth);
         }
@@ -343,7 +343,7 @@ export class DrawerSizeController implements OnDestroy {
           if (this._mainElRef) {
             this._persistanceController.saveDataToScope(
               'mainWidth',
-              this._mainElRef.width - sideWidth - SIDE_RESIZE_BAR_WIDTH,
+              this._mainElRef.width - sideWidth - SIDE_RESIZE_DIVIDER_WIDTH,
             );
           }
 
@@ -353,7 +353,7 @@ export class DrawerSizeController implements OnDestroy {
               sideWidth,
             );
 
-            const availableSideWidth = this.mainElRef.width - MAIN_RESIZE_ACTION_BAR_WIDTH - SIDE_RESIZE_BAR_WIDTH;
+            const availableSideWidth = this.mainElRef.width - MAIN_RESIZE_ACTION_BAR_WIDTH - SIDE_RESIZE_DIVIDER_WIDTH;
 
             this._persistanceController.saveDataToScope(
               'contentWidth',

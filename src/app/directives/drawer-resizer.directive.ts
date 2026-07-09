@@ -5,7 +5,11 @@ import { takeUntil } from 'rxjs/operators';
 
 import { DrawerRef } from '../classes/drawer-ref';
 import { DrawerSizeController } from '../classes/drawer-size-controller';
-import { MAIN_RESIZE_ACTION_BAR_WIDTH, SIDE_RESIZE_BAR_WIDTH } from '../consts/sizes.cont';
+import { MAIN_RESIZE_ACTION_BAR_WIDTH, SIDE_RESIZE_DIVIDER_WIDTH } from '../consts/sizes.cont';
+
+
+/** Set on the resizer and on `<body>` for the duration of a drag. Styled in styles.scss. */
+const RESIZING_CLASS = 'fs-drawer-resizing';
 
 
 @Directive({
@@ -89,7 +93,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
   public get barWidth(): number {
     return this.isMainDrawer
       ? MAIN_RESIZE_ACTION_BAR_WIDTH
-      : SIDE_RESIZE_BAR_WIDTH;
+      : SIDE_RESIZE_DIVIDER_WIDTH;
   }
 
   public ngOnInit() {
@@ -143,6 +147,11 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     this._el.nativeElement.removeEventListener('mousedown', this._dragStartHandler, false);
     this._el.nativeElement.removeEventListener('touchstart', this._dragStartHandler, false);
 
+    // Closing the drawer mid-drag skips `_dragEnd` entirely, which would leave the
+    // document listeners attached and the page pinned to `col-resize`.
+    this._setResizing(false);
+    this._removeDragListeners();
+
     this.sizeController.removeElRef(this);
 
     this._destroy$.next(null);
@@ -170,6 +179,7 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
     this.updateWidth(this._getElementWidth(this.fsDrawerResizer));
 
     this.setMinMaxStyles();
+    this._setResizing(true);
 
     document.addEventListener('touchmove', this._dragHandler, false);
     document.addEventListener('touchend', this._dragEndHandler, false);
@@ -198,10 +208,32 @@ export class FsDrawerResizerDirective implements OnInit, OnDestroy {
    * @param event
    */
   private _dragEnd(event: MouseEvent) {
+    this._setResizing(false);
+    this._removeDragListeners();
+  }
+
+  private _removeDragListeners() {
     document.removeEventListener('mousemove', this._dragHandler, false);
     document.removeEventListener('mouseup', this._dragEndHandler, false);
     document.removeEventListener('touchmove', this._dragHandler, false);
     document.removeEventListener('touchend', this._dragEndHandler, false);
+  }
+
+  /**
+   * A drag is tracked on `document`, and the pointer routinely outruns the divider's
+   * grab zone — `:hover` drops and the highlight would blink out from under the cursor.
+   * The class on the resizer keeps it lit. The same class on `<body>` pins the cursor
+   * and kills text selection, which the pointer would otherwise pick up from whatever it
+   * is being dragged across.
+   */
+  private _setResizing(resizing: boolean): void {
+    if (resizing) {
+      this._renderer.addClass(this._el.nativeElement, RESIZING_CLASS);
+      this._renderer.addClass(document.body, RESIZING_CLASS);
+    } else {
+      this._renderer.removeClass(this._el.nativeElement, RESIZING_CLASS);
+      this._renderer.removeClass(document.body, RESIZING_CLASS);
+    }
   }
 
   /**

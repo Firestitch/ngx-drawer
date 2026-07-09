@@ -3,7 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 
 import { RouteObserver } from '@firestitch/core';
 
-import { DrawerRef, FsDrawerAction, IDrawerComponent, IDrawerConfig } from 'fs-package';
+import { DrawerRef, FsDrawerAction, FsDrawerContentDirective, IDrawerComponent, IDrawerConfig } from 'fs-package';
 import { FsLabelModule } from '@firestitch/label';
 import { AsyncPipe, JsonPipe } from '@angular/common';
 
@@ -14,6 +14,7 @@ import { AsyncPipe, JsonPipe } from '@angular/common';
     changeDetection: ChangeDetectionStrategy.OnPush,
     standalone: true,
     imports: [
+        FsDrawerContentDirective,
         FsLabelModule,
         AsyncPipe,
         JsonPipe,

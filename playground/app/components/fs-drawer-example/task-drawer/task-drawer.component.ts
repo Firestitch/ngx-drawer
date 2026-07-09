@@ -3,6 +3,7 @@ import { DRAWER_DATA, DrawerDataProxy, DrawerRef } from 'fs-package';
 import { Observable } from 'rxjs';
 import { FsDrawerSideComponent } from '../../../../../src/app/components/drawer-side/drawer-side.component';
 import { FsDrawerActionDirective } from '../../../../../src/app/directives/drawer-action.directive';
+import { FsDrawerContentDirective } from '../../../../../src/app/directives/drawer-content.directive';
 import { MatButton } from '@angular/material/button';
 import { FsLabelModule } from '@firestitch/label';
 import { JsonPipe } from '@angular/common';
@@ -15,6 +16,7 @@ import { JsonPipe } from '@angular/common';
     imports: [
         FsDrawerSideComponent,
         FsDrawerActionDirective,
+        FsDrawerContentDirective,
         MatButton,
         FsLabelModule,
         JsonPipe,

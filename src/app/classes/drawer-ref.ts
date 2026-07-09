@@ -64,6 +64,9 @@ export class DrawerRef<T, TR = any> {
    */
   private readonly _sideTemplate$ = new BehaviorSubject<TemplateRef<unknown>>(null);
 
+  /** The consumer's `[fsDrawerContent]` element, published by `fsDrawerContent`. */
+  private _contentElement: ElementRef<HTMLElement> = null;
+
   private _resizeController: DrawerSizeController;
   private _activeAction = new BehaviorSubject<string>(undefined);
   private _menuRefs = new Map<string, DrawerMenuRef<T, TR>>();
@@ -161,6 +164,20 @@ export class DrawerRef<T, TR = any> {
     if (this.sideTemplate !== template) {
       this._sideTemplate$.next(template);
     }
+  }
+
+  /**
+   * The element the consumer marked with `[fsDrawerContent]`, or `null` before their
+   * component has rendered. Distinct from `drawerContent`, which is the drawer's own
+   * scroll region that this element renders inside of.
+   */
+  public get contentElement(): ElementRef<HTMLElement> {
+    return this._contentElement;
+  }
+
+  /** Published by `fsDrawerContent` as it enters and leaves the view. */
+  public setContentElement(element: ElementRef<HTMLElement> | null): void {
+    this._contentElement = element;
   }
 
   public get activeAction() {

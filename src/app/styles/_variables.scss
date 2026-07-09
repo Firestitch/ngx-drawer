@@ -2,5 +2,16 @@
 // MAIN_RESIZE_ACTION_BAR_WIDTH = 45
 $drawer-action-bar-width: 45px;
 
-// SIDE_RESIZE_BAR_WIDTH = 30 — the rail is border-box, so its 1px divider is included.
-$drawer-side-resizer-width: 30px;
+// SIDE_RESIZE_DIVIDER_WIDTH = 1 — the divider line, and nothing else. What makes the
+// splitter usable (grab slop, hover highlight) is painted outside its box.
+$drawer-side-resizer-width: 1px;
+
+// How far the invisible grab zone reaches into the side panel and the content. A 1px
+// target is a pixel-hunt; this makes the real target 7px while the divider still
+// measures 1.
+$drawer-side-resizer-hit-slop: 3px;
+
+// The beat before the divider lights up, so a pointer merely crossing it on the way
+// somewhere else never flashes it on.
+$drawer-side-resizer-hover-delay: 300ms;
+$drawer-side-resizer-fade: 100ms;
