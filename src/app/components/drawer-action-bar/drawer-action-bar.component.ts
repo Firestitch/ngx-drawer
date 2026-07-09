@@ -1,33 +1,31 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, OnDestroy, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, OnDestroy, inject } from '@angular/core';
 
-import { Subject } from 'rxjs';
-
-import { FsDrawerAction } from '../../helpers/action-type.enum';
-import { DrawerRef } from '../../classes/drawer-ref';
-import { Action } from '../../models/action.model';
-import { FsDrawerMenuService } from '../../services/drawer-menu.service';
-import { FsDrawerActionItemComponent } from './drawer-action-item/drawer-action-item.component';
 import { MatIconAnchor } from '@angular/material/button';
 import { MatIcon } from '@angular/material/icon';
 
+import { Subject } from 'rxjs';
+
+import { DrawerRef } from '../../classes/drawer-ref';
+import { FsDrawerAction } from '../../helpers/action-type.enum';
+import { Action } from '../../models/action.model';
+import { FsDrawerMenuService } from '../../services/drawer-menu.service';
+
+import { FsDrawerActionItemComponent } from './drawer-action-item/drawer-action-item.component';
+
 
 @Component({
-    selector: 'fs-drawer-action-bar',
-    templateUrl: './drawer-action-bar.component.html',
-    styleUrls: ['./drawer-action-bar.component.scss'],
-    changeDetection: ChangeDetectionStrategy.OnPush,
-    standalone: true,
-    imports: [
-        FsDrawerActionItemComponent,
-        MatIconAnchor,
-        MatIcon,
-    ],
+  selector: 'fs-drawer-action-bar',
+  templateUrl: './drawer-action-bar.component.html',
+  styleUrls: ['./drawer-action-bar.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: true,
+  imports: [
+    FsDrawerActionItemComponent,
+    MatIconAnchor,
+    MatIcon,
+  ],
 })
-export class FsDrawerActionBarComponent implements OnInit, OnDestroy {
-  private _drawerRef = inject<DrawerRef<any>>(DrawerRef);
-  private _drawerMenu = inject(FsDrawerMenuService);
-  private _cdRef = inject(ChangeDetectorRef);
-
+export class FsDrawerActionBarComponent implements OnDestroy {
 
   @Input()
   public actions: Action[];
@@ -36,9 +34,8 @@ export class FsDrawerActionBarComponent implements OnInit, OnDestroy {
   public activeAction: string;
 
   private _destroy$ = new Subject<void>();
-
-  public ngOnInit(): void {
-  }
+  private _drawerRef = inject<DrawerRef<any>>(DrawerRef);
+  private _drawerMenu = inject(FsDrawerMenuService);
 
   public ngOnDestroy(): void {
     this._destroy$.next(null);
@@ -58,7 +55,7 @@ export class FsDrawerActionBarComponent implements OnInit, OnDestroy {
         event: event,
         action: action,
         drawerRef: this._drawerRef,
-        menuRef: menuRef
+        menuRef: menuRef,
       };
       // Call click
       action.click.call(null, params);

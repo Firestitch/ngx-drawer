@@ -2,7 +2,6 @@
     #drawerContainer
     class="mat-elevation-z2 drawer-container"
     [ngClass]="config.position">
-
   <fs-drawer-action-bar
     class="drawer-action-bar"
     type="main"
@@ -10,12 +9,13 @@
     [resizable]="drawerRef.drawerConfig.resizable"
     [sizeController]="drawerRef.resizeController"
     [direction]="config.position"
-    [actions]="config.actions$ | async"
-    [activeAction]="drawerRef.activeAction$ | async">
+    [actions]="(config.actions$ | async) ?? []"
+    [activeAction]="(drawerRef.activeAction$ | async) ?? ''">
   </fs-drawer-action-bar>
-
   @if (sideTemplate) {
-    <div class="drawer-side" #drawerSide>
+    <div
+        class="drawer-side"
+        #drawerSide>
       <ng-container [ngTemplateOutlet]="sideTemplate"></ng-container>
     </div>
     <div
@@ -27,8 +27,9 @@
       [sizeController]="drawerRef.resizeController">
     </div>
   }
-
-  <div class="drawer-content" #drawerContent>
+  <div
+      class="drawer-content"
+      #drawerContent>
     <ng-template cdkPortalOutlet></ng-template>
   </div>
 </div>
