@@ -20,6 +20,9 @@ export function fsDrawerRoute(route: Route, drawerConfig?: IDrawerConfig): Route
     ...(drawerData || {}),
   };
 
+  // Flat beside the component: FsDrawerRouteComponent passes everything but the
+  // component straight to FsDrawerService.open() as the drawer config, so settings
+  // nested one level down (actions, width, position) never reach the drawer.
   return {
     path,
     component: FsDrawerRouteComponent,
@@ -27,10 +30,8 @@ export function fsDrawerRoute(route: Route, drawerConfig?: IDrawerConfig): Route
     data: {
       fsDrawer: {
         component,
-        config: {
-          data,
-          ...restDrawerConfig,
-        },
+        data,
+        ...restDrawerConfig,
       },
     },
   };
